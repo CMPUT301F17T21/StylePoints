@@ -17,6 +17,12 @@ public class WeekSchedule {
         this.dayOfWeek[6] = saturday;
     }
 
+    public WeekSchedule() {
+        for (int i = 0; i < dayOfWeek.length; i++) {
+            dayOfWeek[i] = false;
+        }
+    }
+
     public Boolean getSunday(){
         return dayOfWeek[0];
     }
