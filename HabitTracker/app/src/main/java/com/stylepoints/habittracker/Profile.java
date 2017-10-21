@@ -42,5 +42,4 @@ public class Profile {
     public int numHabits() {
         return habitList.size();
     }
-
 }
