@@ -1,5 +1,6 @@
 package com.stylepoints.habittracker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,4 +15,9 @@ public class Profile {
     private List<Habit> habitList;
 
     // TODO: Build constructors and getters and setters
+
+    public Profile(String username) {
+        this.username = username;
+        this.habitList = new ArrayList();
+    }
 }
