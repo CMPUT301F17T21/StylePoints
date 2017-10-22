@@ -55,13 +55,9 @@ public class HabitEventTest {
     }
 
     @Test
-    public void getPicture() throws Exception {
-        fail("not implemented");
-    }
-
-    @Test
-    public void setPicture() throws Exception {
-        fail("not implemented");
+    public void testPictureClass() throws Exception {
+        event.setPicture(new Picture());
+        assertEquals(event.getPicture().getClass(), Picture.class);
     }
 
     @Test
@@ -72,13 +68,9 @@ public class HabitEventTest {
     }
 
     @Test
-    public void getLocation() throws Exception {
-        fail("not implemented");
-    }
-
-    @Test
-    public void setLocation() throws Exception {
-        fail("not implemented");
+    public void testLocationClass() throws Exception {
+        event.setLocation(new Location("test"));
+        assertEquals(event.getLocation().getClass(), Location.class);
     }
 
 }
