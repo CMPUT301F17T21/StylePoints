@@ -43,13 +43,21 @@ public class HabitEventTest {
     }
 
     @Test
-    public void getPicture() throws Exception {
-        fail("not implemented");
+    public void testCommentTooLong() {
+        String testComment = "this is a test comment that is more than 30 characters long";
+        assertTrue(testComment.length() > 30);
+        try {
+            event.setComment(testComment);
+            fail("Exception was not thrown for a comment that is too long");
+        } catch (CommentTooLongException e) {
+
+        }
     }
 
     @Test
-    public void setPicture() throws Exception {
-        fail("not implemented");
+    public void testPictureClass() throws Exception {
+        event.setPicture(new Picture());
+        assertEquals(event.getPicture().getClass(), Picture.class);
     }
 
     @Test
@@ -60,13 +68,9 @@ public class HabitEventTest {
     }
 
     @Test
-    public void getLocation() throws Exception {
-        fail("not implemented");
-    }
-
-    @Test
-    public void setLocation() throws Exception {
-        fail("not implemented");
+    public void testLocationClass() throws Exception {
+        event.setLocation(new Location("test"));
+        assertEquals(event.getLocation().getClass(), Location.class);
     }
 
 }
