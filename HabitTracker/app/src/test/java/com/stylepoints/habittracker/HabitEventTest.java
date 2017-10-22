@@ -43,6 +43,18 @@ public class HabitEventTest {
     }
 
     @Test
+    public void testCommentTooLong() {
+        String testComment = "this is a test comment that is more than 30 characters long";
+        assertTrue(testComment.length() > 30);
+        try {
+            event.setComment(testComment);
+            fail("Exception was not thrown for a comment that is too long");
+        } catch (CommentTooLongException e) {
+
+        }
+    }
+
+    @Test
     public void getPicture() throws Exception {
         fail("not implemented");
     }
