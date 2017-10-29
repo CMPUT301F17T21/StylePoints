@@ -3,34 +3,31 @@ package com.stylepoints.habittracker;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
-public class HabitsMainActivity extends BottomMenuActivity {
+public class HabitsMainActivity extends AppCompatActivity {
+
+    Intent intent;
+    Button new_habit_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habits_main);
-        addMenuListeners();
-    }
 
-    @Override
-    public void goToToday() {
-        Intent intent = new Intent(this, TodayMainActivity.class);
-        startActivity(intent);
-    }
+        new_habit_button = (Button) findViewById(R.id.addNewHabitButton);
 
-    @Override
-    public void goToHabits() {
 
-    }
+        new_habit_button.setOnClickListener(new Button.OnClickListener(){
 
-    @Override
-    public void goToSocial() {
-        Intent intent = new Intent(this, SocialMainActivity.class);
-        startActivity(intent);
-    }
+            @Override
+            public void onClick(View view){
+                intent = new Intent(HabitsMainActivity.this, HabitNewActivity.class);
+                startActivity(intent);
+            }
+        });
 
-    @Override
-    public void goToProfile() {
+
     }
 }
