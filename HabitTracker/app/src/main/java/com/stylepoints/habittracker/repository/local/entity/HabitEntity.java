@@ -1,31 +1,66 @@
 package com.stylepoints.habittracker.repository.local.entity;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.stylepoints.habittracker.model.Habit;
 
 import java.util.Date;
 
-/**
- * Created by mchauck on 11/9/17.
- */
 
+@Entity(tableName = "habits")
 public class HabitEntity implements Habit {
+
+    @PrimaryKey
+    private String type;
+    private String reason;
+    private Date startDate;
+    private String schedule;
+
     @Override
     public String getType() {
-        return null;
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
     }
 
     @Override
     public String getReason() {
-        return null;
+        return reason;
     }
 
     @Override
     public Date getStartDate() {
-        return null;
+        return startDate;
     }
 
     @Override
     public String getSchedule() {
-        return null;
+        return schedule;
+    }
+
+    public HabitEntity() {
+
+    }
+
+    public HabitEntity(String type, String reason, Date startDate, String schedule) {
+        this.type = type;
+        this.reason = reason;
+        this.startDate = startDate;
+        this.schedule = schedule;
     }
 }
