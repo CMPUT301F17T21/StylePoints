@@ -9,67 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TodayMainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HabitsMainActivity" />
-        <activity android:name=".HabitEditActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HabitsMainActivity" />
-        </activity>
-        <activity android:name=".HabitNewActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HabitsMainActivity" />
-        </activity>
-        <activity android:name=".EventsMainActivity" />
-        <activity android:name=".EventNewActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".EventsMainActivity" />
-        </activity>
-        <activity android:name=".EventEditActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".EventsMainActivity" />
-        </activity>
-        <activity android:name=".EventMapActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".EventsMainActivity" />
-        </activity>
-        <activity android:name=".SocialMainActivity" />
-        <activity android:name=".SocialMapActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SocialMainActivity" />
-        </activity>
-        <activity android:name=".SocialFollowersActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SocialMainActivity" />
-        </activity>
-        <activity android:name=".SocialFollowingActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SocialMainActivity" />
-        </activity>
-        <activity android:name=".SocialNotificationActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SocialMainActivity" />
-        </activity>
-        <activity android:name=".SocialSearchActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SocialMainActivity" />
-        </activity>
-        <activity android:name=".BottomMenuActivity"></activity>
     </application>
 
 </manifest>
