@@ -1,7 +1,9 @@
 package com.stylepoints.habittracker.repository.local.entity;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import com.stylepoints.habittracker.model.Habit;
 
@@ -12,8 +14,10 @@ import java.util.Date;
 public class HabitEntity implements Habit {
 
     @PrimaryKey
+    @NonNull
     private String type;
     private String reason;
+    @Ignore
     private Date startDate;
     private String schedule;
 

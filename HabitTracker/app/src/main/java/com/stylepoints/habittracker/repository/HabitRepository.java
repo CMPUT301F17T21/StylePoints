@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 
 import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.repository.local.dao.HabitDao;
+import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 
 import javax.inject.Singleton;
 
@@ -20,7 +21,7 @@ public class HabitRepository {
         this.habitDao = habitDao;
     }
 
-    public LiveData<Habit> getHabit(String habitId) {
+    public LiveData<HabitEntity> getHabit(String habitId) {
         return habitDao.load(habitId);
     }
 }

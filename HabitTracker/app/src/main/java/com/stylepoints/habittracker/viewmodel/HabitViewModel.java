@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel;
 
 import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.repository.HabitRepository;
+import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 
 import javax.inject.Inject;
 
@@ -14,7 +15,7 @@ import javax.inject.Inject;
  */
 
 public class HabitViewModel extends ViewModel {
-    private LiveData<Habit> habit;
+    private LiveData<HabitEntity> habit;
     private HabitRepository habitRepo;
 
     @Inject
@@ -27,5 +28,9 @@ public class HabitViewModel extends ViewModel {
             return;
         }
         habit = habitRepo.getHabit(habitId);
+    }
+
+    public LiveData<HabitEntity> getHabit() {
+        return habit;
     }
 }
