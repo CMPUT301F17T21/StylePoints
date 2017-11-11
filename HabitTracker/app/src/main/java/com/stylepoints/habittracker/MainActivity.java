@@ -25,7 +25,9 @@ public class MainActivity extends AppCompatActivity {
         int habitId = HabitRepository.getInstance(db).getHabitIdFromType("exercise");
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        HabitDetailsFragment fragment = HabitDetailsFragment.newInstance(habitId);
+        //HabitDetailsFragment fragment = HabitDetailsFragment.newInstance(habitId);
+
+        HabitListFragment fragment = HabitListFragment.newInstance();
         ft.replace(R.id.main_activity_placeholder, fragment);
         ft.commit();
     }
