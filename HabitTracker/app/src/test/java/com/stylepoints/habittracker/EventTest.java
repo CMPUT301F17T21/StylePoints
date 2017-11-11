@@ -14,15 +14,15 @@ import static org.junit.Assert.*;
 /**
  * Created by mchauck on 10/21/17.
  */
-public class HabitEventTest {
-    HabitEvent event;
+public class EventTest {
+    Event event;
 
     @Before
     public void setUp() throws Exception {
         try {
-            event = new HabitEvent("test comment");
+            event = new Event("test comment");
         } catch (CommentTooLongException e) {
-            fail("HabitEvent comment too long in setUp()");
+            fail("Event comment too long in setUp()");
         }
     }
 

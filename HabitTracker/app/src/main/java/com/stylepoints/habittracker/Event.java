@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by nikosomos on 2017-10-18.
  */
 
-public class HabitEvent {
+public class Event {
 
     private String comment;
     // TODO: Need to find storage class for this field
@@ -18,16 +18,16 @@ public class HabitEvent {
     // TODO: Need to find storage class for this field
     private Location location;
 
-    HabitEvent() {
+    Event() {
         this.eventDate = new Date();
     }
 
-    HabitEvent(String comment) throws CommentTooLongException {
+    Event(String comment) throws CommentTooLongException {
         setComment(comment);
         this.eventDate = new Date();
     }
 
-    HabitEvent(String comment, Date date, Picture picture, Location location) throws CommentTooLongException {
+    Event(String comment, Date date, Picture picture, Location location) throws CommentTooLongException {
         setComment(comment);
         this.eventDate = date;
         this.picture = picture;

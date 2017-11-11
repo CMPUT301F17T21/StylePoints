@@ -1,5 +1,6 @@
 package com.stylepoints.habittracker;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,57 +11,75 @@ import java.util.List;
 
 public class Habit {
 
-    private String type;
+    private final int name_len = 20;
+    private final int reason_len = 30;
+
+    private String name;
     private String reason;
     private Date startDate;
     private WeekSchedule weekSchedule;
 
     // TODO: Decide whether to use ArrayList, or extend it to HabitList for more functionality
-    private List<HabitEvent> habitEventList;
+    // ArrayList it is
+    private ArrayList<Event> eventList;
 
-    public Habit(String type, WeekSchedule schedule) {
-        this.type = type;
-        this.startDate = new Date();
-        this.weekSchedule = schedule;
-        this.habitEventList = new ArrayList<HabitEvent>();
+    public Habit() { // empty habit, can only be used to connect to HabitConnector; must be loaded with actual data before use
+        this.name = null;
+        this.reason = null;
+        this.startDate = null;
+        this.weekSchedule = null;
+        this.eventList = new ArrayList<Event>();
     }
+//    This one is off, missing reason
+//    public Habit(String name, WeekSchedule schedule) {
+//        this. name = name;
+//        this.startDate = new Date();
+//        this.weekSchedule = schedule;
+//        this.eventList = new ArrayList<Event>();
+//    }
 
-    public Habit(String type, String reason, WeekSchedule schedule) {
-        this.type = type;
+    public Habit(String name, String reason, WeekSchedule schedule) {
+        this.name = name;
         this.reason = reason;
         this.startDate = new Date();
         this.weekSchedule = schedule;
-        this.habitEventList = new ArrayList<HabitEvent>();
+        this.eventList = new ArrayList<Event>();
     }
 
-    public Habit(String type, Date startDate, WeekSchedule schedule) {
-        this.type = type;
+    public Habit(String name, Date startDate, WeekSchedule schedule) {
+        this.name = name;
         this.startDate = startDate;
         this.weekSchedule = schedule;
-        this.habitEventList = new ArrayList<HabitEvent>();
+        this.eventList = new ArrayList<Event>();
     }
 
-    public Habit(String type, String reason, Date startDate, WeekSchedule schedule) {
-        this.type = type;
+    public Habit(String name, String reason, Date startDate, WeekSchedule schedule) {
+        this.name = name;
         this.reason = reason;
         this.startDate = startDate;
         this.weekSchedule = schedule;
-        this.habitEventList = new ArrayList<HabitEvent>();
+        this.eventList = new ArrayList<Event>();
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) throws CommentTooLongException {
+        if (name.length() > name_len) {
+            throw new CommentTooLongException();
+        }
+        this.name = name;
     }
 
     public String getReason() {
         return reason;
     }
 
-    public void setReason(String reason) {
+    public void setReason(String reason) throws CommentTooLongException {
+        if (name.length() > reason_len) {
+            throw new CommentTooLongException();
+        }
         this.reason = reason;
     }
 
@@ -80,11 +99,18 @@ public class Habit {
         this.weekSchedule = weekSchedule;
     }
 
-    public List<HabitEvent> getHabitEventList() {
-        return habitEventList;
+    public ArrayList<Event> getEventList() {
+        return eventList;
     }
 
-    public void setHabitEventList(List<HabitEvent> habitEventList) {
-        this.habitEventList = habitEventList;
+    public void setEventList(ArrayList<Event> eventList) {
+        this.eventList = eventList;
+    }
+
+    public String toString () {
+        return "Name: " + this.getName() + "\n" +
+                "Reason: " + this.getReason() + "\n" +
+                "StartDate: " + (new SimpleDateFormat("yyyy/MM/dd").format(this.getStartDate())) + "\n" +
+                "Schedule: " + weekSchedule.toString();
     }
 }

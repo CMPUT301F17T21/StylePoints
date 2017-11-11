@@ -6,6 +6,7 @@ package com.stylepoints.habittracker;
 
 public class WeekSchedule {
     private Boolean[] dayOfWeek = new Boolean[7];
+    private String[] weekdayNames = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
     public WeekSchedule(Boolean sunday, Boolean monday, Boolean tuesday, Boolean wednesday, Boolean thursday, Boolean friday, Boolean saturday) {
         this.dayOfWeek[0] = sunday;
@@ -77,5 +78,18 @@ public class WeekSchedule {
 
     public Boolean setSaturday(Boolean b){
         return dayOfWeek[6] = b;
+    }
+
+    public String toString() {
+        String daysTrue = "";
+        for (int i = 0; i < 7; i++) {
+            if (this.dayOfWeek[i] == true) {
+                daysTrue += weekdayNames[i] + ", ";
+            }
+        }
+        if (daysTrue == "") {
+            return daysTrue;
+        }
+        return daysTrue.substring(0, daysTrue.length() - 2);
     }
 }

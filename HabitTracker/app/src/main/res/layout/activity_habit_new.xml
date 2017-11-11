@@ -8,75 +8,75 @@
     tools:layout_editor_absoluteY="81dp"
     tools:layout_editor_absoluteX="0dp">
 
-    <RadioButton
-        android:id="@+id/radioButtonMonday"
+    <CheckBox
+        android:id="@+id/checkBoxMonday"
         android:layout_width="110dp"
         android:layout_height="40dp"
         android:text="Monday"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/textViewWeeklyScheduleTitle"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/radioButtonTuesday" />
+        app:layout_constraintRight_toLeftOf="@+id/checkBoxTuesday" />
 
-    <RadioButton
-        android:id="@+id/radioButtonTuesday"
+    <CheckBox
+        android:id="@+id/checkBoxTuesday"
         android:layout_width="110dp"
         android:layout_height="40dp"
         android:text="Tuesday"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/textViewWeeklyScheduleTitle"
-        app:layout_constraintLeft_toRightOf="@+id/radioButtonMonday"
-        app:layout_constraintRight_toLeftOf="@+id/radioButtonWednesday" />
+        app:layout_constraintLeft_toRightOf="@+id/checkBoxMonday"
+        app:layout_constraintRight_toLeftOf="@+id/checkBoxWednesday" />
 
-    <RadioButton
-        android:id="@+id/radioButtonWednesday"
+    <CheckBox
+        android:id="@+id/checkBoxWednesday"
         android:layout_width="110dp"
         android:layout_height="40dp"
         android:text="Wednesday"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/textViewWeeklyScheduleTitle"
-        app:layout_constraintLeft_toRightOf="@+id/radioButtonTuesday"
+        app:layout_constraintLeft_toRightOf="@+id/checkBoxTuesday"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <RadioButton
-        android:id="@+id/radioButtonThursday"
+    <CheckBox
+        android:id="@+id/checkBoxThursday"
         android:layout_width="110dp"
         android:layout_height="40dp"
         android:text="Thursday"
         android:layout_marginTop="9dp"
-        app:layout_constraintTop_toBottomOf="@+id/radioButtonTuesday"
-        app:layout_constraintRight_toLeftOf="@+id/radioButtonFriday"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxTuesday"
+        app:layout_constraintRight_toLeftOf="@+id/checkBoxFriday"
         app:layout_constraintLeft_toLeftOf="parent" />
 
-    <RadioButton
-        android:id="@+id/radioButtonFriday"
+    <CheckBox
+        android:id="@+id/checkBoxFriday"
         android:layout_width="110dp"
         android:layout_height="40dp"
         android:text="Friday"
         android:layout_marginTop="9dp"
-        app:layout_constraintTop_toBottomOf="@+id/radioButtonTuesday"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxTuesday"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/radioButtonThursday" />
+        app:layout_constraintLeft_toRightOf="@+id/checkBoxThursday" />
 
-    <RadioButton
-        android:id="@+id/radioButtonSaturday"
+    <CheckBox
+        android:id="@+id/checkBoxSaturday"
         android:layout_width="110dp"
         android:layout_height="40dp"
         android:text="Saturday"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/radioButtonThursday"
-        app:layout_constraintRight_toLeftOf="@+id/radioButtonSunday"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxThursday"
+        app:layout_constraintRight_toLeftOf="@+id/checkBoxSunday"
         app:layout_constraintLeft_toLeftOf="parent" />
 
-    <RadioButton
-        android:id="@+id/radioButtonSunday"
+    <CheckBox
+        android:id="@+id/checkBoxSunday"
         android:layout_width="110dp"
         android:layout_height="40dp"
         android:text="Sunday"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/radioButtonFriday"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxFriday"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/radioButtonSaturday" />
+        app:layout_constraintLeft_toRightOf="@+id/checkBoxSaturday" />
 
     <Button
         android:id="@+id/buttonAddHabit"
@@ -150,7 +150,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/radioButtonSaturday"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxSaturday"
         android:layout_marginStart="16dp" />
 
     <EditText
@@ -205,6 +205,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/textViewReasonTitle"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioButtonSunday" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxSunday" />
 
 </android.support.constraint.ConstraintLayout>

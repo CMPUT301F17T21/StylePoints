@@ -8,7 +8,7 @@
 
 
     <ListView
-        android:id="@+id/allHabitsList"
+        android:id="@+id/habitListView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="16dp"

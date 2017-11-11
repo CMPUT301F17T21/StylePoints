@@ -59,12 +59,12 @@ public class HabitTest {
         Habit habit = new Habit(type, reason, start, schedule);
 
         //list test
-        List<HabitEvent> testList = new ArrayList<HabitEvent>();
-        assertEquals("HabitList getter must get the right list", habit.getHabitEventList(), testList);
+        List<Event> testList = new ArrayList<Event>();
+        assertEquals("HabitList getter must get the right list", habit.getEventList(), testList);
 
-        List<HabitEvent> list2 = new ArrayList<HabitEvent>();
-        habit.setHabitEventList(list2);
-        assertEquals("Habit event list setter needs to set the right list", habit.getHabitEventList(), list2);
+        List<Event> list2 = new ArrayList<Event>();
+        habit.setEventList(list2);
+        assertEquals("Habit event list setter needs to set the right list", habit.getEventList(), list2);
     }
 }
 
