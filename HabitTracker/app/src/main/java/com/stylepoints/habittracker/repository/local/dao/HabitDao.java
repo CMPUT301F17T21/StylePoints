@@ -18,12 +18,15 @@ import java.util.List;
 
 @Dao
 public interface HabitDao {
-    @Insert(onConflict = OnConflictStrategy.ABORT)
-    void save(HabitEntity habit);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    long save(HabitEntity habit);
 
-    @Query("SELECT * FROM habits WHERE type = :habitId")
-    LiveData<HabitEntity> load(String habitId);
+    @Query("SELECT * FROM habits WHERE id = :habitId")
+    LiveData<HabitEntity> load(int habitId);
 
     @Query("SELECT * FROM habits")
     LiveData<List<HabitEntity>> loadAllHabits();
+
+    @Query("SELECT * FROM habits WHERE type LIKE :type LIMIT 1")
+    long findIdOfHabitType(String type);
 }

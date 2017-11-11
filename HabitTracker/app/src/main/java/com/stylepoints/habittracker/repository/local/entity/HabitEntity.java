@@ -13,13 +13,20 @@ import java.util.Date;
 @Entity(tableName = "habits")
 public class HabitEntity implements Habit {
 
-    @PrimaryKey
-    @NonNull
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String type;
     private String reason;
-    @Ignore
     private Date startDate;
     private String schedule;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @Override
     public String getType() {

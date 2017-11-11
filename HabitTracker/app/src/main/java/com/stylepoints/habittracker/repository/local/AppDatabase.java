@@ -16,6 +16,7 @@ import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
  *
  */
 @Database(entities = {HabitEntity.class}, version = 1)
+@TypeConverters({DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
