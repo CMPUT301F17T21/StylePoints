@@ -38,9 +38,12 @@ public class HabitRepository {
         return habitDao.loadAllHabits();
     }
 
+    public int getHabitIdFromType(String type) {
+        return habitDao.findIdOfHabitType(type);
+    }
+
     // TODO: change to off main thread
     public long save(HabitEntity habit) {
-        Log.d("HABITREPOSITORY", habit.getReason() + habit.getId());
         return habitDao.save(habit);
     }
 

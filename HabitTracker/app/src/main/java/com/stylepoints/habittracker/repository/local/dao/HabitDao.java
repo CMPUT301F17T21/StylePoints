@@ -28,5 +28,10 @@ public interface HabitDao {
     LiveData<List<HabitEntity>> loadAllHabits();
 
     @Query("SELECT * FROM habits WHERE type LIKE :type LIMIT 1")
-    long findIdOfHabitType(String type);
+    int findIdOfHabitType(String type);
+
+    // https://stackoverflow.com/questions/44244508/room-persistance-library-delete-all
+    // 2017-11-10
+    @Query("DELETE FROM habits")
+    void nukeTable();
 }
