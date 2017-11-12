@@ -20,6 +20,7 @@ public class HabitEntity implements Habit {
     private String reason;
     private Date startDate;
     private String schedule;
+//    private WeekSchEntity schedule;
 
     public int getId() {
         return id;
@@ -80,6 +81,6 @@ public class HabitEntity implements Habit {
         return "Type: " + this.getType() + "\n" +
                 "Reason: " + this.getReason() + "\n" +
                 "StartDate: " + (new SimpleDateFormat("yyyy/MM/dd").format(this.getStartDate())) + "\n" +
-                "Schedule: " + getSchedule();
+                "Schedule: " + getSchedule().toString();
     }
 }

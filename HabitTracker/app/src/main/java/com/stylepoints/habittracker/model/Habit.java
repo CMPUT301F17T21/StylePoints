@@ -1,5 +1,7 @@
 package com.stylepoints.habittracker.model;
 
+import com.stylepoints.habittracker.repository.local.entity.WeekSchEntity;
+
 import java.util.Date;
 
 /**

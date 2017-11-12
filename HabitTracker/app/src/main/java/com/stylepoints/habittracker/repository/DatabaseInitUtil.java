@@ -5,7 +5,10 @@ import android.util.Log;
 import com.stylepoints.habittracker.repository.local.AppDatabase;
 import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
+import com.stylepoints.habittracker.repository.local.entity.WeekSchEntity;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -18,11 +21,15 @@ public class DatabaseInitUtil {
         // clear out the tables so they are empty
         clearDb(db);
 
-        HabitEntity habit1 = new HabitEntity("exercise", "get healthy", new Date(), "MWF");
+//        Boolean[] hb1Sch = {false, true, false, true, false, true, false};
+//        HabitEntity habit1 = new HabitEntity("exercise", "get healthy", new Date(), (new WeekSchEntity(Arrays.asList(hb1Sch))).toString());
+        HabitEntity habit1 = new HabitEntity("exercise", "get healthy", new Date(), "Monday, Wednesday");
         habit1.setId(1);
         db.habitDao().save(habit1);
 
-        HabitEntity habit2 = new HabitEntity("floss", "make dentist happy", new Date(), "not implemented");
+//        Boolean[] hb2Sch = {false, false, false, false, false, false, false};
+//        HabitEntity habit2 = new HabitEntity("floss", "make dentist happy", new Date(), (new WeekSchEntity(Arrays.asList(hb2Sch))).toString());
+        HabitEntity habit2 = new HabitEntity("floss", "make dentist happy", new Date(), "");
         habit2.setId(2);
         db.habitDao().save(habit2);
 
