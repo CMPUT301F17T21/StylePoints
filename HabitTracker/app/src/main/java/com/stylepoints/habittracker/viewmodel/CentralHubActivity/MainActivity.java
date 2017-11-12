@@ -1,15 +1,16 @@
-package com.stylepoints.habittracker;
+package com.stylepoints.habittracker.viewmodel.CentralHubActivity;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.repository.DatabaseInitUtil;
-import com.stylepoints.habittracker.repository.HabitRepository;
 import com.stylepoints.habittracker.repository.local.AppDatabase;
+import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.EventsMainActivity;
+import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitsMainActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -38,6 +39,14 @@ public class MainActivity extends AppCompatActivity {
         eventButton = (Button) findViewById(R.id.eventsMenuButton);
         profileButton = (Button) findViewById(R.id.profileMenuButton);
         socialButton = (Button) findViewById(R.id.socialMenuButton);
+
+        eventButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, EventsMainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         habitButton.setOnClickListener(new Button.OnClickListener(){
             @Override

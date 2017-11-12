@@ -1,7 +1,9 @@
-package com.stylepoints.habittracker;
+package com.stylepoints.habittracker.viewmodel.HabitRelatedActivities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.stylepoints.habittracker.R;
 
 public class HabitEditActivity extends AppCompatActivity {
 

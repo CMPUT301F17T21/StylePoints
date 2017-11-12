@@ -9,16 +9,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".viewmodel.CentralHubActivity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HabitsMainActivity" />
-        <activity android:name=".HabitEditActivity" />
-        <activity android:name=".HabitNewActivity"></activity>
+        <activity
+            android:name=".viewmodel.HabitRelatedActivities.HabitsMainActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".viewmodel.HabitRelatedActivities.HabitEditActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".viewmodel.HabitRelatedActivities.HabitNewActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".viewmodel.HabitEventRelatedActivites.EventsMainActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventNewActivity" />
+        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventEditActivity"></activity>
     </application>
 
 </manifest>

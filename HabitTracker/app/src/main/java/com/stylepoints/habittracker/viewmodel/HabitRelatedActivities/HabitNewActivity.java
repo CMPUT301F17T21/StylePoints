@@ -1,4 +1,4 @@
-package com.stylepoints.habittracker;
+package com.stylepoints.habittracker.viewmodel.HabitRelatedActivities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,13 +8,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.repository.HabitRepository;
 import com.stylepoints.habittracker.repository.local.AppDatabase;
 import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class HabitNewActivity extends AppCompatActivity {
     Intent intent;
