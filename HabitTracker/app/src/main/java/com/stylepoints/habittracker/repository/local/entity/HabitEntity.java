@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.stylepoints.habittracker.model.Habit;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -73,5 +74,12 @@ public class HabitEntity implements Habit {
         this.reason = reason;
         this.startDate = startDate;
         this.schedule = schedule;
+    }
+
+    public String toString () {
+        return "Type: " + this.getType() + "\n" +
+                "Reason: " + this.getReason() + "\n" +
+                "StartDate: " + (new SimpleDateFormat("yyyy/MM/dd").format(this.getStartDate())) + "\n" +
+                "Schedule: " + getSchedule();
     }
 }

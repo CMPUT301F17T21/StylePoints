@@ -16,6 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".HabitsMainActivity" />
+        <activity android:name=".HabitEditActivity" />
+        <activity android:name=".HabitNewActivity"></activity>
     </application>
 
 </manifest>
