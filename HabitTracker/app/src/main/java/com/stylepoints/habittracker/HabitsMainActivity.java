@@ -37,13 +37,14 @@ public class HabitsMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habits_main);
-
+        System.out.println("AAAAA");
         HabitRepository repo = HabitRepository.getInstance(AppDatabase.getAppDatabase(getApplicationContext()));
         HabitListViewModelFactory factory = new HabitListViewModelFactory(repo);
         HabitListViewModel model = ViewModelProviders.of(this, factory).get(HabitListViewModel.class);
-
+        System.out.println("BBBBB");
         button_new_habit = (Button) findViewById(R.id.addNewHabitButton);
         listview_habit_list = (ListView) findViewById(R.id.habitListView);
+        System.out.println("CCCCC");
 
         listview_habit_list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
