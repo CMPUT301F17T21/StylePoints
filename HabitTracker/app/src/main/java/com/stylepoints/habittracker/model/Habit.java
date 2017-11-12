@@ -1,8 +1,8 @@
 package com.stylepoints.habittracker.model;
 
-import com.stylepoints.habittracker.repository.local.entity.WeekSchEntity;
-
+import java.time.DayOfWeek;
 import java.util.Date;
+import java.util.EnumSet;
 
 /**
  * Created by mchauck on 11/9/17.
@@ -12,5 +12,6 @@ public interface Habit {
     String getType();
     String getReason();
     Date getStartDate();
-    String getSchedule();
+    EnumSet<DayOfWeek> getDaysActive();
+    boolean isActiveToday();
 }

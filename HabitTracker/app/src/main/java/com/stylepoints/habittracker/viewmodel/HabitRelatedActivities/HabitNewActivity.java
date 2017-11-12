@@ -55,7 +55,9 @@ public class HabitNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 HabitEntity newHabit;
+                /*
                 try {
+
                     newHabit = new HabitEntity(edittext_habit_name.getText().toString(),
                             edittext_habit_reason.getText().toString(),
                             (new SimpleDateFormat(date_format)).parse(edittext_habit_start_date.getText().toString()),
@@ -65,9 +67,8 @@ public class HabitNewActivity extends AppCompatActivity {
                 } catch (ParseException exception) {
                     System.out.println("Incorrect date format");
                 }
-
-                intent = new Intent(HabitNewActivity.this, HabitsMainActivity.class);
-                startActivity(intent);
+                */
+                finish();
             }
 
         });
