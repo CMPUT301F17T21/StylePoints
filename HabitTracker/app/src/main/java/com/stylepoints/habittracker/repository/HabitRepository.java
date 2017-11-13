@@ -34,6 +34,10 @@ public class HabitRepository {
         return habitDao.load(habitId);
     }
 
+    public HabitEntity getHabitSync(int habitId) {
+        return habitDao.loadSync(habitId);
+    }
+
     public LiveData<List<HabitEntity>> loadAll() {
         return habitDao.loadAllHabits();
     }
