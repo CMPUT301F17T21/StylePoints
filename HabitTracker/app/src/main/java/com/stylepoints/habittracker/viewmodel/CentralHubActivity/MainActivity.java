@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -15,7 +16,6 @@ import com.stylepoints.habittracker.repository.HabitRepository;
 import com.stylepoints.habittracker.repository.local.AppDatabase;
 import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.EventsMainActivity;
-import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
 import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitsMainActivity;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     Button profileButton;
     Button socialButton;
 
-    ListView listView;
+    ListView listViewHabitToday;
 
     private LiveData<List<HabitEntity>> habitList;
     private HabitRepository repo;
@@ -63,12 +63,12 @@ public class MainActivity extends AppCompatActivity {
 
             ArrayAdapter<HabitEntity> adapter = new ArrayAdapter<HabitEntity>(
                     this, android.R.layout.simple_list_item_1, habitList);
-            listView.setAdapter(adapter);
+            listViewHabitToday.setAdapter(adapter);
         });
     }
 
     private void bindToUi() {
-        listView = (ListView) findViewById(R.id.todaysHabitsList);
+        listViewHabitToday = (ListView) findViewById(R.id.todaysHabitsList);
         habitButton = (Button) findViewById(R.id.habitsMenuButton);
         eventButton = (Button) findViewById(R.id.eventsMenuButton);
         profileButton = (Button) findViewById(R.id.profileMenuButton);
@@ -86,6 +86,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, HabitsMainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        listViewHabitToday.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?>adapter, View v, int position, long l){ // Be aware that the subsequent class is different from the EventAddNewActivity
+                Intent intent = new Intent(MainActivity.this, EventTodayNewActivity.class);
                 startActivity(intent);
             }
         });

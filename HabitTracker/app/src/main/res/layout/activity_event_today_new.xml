@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".viewmodel.HabitEventRelatedActivites.EventNewActivity">
+    tools:context=".viewmodel.CentralHubActivity.EventTodayNewActivity">
 
     <TextView
         android:id="@+id/textViewDateOfOccurence"
@@ -76,7 +76,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewCommentTitle" />
 
-    <EditText
+    <TextView
         android:id="@+id/textViewEventName"
         android:layout_width="0dp"
         android:layout_height="40dp"

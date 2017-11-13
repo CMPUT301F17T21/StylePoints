@@ -18,39 +18,45 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stylepoints.habittracker.R;
+import com.stylepoints.habittracker.repository.HabitRepository;
+import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
 
 import java.io.ByteArrayOutputStream;
 
 public class EventNewActivity extends AppCompatActivity {
+    static String TAG = "EventNewActivity";
+    HabitRepository repo;
+
     static final int CAM_REQUEST = 2;
     static final int REQ_CODE_CAMERA = 157670;
 
     Intent intent;
 
-    TextView textViewEventName;
-    TextView textViewDateOfOccurence;
+    EditText editTextEventName;  // Change the this to a spinner later one, selecting from existing habits
+    TextView textViewDateOfOccurence;  // Change to calendar selector, like habits
     EditText editTextEventComment;
     ImageView imageViewEventPhoto;
     CheckBox checkBoxAttachLocation;
     Button buttonTakePicture;
-    Button buttonSaveEvent;
-    Button buttonDeleteEvent;
+    Button buttonAddEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_new);
 
-        // Intialise variables
-        textViewEventName = (TextView) findViewById(R.id.textViewEventName);
-        textViewDateOfOccurence = (TextView) findViewById(R.id.textViewDateOfOccurence);
-        editTextEventComment = (EditText) findViewById(R.id.editTextEventComment);
-        imageViewEventPhoto = (ImageView) findViewById(R.id.imageViewEventPhoto);
-        checkBoxAttachLocation = (CheckBox) findViewById(R.id.checkBoxAttachLocation);
-        buttonTakePicture = (Button) findViewById(R.id.buttonTakePhoto);
-        buttonSaveEvent = (Button) findViewById(R.id.buttonSaveEvent);
-        buttonDeleteEvent = (Button) findViewById(R.id.buttonDeleteEvent);
+        // Inisitialise the activity to layout
+        bindToUi();
 
+        buttonAddEvent.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HabitEventEntity event = new HabitEventEntity();
+
+
+
+            }
+        });
 
         buttonTakePicture.setOnClickListener(new Button.OnClickListener(){
             @Override
@@ -66,6 +72,20 @@ public class EventNewActivity extends AppCompatActivity {
         });
     }
 
+
+    private void bindToUi() {
+        // Intialise variables
+        editTextEventName = (EditText) findViewById(R.id.textViewEventName);
+        textViewDateOfOccurence = (TextView) findViewById(R.id.textViewDateOfOccurence);
+        editTextEventComment = (EditText) findViewById(R.id.editTextEventComment);
+        imageViewEventPhoto = (ImageView) findViewById(R.id.imageViewEventPhoto);
+        checkBoxAttachLocation = (CheckBox) findViewById(R.id.checkBoxAttachLocation);
+        buttonTakePicture = (Button) findViewById(R.id.buttonTakePhoto);
+        buttonAddEvent = (Button) findViewById(R.id.buttonAddEvent);
+    }
+
+
+    // Photo specific process
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
