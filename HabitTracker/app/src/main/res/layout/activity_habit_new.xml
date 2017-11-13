@@ -144,14 +144,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
-<<<<<<< HEAD
         app:layout_constraintTop_toBottomOf="@+id/checkBoxSaturday" />
-=======
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/checkBoxSaturday"
-        android:layout_marginStart="16dp" />
->>>>>>> master
 
     <EditText
         android:id="@+id/editTextHabitName"

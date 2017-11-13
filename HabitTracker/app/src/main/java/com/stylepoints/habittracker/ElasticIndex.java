@@ -9,9 +9,11 @@ import java.util.Map;
 public class ElasticIndex extends AppCompatActivity {
     Map<String, Object> json = new HashMap<String, Object>();
 
+    /*
     public class Class() {
         json.put("http://cmput301.softwareprocess.es:8080/<StylePoints>");
     }
+    */
 
 }
 

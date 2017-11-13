@@ -17,6 +17,7 @@ public class EventNewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_new);
     }
 
+    /*
     public void takePhoto(int requestCode, int resultCode, Intent data, ImageView photoView) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -30,6 +31,7 @@ public class EventNewActivity extends AppCompatActivity {
             photoView.setImageBitmap(imageBitmap);
         }
     }
+    */
 }
 
 
