@@ -44,6 +44,9 @@ public class HabitsMainActivity extends AppCompatActivity {
         button_new_habit = (Button) findViewById(R.id.addNewHabitButton);
         listview_habit_list = (ListView) findViewById(R.id.habitListView);
 
+        // handler for what to do when an item is clicked on in the list.
+        // in this case, switch to the edit activity, and pass in the habitId
+        // so that the edit activity can populate the fields
         listview_habit_list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?>adapter, View v, int position, long l){
@@ -54,6 +57,7 @@ public class HabitsMainActivity extends AppCompatActivity {
             }
         });
 
+        // Add new habit button, start the activity to add a habit
         button_new_habit.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view) {

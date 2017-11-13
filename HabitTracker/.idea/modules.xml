@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HabitTracker.iml" filepath="$PROJECT_DIR$/HabitTracker.iml" />
+      <module fileurl="file://C:\Users\qikai\Documents\301P2\StylePoints\HabitTracker\HabitTracker.iml" filepath="C:\Users\qikai\Documents\301P2\StylePoints\HabitTracker\HabitTracker.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\qikai\Documents\301P2\StylePoints\HabitTracker\app\app.iml" filepath="C:\Users\qikai\Documents\301P2\StylePoints\HabitTracker\app\app.iml" />
     </modules>
   </component>
 </project>

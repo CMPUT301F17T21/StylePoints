@@ -24,6 +24,9 @@ public interface HabitDao {
     @Query("SELECT * FROM habits WHERE id = :habitId")
     LiveData<HabitEntity> load(int habitId);
 
+    @Query("SELECT * FROM habits WHERE id = :habitId")
+    HabitEntity loadSync(int habitId);
+
     @Query("SELECT * FROM habits")
     LiveData<List<HabitEntity>> loadAllHabits();
 

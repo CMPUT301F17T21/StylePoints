@@ -23,7 +23,6 @@ public class HabitEventEntity implements HabitEvent {
     private Date date;
     private String comment;
     private Location location;
-    // TODO: add photograph support
 
     public HabitEventEntity() {
     }
@@ -85,8 +84,5 @@ public class HabitEventEntity implements HabitEvent {
     public Location getLocation() {
         return location;
     }
-
-
-
 
 }
