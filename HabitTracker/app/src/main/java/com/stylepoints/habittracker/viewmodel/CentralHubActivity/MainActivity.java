@@ -18,6 +18,7 @@ import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.EventsM
 import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
 import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitsMainActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,8 +31,10 @@ public class MainActivity extends AppCompatActivity {
     Button socialButton;
 
     ListView listView;
+    ArrayAdapter<HabitEntity> adapter;
 
-    private LiveData<List<HabitEntity>> habitList;
+    private List<HabitEntity> habitList;
+    private LiveData<List<HabitEntity>> fullList;
     private HabitRepository repo;
 
     @Override
@@ -42,28 +45,31 @@ public class MainActivity extends AppCompatActivity {
 
         AppDatabase db = AppDatabase.getAppDatabase(getApplicationContext());
         // for now, initialize database with a couple of test entries
-        DatabaseInitUtil.initializeDbWithTestData(db);
+        // DatabaseInitUtil.initializeDbWithTestData(db);
 
         repo = HabitRepository.getInstance(db);
-        habitList = repo.loadAll();
+        fullList = repo.loadAll();
+        habitList = new ArrayList<>();
 
         bindToUi();
         subscribeToModel();
+
+        adapter = new ArrayAdapter<HabitEntity>(
+                this, android.R.layout.simple_list_item_1, habitList);
+        listView.setAdapter(adapter);
     }
 
     private void subscribeToModel() {
-        habitList.observe(this, habitList -> {
-            if (habitList == null) { return; }
+        fullList.observe(this, fullList -> {
+            if (fullList == null) { return; }
             // TODO: do this a better way
-            for (HabitEntity habit : habitList) {
-                if (!habit.isActiveToday()) {
-                    habitList.remove(habit);
+            habitList.clear();
+            for (HabitEntity habit : fullList) {
+                if (habit.isActiveToday()) {
+                    habitList.add(habit);
                 }
             }
-
-            ArrayAdapter<HabitEntity> adapter = new ArrayAdapter<HabitEntity>(
-                    this, android.R.layout.simple_list_item_1, habitList);
-            listView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         });
     }
 
