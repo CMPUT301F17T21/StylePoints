@@ -4,4 +4,17 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="_2015_01_20">2015-01-20</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="delete_event">Delete event</string>
+    <string name="date_of_occurence">Date of Occurence</string>
+    <string name="example_chicken">Example: Chicken</string>
+    <string name="event_name">Event Name</string>
+    <string name="jogging">Jogging</string>
+    <string name="attach_location">Attach Location</string>
+    <string name="ran_3_km_today">Ran 3 km today!</string>
+    <string name="photograph">Photograph</string>
 </resources>
