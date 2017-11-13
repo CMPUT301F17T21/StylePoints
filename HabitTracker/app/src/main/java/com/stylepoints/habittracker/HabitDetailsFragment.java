@@ -88,7 +88,7 @@ public class HabitDetailsFragment extends Fragment {
                     tvHabitType.setText(habitEntity.getType());
                     tvHabitReason.setText(habitEntity.getReason());
                     tvStartDate.setText(habitEntity.getStartDate().toString());
-                    tvHabitSchedule.setText(habitEntity.getSchedule());
+                    tvHabitSchedule.setText(habitEntity.getDaysActive().toString());
                 }
             }
         });

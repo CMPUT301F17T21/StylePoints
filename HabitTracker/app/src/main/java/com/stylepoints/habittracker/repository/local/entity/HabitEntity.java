@@ -8,7 +8,11 @@ import android.support.annotation.NonNull;
 import com.stylepoints.habittracker.model.Habit;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.EnumSet;
 
 
 @Entity(tableName = "habits")
@@ -19,8 +23,7 @@ public class HabitEntity implements Habit {
     private String type;
     private String reason;
     private Date startDate;
-    private String schedule;
-//    private WeekSchEntity schedule;
+    private EnumSet<DayOfWeek> daysActive;
 
     public int getId() {
         return id;
@@ -47,8 +50,13 @@ public class HabitEntity implements Habit {
         this.startDate = startDate;
     }
 
-    public void setSchedule(String schedule) {
-        this.schedule = schedule;
+    public void setDaysActive(DayOfWeek... days) {
+        daysActive = EnumSet.noneOf(DayOfWeek.class);
+        daysActive.addAll(Arrays.asList(days));
+    }
+
+    public void setDaysActive(EnumSet<DayOfWeek> daysActive) {
+        this.daysActive = daysActive;
     }
 
     @Override
@@ -62,25 +70,38 @@ public class HabitEntity implements Habit {
     }
 
     @Override
-    public String getSchedule() {
-        return schedule;
+    public EnumSet<DayOfWeek> getDaysActive() {
+        return daysActive;
+    }
+
+    @Override
+    public boolean isActiveToday() {
+        LocalDate date = LocalDate.now();
+        return daysActive.contains(date.getDayOfWeek());
     }
 
     public HabitEntity() {
-
+        daysActive = EnumSet.noneOf(DayOfWeek.class);
     }
 
-    public HabitEntity(String type, String reason, Date startDate, String schedule) {
+    public HabitEntity(String type, String reason, Date startDate, DayOfWeek... daysActive) {
         this.type = type;
         this.reason = reason;
         this.startDate = startDate;
-        this.schedule = schedule;
+        this.setDaysActive(daysActive);
+    }
+
+    public HabitEntity(String type, String reason, Date startDate, EnumSet<DayOfWeek> daysActive) {
+        this.type = type;
+        this.reason = reason;
+        this.startDate = startDate;
+        this.daysActive = daysActive;
     }
 
     public String toString () {
         return "Type: " + this.getType() + "\n" +
                 "Reason: " + this.getReason() + "\n" +
                 "StartDate: " + (new SimpleDateFormat("yyyy/MM/dd").format(this.getStartDate())) + "\n" +
-                "Schedule: " + getSchedule().toString();
+                "Schedule: " + daysActive.toString();
     }
 }
