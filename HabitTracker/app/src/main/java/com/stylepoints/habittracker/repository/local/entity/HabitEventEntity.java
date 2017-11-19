@@ -23,18 +23,19 @@ public class HabitEventEntity implements HabitEvent {
     private Date date;
     private String comment;
     private Location location;
+    // TODO: add photograph support
 
     public HabitEventEntity() {
     }
 
-    public HabitEventEntity(int id, Date date, String comment) {
-        this.id = id;
+    public HabitEventEntity(int habitId, Date date, String comment) {
+        this.habitId = habitId;
         this.date = date;
         this.comment = comment;
     }
 
-    public HabitEventEntity(int id, Date date, String comment, Location location) {
-        this.id = id;
+    public HabitEventEntity(int habitId, Date date, String comment, Location location) {
+        this.habitId = habitId;
         this.date = date;
         this.comment = comment;
         this.location = location;
@@ -84,5 +85,8 @@ public class HabitEventEntity implements HabitEvent {
     public Location getLocation() {
         return location;
     }
+
+
+
 
 }

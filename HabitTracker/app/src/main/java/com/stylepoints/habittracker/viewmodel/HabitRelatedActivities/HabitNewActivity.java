@@ -97,7 +97,7 @@ public class HabitNewActivity extends AppCompatActivity implements DatePickerDia
 
     }
 
-    private boolean verifyFields() { // This is no longer needed
+    private boolean verifyFields() {
         boolean valid = true;
 
         // TODO: check if type is empty string
