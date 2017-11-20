@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stylepoints.habittracker.R;
-
-import java.io.ByteArrayOutputStream;
 
 public class EventEditActivity extends AppCompatActivity {
 
@@ -43,7 +40,7 @@ public class EventEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_new);
 
         // Intialise variables
-        textViewEventName = (TextView) findViewById(R.id.textViewEventName);
+        textViewEventName = (TextView) findViewById(R.id.spinnerEventName);
         textViewDateOfOccurence = (TextView) findViewById(R.id.textViewDateOfOccurence);
         editTextEventComment = (EditText) findViewById(R.id.editTextEventComment);
         imageViewEventPhoto = (ImageView) findViewById(R.id.imageViewEventPhoto);
@@ -85,14 +82,7 @@ public class EventEditActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bp = (Bitmap) data.getExtras().get("data");
 
-        ByteArrayOutputStream bp_byte = new ByteArrayOutputStream();
-
-        bp.compress(Bitmap.CompressFormat.JPEG, 100, bp_byte);
-        byte bytearray[] = bp_byte.toByteArray();
-        System.out.println(bytearray.length);
-
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytearray, 0, bytearray.length);
-        imageViewEventPhoto.setImageBitmap(bitmap);
+        imageViewEventPhoto.setImageBitmap(bp);
 
     }
 }

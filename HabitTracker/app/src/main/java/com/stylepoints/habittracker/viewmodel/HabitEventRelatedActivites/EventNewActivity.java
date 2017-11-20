@@ -1,19 +1,25 @@
 package com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites;
-
+////////////////////////////Work on this urgent
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,24 +27,26 @@ import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.repository.HabitRepository;
 import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
 
-import java.io.ByteArrayOutputStream;
-
 public class EventNewActivity extends AppCompatActivity {
     static String TAG = "EventNewActivity";
     HabitRepository repo;
 
     static final int CAM_REQUEST = 2;
     static final int REQ_CODE_CAMERA = 157670;
+    static final int LOC_REQUEST = 105;
 
     Intent intent;
 
-    EditText editTextEventName;  // Change the this to a spinner later one, selecting from existing habits
+    Spinner spinnerEventName;  // Change the this to a spinner later one, selecting from existing habits
     TextView textViewDateOfOccurence;  // Change to calendar selector, like habits
     EditText editTextEventComment;
     ImageView imageViewEventPhoto;
     CheckBox checkBoxAttachLocation;
     Button buttonTakePicture;
     Button buttonAddEvent;
+
+    private LocationManager locManager;
+    private LocationListener locListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,18 +75,58 @@ public class EventNewActivity extends AppCompatActivity {
                 }
             }
         });
+
+        conf_getLocationButton();
     }
 
+    private void conf_getLocationButton() {
+        System.out.println("RRRRRRRR");
+        if (ActivityCompat.checkSelfPermission(EventNewActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(EventNewActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}, LOC_REQUEST);
+        }
+        checkBoxAttachLocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                locManager.requestLocationUpdates("gps", (long) 5000, (float) 0, locListener);
+            }
+        });
+    }
     private void bindToUi() {
+        System.out.println("AAAAAAA");
         // Intialise variables
-        editTextEventName = (EditText) findViewById(R.id.textViewEventName);
+        spinnerEventName = (Spinner) findViewById(R.id.spinnerEventName);
         textViewDateOfOccurence = (TextView) findViewById(R.id.textViewDateOfOccurence);
         editTextEventComment = (EditText) findViewById(R.id.editTextEventComment);
         imageViewEventPhoto = (ImageView) findViewById(R.id.imageViewEventPhoto);
         checkBoxAttachLocation = (CheckBox) findViewById(R.id.checkBoxAttachLocation);
         buttonTakePicture = (Button) findViewById(R.id.buttonTakePhoto);
         buttonAddEvent = (Button) findViewById(R.id.buttonAddEvent);
+
+        locManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        locListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                System.out.println(location.getLatitude());
+                Toast.makeText(EventNewActivity.this, "\n " + location.getLongitude() + " " + location.getLatitude(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+                System.out.println("BBBBBBBBB");
+            }
+        };
     }
 
 
@@ -94,6 +142,13 @@ public class EventNewActivity extends AppCompatActivity {
                 Toast.makeText(this, "CannotAccessCamera", Toast.LENGTH_LONG).show();
             }
         }
+        else if (requestCode == LOC_REQUEST) {
+             if (grantResults.length >= 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                 conf_getLocationButton();
+             } else {
+                 Toast.makeText(this, "CannotGetCurrentLocation", Toast.LENGTH_LONG).show();
+             }
+        }
     }
 
     @Override
@@ -101,19 +156,14 @@ public class EventNewActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             Bitmap bp = (Bitmap) data.getExtras().get("data");
-
-            ByteArrayOutputStream bp_byte = new ByteArrayOutputStream();
-
-            bp.compress(Bitmap.CompressFormat.JPEG, 100, bp_byte);
-            byte bytearray[] = bp_byte.toByteArray();
-
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytearray, 0, bytearray.length);
-            imageViewEventPhoto.setImageBitmap(bitmap);
-        }
-        else if (resultCode == RESULT_CANCELED) {
+            imageViewEventPhoto.setImageBitmap(bp);
+        } else if (resultCode == RESULT_CANCELED) {
             // Camera intent cancelled; do nothing here
         }
 
     }
 
+    public CheckBox getCheckBoxAttachLocation() {
+        return checkBoxAttachLocation;
+    }
 }
