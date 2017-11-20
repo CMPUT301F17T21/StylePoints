@@ -50,6 +50,7 @@ public class EventsMainActivity extends AppCompatActivity {
         List<String> filterlist = new ArrayList<String>();
         filterlist.add("Reverse Chronology");
         filterlist.add("Key Word in Comment");
+        // Need to add all habit names
         filtersArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, filterlist);
         spinner_event_filter.setAdapter(filtersArrayAdapter);
 

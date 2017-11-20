@@ -22,40 +22,40 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".viewmodel.CentralHubActivity.EventTodayNewActivity" >
+        <activity android:name=".viewmodel.CentralHubActivity.EventTodayNewActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".viewmodel.CentralHubActivity.MainActivity" />
         </activity>
         <activity
             android:name=".viewmodel.HabitRelatedActivities.HabitsMainActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".viewmodel.CentralHubActivity.MainActivity" />
         </activity>
         <activity
             android:name=".viewmodel.HabitRelatedActivities.HabitEditActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".viewmodel.HabitRelatedActivities.HabitsMainActivity" />
         </activity>
         <activity
             android:name=".viewmodel.HabitRelatedActivities.HabitNewActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".viewmodel.HabitRelatedActivities.HabitsMainActivity" />
         </activity>
         <activity
             android:name=".viewmodel.HabitEventRelatedActivites.EventsMainActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".viewmodel.CentralHubActivity.MainActivity" />
         </activity>
-        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventNewActivity" >
+        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventNewActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".viewmodel.HabitEventRelatedActivites.EventsMainActivity" />
@@ -64,6 +64,11 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".viewmodel.HabitEventRelatedActivites.EventsMainActivity" />
+        </activity>
+        <activity android:name=".viewmodel.HabitRelatedActivities.HabitStatActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".viewmodel.HabitEventRelatedActivites.EventEditActivity" />
         </activity>
     </application>
 

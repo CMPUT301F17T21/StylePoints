@@ -52,9 +52,6 @@ public class EventNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 HabitEventEntity event = new HabitEventEntity();
-
-
-
             }
         });
 
@@ -89,7 +86,7 @@ public class EventNewActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQ_CODE_CAMERA) {
+        if (requestCode == REQ_CODE_CAMERA ) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, CAM_REQUEST);
@@ -102,16 +99,20 @@ public class EventNewActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bp = (Bitmap) data.getExtras().get("data");
+        if (resultCode == RESULT_OK) {
+            Bitmap bp = (Bitmap) data.getExtras().get("data");
 
-        ByteArrayOutputStream bp_byte = new ByteArrayOutputStream();
+            ByteArrayOutputStream bp_byte = new ByteArrayOutputStream();
 
-        bp.compress(Bitmap.CompressFormat.JPEG, 100, bp_byte);
-        byte bytearray[] = bp_byte.toByteArray();
-        System.out.println(bytearray.length);
+            bp.compress(Bitmap.CompressFormat.JPEG, 100, bp_byte);
+            byte bytearray[] = bp_byte.toByteArray();
 
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytearray, 0, bytearray.length);
-        imageViewEventPhoto.setImageBitmap(bitmap);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytearray, 0, bytearray.length);
+            imageViewEventPhoto.setImageBitmap(bitmap);
+        }
+        else if (resultCode == RESULT_CANCELED) {
+            // Camera intent cancelled; do nothing here
+        }
 
     }
 
