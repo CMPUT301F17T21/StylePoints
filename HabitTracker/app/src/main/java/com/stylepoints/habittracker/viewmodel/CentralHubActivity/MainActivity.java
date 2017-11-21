@@ -2,6 +2,7 @@ package com.stylepoints.habittracker.viewmodel.CentralHubActivity;
 
 import android.arch.lifecycle.LiveData;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -41,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Added for getting the user name and ID
+        SharedPreferences pref = getSharedPreferences("username", 0);
+        if (!pref.contains("username")){
+            //Go to Activity to get username. Should only be ran the first time
+        }
+        String username = pref.getString("username", "");
 
 
         AppDatabase db = AppDatabase.getAppDatabase(getApplicationContext());
