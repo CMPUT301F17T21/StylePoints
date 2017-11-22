@@ -142,7 +142,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonTakePhoto"
         app:layout_constraintTop_toBottomOf="@+id/editTextEventComment"
-        app:srcCompat="android:drawable/alert_dark_frame" />
+        app:srcCompat="@android:drawable/alert_dark_frame" />
 
     <CheckBox
         android:id="@+id/checkBoxAttachLocation"
