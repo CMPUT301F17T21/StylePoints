@@ -2,10 +2,8 @@ package com.stylepoints.habittracker.viewmodel.HabitRelatedActivities;
 
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,8 +17,6 @@ import com.stylepoints.habittracker.repository.HabitRepository;
 import com.stylepoints.habittracker.repository.local.AppDatabase;
 import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -111,8 +107,8 @@ public class HabitNewActivity extends AppCompatActivity implements DatePickerDia
     }
 
     private void bindToUi() {
-        button_add_habit = (Button) findViewById(R.id.buttonAddHabit);
-        button_set_date = (Button) findViewById(R.id.button_set_date);
+        button_add_habit = (Button) findViewById(R.id.buttonSaveHabit);
+        button_set_date = (Button) findViewById(R.id.buttonSetDate);
         edittext_habit_name = (EditText) findViewById(R.id.editTextHabitName);
         edittext_habit_reason = (EditText) findViewById(R.id.editTextReason);
         textview_habit_start_date = (TextView) findViewById(R.id.textViewDate);

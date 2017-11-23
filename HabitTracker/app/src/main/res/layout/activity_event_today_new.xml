@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".viewmodel.HabitEventRelatedActivites.EventNewActivity">
+    tools:context=".viewmodel.CentralHubActivity.EventTodayNewActivity">
 
     <TextView
         android:id="@+id/textViewDateOfOccurence"
@@ -76,15 +76,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewCommentTitle" />
 
-    <Spinner
+    <TextView
         android:id="@+id/spinnerEventName"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:gravity="center"
+        android:inputType="textPersonName"
+        android:text="Jogging"
         android:textSize="14sp"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/textViewEventNameTitle"
@@ -121,7 +123,6 @@
         android:contentDescription="TODO"
         app:layout_constraintBottom_toBottomOf="@+id/buttonTakePhoto"
         app:layout_constraintEnd_toEndOf="@+id/editTextEventComment"
-        app:layout_constraintHorizontal_bias="0.462"
         app:layout_constraintStart_toStartOf="@+id/editTextEventComment"
         app:layout_constraintTop_toBottomOf="@+id/editTextEventComment"
         app:srcCompat="@android:drawable/alert_dark_frame" />
