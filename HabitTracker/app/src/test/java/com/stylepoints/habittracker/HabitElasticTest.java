@@ -2,6 +2,7 @@ package com.stylepoints.habittracker;
 
 
 import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
+import com.stylepoints.habittracker.repository.remote.ElasticHabitListResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticRequestStatus;
 import com.stylepoints.habittracker.repository.remote.ElasticResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticSearch;
@@ -11,6 +12,7 @@ import org.junit.Test;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.List;
 
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -67,5 +69,20 @@ public class HabitElasticTest {
         System.out.println(delStatus);
         assertEquals("habit", delStatus.getType());
         assertEquals(status.getId(), delStatus.getId());
+    }
+
+    @Test
+    public void getUsersHabitsTest() throws Exception {
+        Response<ElasticHabitListResponse> response = elastic.searchHabit("user:mackenzie").execute();
+        assert(response.isSuccessful());
+        List<HabitEntity> habitList = response.body().getList();
+        assert(habitList != null);
+
+        System.out.println("Number of hits: " + response.body().getNumHits());
+
+        for (HabitEntity habit : habitList) {
+            System.out.println(habit);
+        }
+        assert(habitList.size() > 0);
     }
 }

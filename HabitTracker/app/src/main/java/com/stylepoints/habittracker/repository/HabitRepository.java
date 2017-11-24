@@ -9,6 +9,7 @@ import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.repository.local.AppDatabase;
 import com.stylepoints.habittracker.repository.local.dao.HabitDao;
 import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
+import com.stylepoints.habittracker.repository.remote.ElasticHabitListResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticSearch;
 
@@ -72,7 +73,23 @@ public class HabitRepository {
 
             @Override
             public void onFailure(Call<ElasticResponse<HabitEntity>> call, Throwable t) {
+                // TODO: add failure case
+            }
+        });
+        return data;
+    }
 
+    public LiveData<List<HabitEntity>> getUsersHabits(String elasticUsername) {
+        final MutableLiveData<List<HabitEntity>> data = new MutableLiveData<>();
+        elastic.searchHabit("user:" + elasticUsername).enqueue(new Callback<ElasticHabitListResponse>() {
+            @Override
+            public void onResponse(Call<ElasticHabitListResponse> call, Response<ElasticHabitListResponse> response) {
+                data.setValue(response.body().getList());
+            }
+
+            @Override
+            public void onFailure(Call<ElasticHabitListResponse> call, Throwable t) {
+                // TODO: add failure case
             }
         });
         return data;

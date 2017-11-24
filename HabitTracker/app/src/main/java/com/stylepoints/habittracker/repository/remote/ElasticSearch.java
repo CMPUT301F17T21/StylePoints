@@ -21,6 +21,9 @@ public interface ElasticSearch {
     @GET("habit/{id}")
     Call<ElasticResponse<HabitEntity>> getHabitById(@Path("id") String id);
 
+    @GET("habit/_search")
+    Call<ElasticHabitListResponse> searchHabit(@Query("q") String fieldAndTerm);
+
     @POST("habit/")
     Call<ElasticRequestStatus> saveHabit(@Body HabitEntity habit);
 
@@ -45,5 +48,4 @@ public interface ElasticSearch {
 
     @GET("event/_search")
     Call<ElasticEventListResponse> searchEvent(@Query("q") String fieldAndTerms);
-
 }
