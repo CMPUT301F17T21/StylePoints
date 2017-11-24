@@ -10,10 +10,6 @@ import com.stylepoints.habittracker.repository.local.dao.HabitDao;
 import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 
 import java.util.List;
-import java.util.concurrent.Executor;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Created by mchauck on 11/9/17.
