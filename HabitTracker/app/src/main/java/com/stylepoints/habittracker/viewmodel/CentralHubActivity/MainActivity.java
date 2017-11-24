@@ -1,13 +1,16 @@
 package com.stylepoints.habittracker.viewmodel.CentralHubActivity;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.repository.DatabaseInitUtil;
@@ -30,11 +33,14 @@ public class MainActivity extends AppCompatActivity {
     Button profileButton;
     Button socialButton;
 
+    TextView testTextView;
+
     ListView listView;
     ArrayAdapter<HabitEntity> adapter;
 
     private List<HabitEntity> habitList;
     private LiveData<List<HabitEntity>> fullList;
+    private LiveData<HabitEntity> testRemoteHabit;
     private HabitRepository repo;
 
     @Override
@@ -49,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         repo = HabitRepository.getInstance(db);
         fullList = repo.loadAll();
+        testRemoteHabit = repo.getRemoteHabit("AV_sN6rwT651_e3dy3Dl");
         habitList = new ArrayList<>();
 
         bindToUi();
@@ -71,9 +78,18 @@ public class MainActivity extends AppCompatActivity {
             }
             adapter.notifyDataSetChanged();
         });
+
+        testRemoteHabit.observe(this, new Observer<HabitEntity>() {
+            @Override
+            public void onChanged(@Nullable HabitEntity habitEntity) {
+                testTextView.setText(habitEntity.toString());
+            }
+        });
+
     }
 
     private void bindToUi() {
+        testTextView = (TextView) findViewById(R.id.tv_testing);
         listView = (ListView) findViewById(R.id.todaysHabitsList);
         habitButton = (Button) findViewById(R.id.habitsMenuButton);
         eventButton = (Button) findViewById(R.id.eventsMenuButton);

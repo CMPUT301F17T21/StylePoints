@@ -1,16 +1,15 @@
 package com.stylepoints.habittracker.repository.remote;
 
-import com.google.gson.annotations.SerializedName;
+import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Generics apparently erase type when run so we have to make separate classes
- * for every thing that can be searched. A great application for generics but
- * java is dumb.
+ * Created by Mackenzie on 2017-11-23.
  */
-public class ElasticTweetResponse {
+
+public class ElasticEventListResponse {
     private int took;
     private boolean timed_out;
     private Hits hits;
@@ -18,7 +17,7 @@ public class ElasticTweetResponse {
     class Hits {
         private int total;
         private float max_score;
-        List<ElasticResponse<Tweet>> hits;
+        List<ElasticResponse<HabitEventEntity>> hits;
 
         @Override
         public String toString() {
@@ -30,9 +29,9 @@ public class ElasticTweetResponse {
         }
     }
 
-    public List<Tweet> getList() {
-        List<Tweet> list = new ArrayList<>();
-        for (ElasticResponse<Tweet> hit : this.hits.hits) {
+    public List<HabitEventEntity> getList() {
+        List<HabitEventEntity> list = new ArrayList<>();
+        for (ElasticResponse<HabitEventEntity> hit : this.hits.hits) {
             list.add(hit.getSource());
         }
         return list;

@@ -94,10 +94,7 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
                     habit.setReason(edittext_habit_reason.getText().toString());
                     habit.setType(edittext_habit_name.getText().toString());
 
-                    // https://stackoverflow.com/questions/22929237/convert-java-time-localdate-into-java-util-date-type
-                    // 2017-11-12
-                    Date d = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                    habit.setStartDate(d);
+                    habit.setStartDate(date);
 
                     EnumSet<DayOfWeek> schedule = EnumSet.noneOf(DayOfWeek.class);
                     if (checkbox_monday.isChecked()) { schedule.add(DayOfWeek.MONDAY); }
@@ -132,7 +129,7 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
     }
 
     private void fillUi(HabitEntity habit) {
-        date = LocalDate.from(habit.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        date = habit.getStartDate();
 
         edittext_habit_name.setText(habit.getType());
         edittext_habit_reason.setText(habit.getReason());

@@ -6,8 +6,10 @@ import android.arch.persistence.room.PrimaryKey;
 import android.location.Location;
 import android.support.annotation.Nullable;
 
+import com.google.gson.annotations.Expose;
 import com.stylepoints.habittracker.model.HabitEvent;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity(foreignKeys = @ForeignKey(entity = HabitEntity.class,
@@ -20,21 +22,27 @@ public class HabitEventEntity implements HabitEvent {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int habitId;
-    private Date date;
+
+    @Expose
+    private String elasticId;
+    @Expose
+    private LocalDate date;
+    @Expose
     private String comment;
+    @Expose
     private Location location;
     // TODO: add photograph support
 
     public HabitEventEntity() {
     }
 
-    public HabitEventEntity(int habitId, Date date, String comment) {
+    public HabitEventEntity(int habitId, LocalDate date, String comment) {
         this.habitId = habitId;
         this.date = date;
         this.comment = comment;
     }
 
-    public HabitEventEntity(int habitId, Date date, String comment, Location location) {
+    public HabitEventEntity(int habitId, LocalDate date, String comment, Location location) {
         this.habitId = habitId;
         this.date = date;
         this.comment = comment;
@@ -43,6 +51,15 @@ public class HabitEventEntity implements HabitEvent {
 
     public int getId() {
         return id;
+    }
+
+    public String getElasticId() {
+        return elasticId;
+    }
+
+    @Override
+    public void setElasticId(String elasticId) {
+        this.elasticId = elasticId;
     }
 
     public int getHabitId() {
@@ -57,7 +74,7 @@ public class HabitEventEntity implements HabitEvent {
         this.id = id;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -70,7 +87,7 @@ public class HabitEventEntity implements HabitEvent {
     }
 
     @Override
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 

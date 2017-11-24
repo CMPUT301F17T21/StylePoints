@@ -5,5 +5,5 @@ package com.stylepoints.habittracker.repository.remote;
  */
 
 public interface Id {
-    public void setId(String id);
+    public void setElasticId(String id);
 }

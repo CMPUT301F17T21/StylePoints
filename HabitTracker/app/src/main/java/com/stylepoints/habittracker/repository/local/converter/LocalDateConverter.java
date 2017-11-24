@@ -2,6 +2,8 @@ package com.stylepoints.habittracker.repository.local.converter;
 
 import android.arch.persistence.room.TypeConverter;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -11,14 +13,17 @@ import java.util.Date;
  * 2017-11-10
  */
 
-public class DateConverter {
+public class LocalDateConverter {
     @TypeConverter
-    public static Date toDate(Long timestamp) {
-        return timestamp == null ? null : new Date(timestamp);
+    public static LocalDate toDate(Long timestamp) {
+        if (timestamp == null) { return null; }
+        return LocalDate.ofEpochDay(timestamp);
+
     }
 
     @TypeConverter
-    public static Long toTimestamp(Date date) {
-        return date == null ? null : date.getTime();
+    public static Long toTimestamp(LocalDate date) {
+        if (date == null) { return null; }
+        return date.toEpochDay();
     }
 }

@@ -13,6 +13,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class HabitDaoTest {
 
     @Test
     public void insertAndGetHabit() {
-        HabitEntity habit = new HabitEntity("Exercise", "get healthy", new Date(), DayOfWeek.MONDAY);
+        HabitEntity habit = new HabitEntity("Exercise", "get healthy", LocalDate.now(), DayOfWeek.MONDAY);
         int habitId = (int) db.habitDao().save(habit);
 
         assertEquals("Habit not retrieved from repo", habit.getType(), db.habitDao().loadSync(habitId).getType());
@@ -42,7 +43,7 @@ public class HabitDaoTest {
 
     @Test
     public void getHabitIdFromType() throws Exception{
-        HabitEntity habit = new HabitEntity("Exercise", "get healthy", new Date(), DayOfWeek.MONDAY);
+        HabitEntity habit = new HabitEntity("Exercise", "get healthy", LocalDate.now(), DayOfWeek.MONDAY);
         int habitId = (int) db.habitDao().save(habit);
 
         int idLookup = db.habitDao().findIdOfHabitType("Exercise");
@@ -52,10 +53,10 @@ public class HabitDaoTest {
 
     @Test
     public void getHabitList() throws Exception {
-        HabitEntity habit = new HabitEntity("Exercise", "get healthy", new Date(), DayOfWeek.MONDAY);
+        HabitEntity habit = new HabitEntity("Exercise", "get healthy", LocalDate.now(), DayOfWeek.MONDAY);
         db.habitDao().save(habit);
 
-        HabitEntity habit2 = new HabitEntity("Exercise", "get healthy", new Date(), DayOfWeek.MONDAY);
+        HabitEntity habit2 = new HabitEntity("Exercise", "get healthy", LocalDate.now(), DayOfWeek.MONDAY);
         db.habitDao().save(habit2);
 
         List<HabitEntity> habits = LiveDataTestUtil.getValue(db.habitDao().loadAllHabits());

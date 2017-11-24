@@ -12,7 +12,7 @@ public class ElasticRequestStatus implements Id {
     private boolean created;
 
     @Override
-    public void setId(String id) {
+    public void setElasticId(String id) {
         this._id = id;
     }
 
