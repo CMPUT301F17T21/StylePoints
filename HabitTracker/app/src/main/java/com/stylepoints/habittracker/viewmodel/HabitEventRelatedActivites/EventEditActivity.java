@@ -40,15 +40,7 @@ public class EventEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_new);
 
         // Intialise variables
-        textViewEventName = (TextView) findViewById(R.id.spinnerEventName);
-        textViewDateOfOccurence = (TextView) findViewById(R.id.textViewDateOfOccurence);
-        editTextEventComment = (EditText) findViewById(R.id.editTextEventComment);
-        imageViewEventPhoto = (ImageView) findViewById(R.id.imageViewEventPhoto);
-        checkBoxAttachLocation = (CheckBox) findViewById(R.id.checkBoxAttachLocation);
-        buttonTakePicture = (Button) findViewById(R.id.buttonTakePhoto);
-        buttonSaveEvent = (Button) findViewById(R.id.buttonSaveEvent);
-        buttonDeleteEvent = (Button) findViewById(R.id.buttonDeleteEvent);
-
+        bindToUi();
 
         buttonTakePicture.setOnClickListener(new Button.OnClickListener(){
             @Override
@@ -64,6 +56,7 @@ public class EventEditActivity extends AppCompatActivity {
         });
     }
 
+    /* Request for permission for camera (and maybe location) */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -77,13 +70,25 @@ public class EventEditActivity extends AppCompatActivity {
         }
     }
 
+    /* On request accepted for a restricted action */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bp = (Bitmap) data.getExtras().get("data");
-
         imageViewEventPhoto.setImageBitmap(bp);
+    }
 
+    /* Initialisation procedures */
+    // Assign widgets to specified variables
+    private void bindToUi() {
+        textViewEventName = (TextView) findViewById(R.id.spinnerEventName);
+        textViewDateOfOccurence = (TextView) findViewById(R.id.textViewDateOfOccurence);
+        editTextEventComment = (EditText) findViewById(R.id.editTextEventComment);
+        imageViewEventPhoto = (ImageView) findViewById(R.id.imageViewEventPhoto);
+        checkBoxAttachLocation = (CheckBox) findViewById(R.id.checkBoxAttachLocation);
+        buttonTakePicture = (Button) findViewById(R.id.buttonTakePhoto);
+        buttonSaveEvent = (Button) findViewById(R.id.buttonSaveEvent);
+        buttonDeleteEvent = (Button) findViewById(R.id.buttonDeleteEvent);
     }
 }
 

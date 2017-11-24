@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,7 +26,10 @@ import android.widget.Toast;
 
 import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.repository.HabitRepository;
+import com.stylepoints.habittracker.repository.local.AppDatabase;
 import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
+
+import java.util.Date;
 
 public class EventNewActivity extends AppCompatActivity {
     static String TAG = "EventNewActivity";
@@ -52,6 +56,8 @@ public class EventNewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_new);
+        // Get required repo
+        repo = HabitRepository.getInstance(AppDatabase.getAppDatabase(getApplicationContext()));
 
         // Inisitialise the activity to layout
         bindToUi();
@@ -60,8 +66,26 @@ public class EventNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 HabitEventEntity event = new HabitEventEntity();
+                event.setHabitId(111111); // placeholder
+                event.setDate(new Date()); // placeholder
+//                event.setLocation();
+                event.setComment(editTextEventComment.getText().toString());
+                event.setPhoto(((BitmapDrawable) imageViewEventPhoto.getDrawable()).getBitmap());
+
+//                repo.sa
             }
         });
+
+
+
+
+
+
+
+
+
+
+
 
         buttonTakePicture.setOnClickListener(new Button.OnClickListener(){
             @Override
@@ -79,20 +103,7 @@ public class EventNewActivity extends AppCompatActivity {
         conf_getLocationButton();
     }
 
-    private void conf_getLocationButton() {
-        System.out.println("RRRRRRRR");
-        if (ActivityCompat.checkSelfPermission(EventNewActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(EventNewActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}, LOC_REQUEST);
-        }
-        checkBoxAttachLocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
-            @SuppressLint("MissingPermission")
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                locManager.requestLocationUpdates("gps", (long) 5000, (float) 0, locListener);
-            }
-        });
-    }
     private void bindToUi() {
         System.out.println("AAAAAAA");
         // Intialise variables
@@ -161,6 +172,21 @@ public class EventNewActivity extends AppCompatActivity {
             // Camera intent cancelled; do nothing here
         }
 
+    }
+    // Ignore this
+    private void conf_getLocationButton() {
+        System.out.println("RRRRRRRR");
+        if (ActivityCompat.checkSelfPermission(EventNewActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(EventNewActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}, LOC_REQUEST);
+        }
+        checkBoxAttachLocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                locManager.requestLocationUpdates("gps", (long) 5000, (float) 0, locListener);
+            }
+        });
     }
 
     public CheckBox getCheckBoxAttachLocation() {

@@ -1,4 +1,4 @@
-package com.stylepoints.habittracker.viewmodel;
+package com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.Auxiliary;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;

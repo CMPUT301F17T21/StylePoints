@@ -10,12 +10,10 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.stylepoints.habittracker.R;
-import com.stylepoints.habittracker.repository.DatabaseInitUtil;
 import com.stylepoints.habittracker.repository.HabitRepository;
 import com.stylepoints.habittracker.repository.local.AppDatabase;
 import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.EventsMainActivity;
-import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
 import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitsMainActivity;
 
 import java.util.ArrayList;

@@ -14,8 +14,8 @@ import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.repository.HabitRepository;
 import com.stylepoints.habittracker.repository.local.AppDatabase;
 import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
-import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
-import com.stylepoints.habittracker.viewmodel.HabitListViewModelFactory;
+import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.Auxiliary.HabitListViewModel;
+import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.Auxiliary.HabitListViewModelFactory;
 
 import java.util.List;
 
