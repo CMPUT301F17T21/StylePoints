@@ -10,7 +10,6 @@ import com.google.gson.annotations.Expose;
 import com.stylepoints.habittracker.model.HabitEvent;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity(foreignKeys = @ForeignKey(entity = HabitEntity.class,
                                   parentColumns = "id",
@@ -22,9 +21,12 @@ public class HabitEventEntity implements HabitEvent {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int habitId;
+    private String elasticId;
 
     @Expose
-    private String elasticId;
+    private String user;
+    @Expose
+    private String habitElasticId;
     @Expose
     private LocalDate date;
     @Expose
@@ -47,6 +49,22 @@ public class HabitEventEntity implements HabitEvent {
         this.date = date;
         this.comment = comment;
         this.location = location;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getHabitElasticId() {
+        return habitElasticId;
+    }
+
+    public void setHabitElasticId(String habitElasticId) {
+        this.habitElasticId = habitElasticId;
     }
 
     public int getId() {
@@ -103,7 +121,14 @@ public class HabitEventEntity implements HabitEvent {
         return location;
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "HabitEventEntity{" +
+                "user='" + user + '\'' +
+                ", habitElasticId='" + habitElasticId + '\'' +
+                ", date=" + date +
+                ", comment='" + comment + '\'' +
+                ", location=" + location +
+                '}';
+    }
 }

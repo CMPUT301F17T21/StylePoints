@@ -49,6 +49,7 @@ public class HabitElasticTest {
         habit.setUser("mackenzie");
 
         Response<ElasticRequestStatus> response = elastic.saveHabit(habit).execute();
+        assert(response.isSuccessful());
         System.out.println(response);
         ElasticRequestStatus status = response.body();
         System.out.println(status);
@@ -60,6 +61,8 @@ public class HabitElasticTest {
 
         // delete the habit we just added
         Response<ElasticRequestStatus> delResponse = elastic.deleteHabit(status.getId()).execute();
+        assert(delResponse.isSuccessful());
+
         ElasticRequestStatus delStatus = delResponse.body();
         System.out.println(delStatus);
         assertEquals("habit", delStatus.getType());

@@ -17,10 +17,7 @@ public class ElasticResponse<T extends Id> {
     private T _source;
 
     // TODO: custom error
-    public T getSource() throws NoSuchFieldError {
-        if (!found) {
-            throw new NoSuchFieldError();
-        }
+    public T getSource() {
         _source.setElasticId(_id);
         return _source;
     }

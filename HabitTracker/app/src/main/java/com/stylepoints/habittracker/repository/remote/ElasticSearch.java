@@ -35,10 +35,10 @@ public interface ElasticSearch {
     Call<ElasticResponse<HabitEventEntity>> getEventById(@Path("id") String id);
 
     @POST("event/")
-    Call<ElasticRequestStatus> saveEvent(@Body HabitEntity habit);
+    Call<ElasticRequestStatus> saveEvent(@Body HabitEventEntity habit);
 
     @PUT("event/{id}")
-    Call<ElasticRequestStatus> updateEvent(@Path("id") String id, @Body HabitEntity habit);
+    Call<ElasticRequestStatus> updateEvent(@Path("id") String id, @Body HabitEventEntity habit);
 
     @DELETE("event/{id}")
     Call<ElasticRequestStatus> deleteEvent(@Path("id") String id);
