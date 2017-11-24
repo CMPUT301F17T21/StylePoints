@@ -6,6 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
+import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
 
 import java.util.List;
@@ -18,6 +19,9 @@ public interface HabitEventDao {
 
     @Query("SELECT * FROM habit_events WHERE id = :eventId")
     LiveData<HabitEventEntity> load(int eventId);
+
+    @Query("SELECT * FROM habit_events WHERE id = :eventId")
+    HabitEventEntity loadSync(int eventId);
 
     @Query("SELECT * FROM habit_events WHERE habitId = :habitId")
     LiveData<List<HabitEventEntity>> loadEventsByHabitId(int habitId);

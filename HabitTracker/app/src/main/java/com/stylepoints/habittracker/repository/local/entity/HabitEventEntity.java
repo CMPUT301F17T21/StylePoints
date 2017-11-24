@@ -1,5 +1,6 @@
 package com.stylepoints.habittracker.repository.local.entity;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
@@ -8,7 +9,12 @@ import android.location.Location;
 import android.support.annotation.Nullable;
 
 import com.stylepoints.habittracker.model.HabitEvent;
+import com.stylepoints.habittracker.repository.HabitRepository;
+import com.stylepoints.habittracker.repository.local.AppDatabase;
+import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.Auxiliary.HabitListViewModel;
+import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.Auxiliary.HabitListViewModelFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(foreignKeys = @ForeignKey(entity = HabitEntity.class,
@@ -21,6 +27,7 @@ public class HabitEventEntity implements HabitEvent {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int habitId;
+    private String name;
     private Date date;
     private String comment;
     private Location location;
@@ -30,20 +37,20 @@ public class HabitEventEntity implements HabitEvent {
     public HabitEventEntity() {
     }
 
-    public HabitEventEntity(int habitId, Date date, String comment) {
+    public HabitEventEntity(int habitId, String name, Date date, String comment) {
         this.habitId = habitId;
         this.date = date;
         this.comment = comment;
     }
 
-    public HabitEventEntity(int habitId, Date date, String comment, Location location) {
+    public HabitEventEntity(int habitId, String name, Date date, String comment, Location location) {
         this.habitId = habitId;
         this.date = date;
         this.comment = comment;
         this.location = location;
     }
 
-    public HabitEventEntity(int habitId, Date date, String comment, Location location, Bitmap photo) {
+    public HabitEventEntity(int habitId, String name, Date date, String comment, Location location, Bitmap photo) {
         this.habitId = habitId;
         this.date = date;
         this.comment = comment;
@@ -59,12 +66,20 @@ public class HabitEventEntity implements HabitEvent {
         return habitId;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setHabitId(int habitId) {
         this.habitId = habitId;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setDate(Date date) {
@@ -106,5 +121,9 @@ public class HabitEventEntity implements HabitEvent {
         return photo;
     };
 
+    public String toString() {
+        return "Habit: " + this.getName() + "\n" +
+                "StartDate: " + (new SimpleDateFormat("yyyy/MM/dd").format(this.getDate())) + "\n";
+    }
 
 }

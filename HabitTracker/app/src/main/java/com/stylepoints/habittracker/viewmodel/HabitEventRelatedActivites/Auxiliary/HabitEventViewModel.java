@@ -18,7 +18,7 @@ public class HabitEventViewModel extends ViewModel {
     private HabitEventRepository eventRepo;
 
 
-    /// might need something to grab event by habit first
+    /// might need something to grab event by event first
     public HabitEventViewModel(HabitEventRepository eventRepo, int eventId) {
         this.eventRepo = eventRepo;
         this.event = eventRepo.getEventById(eventId);

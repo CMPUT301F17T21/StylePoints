@@ -30,11 +30,11 @@ public class DatabaseInitUtil {
         db.habitDao().save(habit2);
 
 
-        HabitEventEntity event1 = new HabitEventEntity(1, new Date(), "ran 5km today");
+        HabitEventEntity event1 = new HabitEventEntity(1, "Jogging", new Date(), "ran 5km today");
         event1.setHabitId(1); // this habit event belongs to the habit with id 0 (the exercise habit above)
         db.habitEventDao().save(event1);
 
-        HabitEventEntity event2 = new HabitEventEntity(2, new Date(), "went to gym");
+        HabitEventEntity event2 = new HabitEventEntity(2, "Swimming", new Date(), "went to gym");
         int habitId = db.habitDao().findIdOfHabitType("exercise"); // finding the id by string
         event2.setHabitId(habitId);
         db.habitEventDao().save(event2);

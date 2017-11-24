@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 
 import com.stylepoints.habittracker.repository.local.AppDatabase;
 import com.stylepoints.habittracker.repository.local.dao.HabitEventDao;
+import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
 
 import java.util.List;
@@ -18,6 +19,9 @@ public class HabitEventRepository {
 
     public LiveData<List<HabitEventEntity>> getEventsByHabitId(int habitId) {
         return dao.loadEventsByHabitId(habitId);
+    }
+    public HabitEventEntity getEventSync(int eventId) {
+        return dao.loadSync(eventId);
     }
 
     public LiveData<List<HabitEventEntity>> getAllEvents() {

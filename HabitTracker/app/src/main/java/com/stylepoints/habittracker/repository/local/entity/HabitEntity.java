@@ -99,9 +99,10 @@ public class HabitEntity implements Habit {
     }
 
     public String toString () {
-        return "Type: " + this.getType() + "\n" +
-                "Reason: " + this.getReason() + "\n" +
-                "StartDate: " + (new SimpleDateFormat("yyyy/MM/dd").format(this.getStartDate())) + "\n" +
-                "Schedule: " + daysActive.toString();
+        return "Habit: " + this.getType() + "\n";
+//        return "Type: " + this.getType() + "\n" +
+//                "Reason: " + this.getReason() + "\n" +
+//                "StartDate: " + (new SimpleDateFormat("yyyy/MM/dd").format(this.getStartDate())) + "\n" +
+//                "Schedule: " + daysActive.toString();
     }
 }

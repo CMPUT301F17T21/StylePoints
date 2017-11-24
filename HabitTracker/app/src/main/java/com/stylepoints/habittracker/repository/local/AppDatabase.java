@@ -20,7 +20,7 @@ import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
  * https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9
  *
  */
-@Database(entities = {HabitEntity.class, HabitEventEntity.class}, version = 6)
+@Database(entities = {HabitEntity.class, HabitEventEntity.class}, version = 7)
 @TypeConverters({DateConverter.class, LocationConverter.class, ScheduleConverter.class, BitmapConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;

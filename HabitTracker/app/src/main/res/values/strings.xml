@@ -18,4 +18,8 @@
     <string name="ran_3_km_today">Ran 3 km today!</string>
     <string name="photograph">Photograph</string>
     <string name="placeholder">placeholder</string>
+    <string name="add_new_event">Add New Event</string>
+    <string name="commentary_key_word">Commentary Key Word</string>
+    <string name="search_word">search_word</string>
+    <string name="remove_photo">remove photo</string>
 </resources>
