@@ -29,7 +29,8 @@
             android:name=".viewmodel.HabitEventRelatedActivites.EventsMainActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".viewmodel.HabitEventRelatedActivites.EventNewActivity" />
-        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventEditActivity"></activity>
+        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventEditActivity" />
+        <activity android:name=".viewmodel.CentralHubActivity.NewUserActivity"></activity>
     </application>
 
 </manifest>
