@@ -129,6 +129,7 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
             @Override
             public void onClick(View view) {
                 // Enter deletion code here
+                repo.delete(habit);
                 finish();
             }
         });

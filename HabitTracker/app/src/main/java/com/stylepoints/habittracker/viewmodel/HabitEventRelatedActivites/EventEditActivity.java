@@ -178,13 +178,13 @@ public class EventEditActivity extends AppCompatActivity {
         });
 
         // Deletion process
-//        buttonDeleteEvent.setOnClickListener(new Button.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                eventRepo.delete(event);
-//                finish();
-//            }
-//        });
+        buttonDeleteEvent.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                eventRepo.delete(event);
+                finish();
+            }
+        });
 
 //        checkBoxAttachLocation.setOnClickListener(new View.OnClickListener() {
 //            @Override

@@ -39,6 +39,12 @@ public class HabitEventRepository {
         return dao.save(event);
     }
 
+    public int delete(HabitEventEntity event) {
+        // TODO: make sure that the habit this references is actually in the database
+        // TODO: verify data is correct (comment length is not too long)
+        return dao.delete(event);
+    }
+
     public static HabitEventRepository getInstance(AppDatabase db) {
         if (INSTANCE == null) {
             INSTANCE = new HabitEventRepository(db.habitEventDao());

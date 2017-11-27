@@ -51,6 +51,10 @@ public class HabitRepository {
         return habitDao.save(habit);
     }
 
+    public int delete(HabitEntity habit) {
+        return habitDao.delete(habit);
+    }
+
     public static HabitRepository getInstance(AppDatabase db) {
         if (INSTANCE == null) {
             INSTANCE = new HabitRepository(db.habitDao());
