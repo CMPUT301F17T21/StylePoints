@@ -67,10 +67,6 @@ public class EventNewActivity extends AppCompatActivity {
         return buttonAddEvent;
     }
 
-    public Intent getIntent() {
-        return intent;
-    }
-
     public List<HabitEntity> getHabitList() {
         return habitList;
     };
@@ -84,7 +80,6 @@ public class EventNewActivity extends AppCompatActivity {
     private Button buttonRemovePicture;
     private Button buttonAddEvent;
 
-    private Intent intent;
     private List<HabitEntity> habitList;
     private ArrayAdapter<HabitEntity> habitArrayAdapter;
 
@@ -92,6 +87,8 @@ public class EventNewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_new);
+
+        System.out.println("EventNewActivity");
 
         // Get required repo
         HabitRepository habitRepo = HabitRepository.getInstance(AppDatabase.getAppDatabase(getApplicationContext()));
@@ -102,12 +99,14 @@ public class EventNewActivity extends AppCompatActivity {
         HabitEventListViewModelFactory eventFactory = new HabitEventListViewModelFactory(eventRepo);
         HabitEventListViewModel eventModel = ViewModelProviders.of(this, eventFactory).get(HabitEventListViewModel.class);
 
+
+        System.out.println(getIntent());
         // Inisitialise the activity to layout
         bindToUi();
 
         // Initialise the data of occurence field
         Date date = new Date();
-        textViewDateOfOccurence.setText((new SimpleDateFormat("yyyy/MM/dd")).format(date));
+        textViewDateOfOccurence.setText((new SimpleDateFormat("yyyy/MM/dd hh:mm:ss")).format(date));
 
         // Initialise the spinner for habit input
         habitList = new ArrayList<HabitEntity>();
@@ -127,7 +126,7 @@ public class EventNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, CAM_REQUEST);
                 } else {
                     String permissionRequest[] = {Manifest.permission.CAMERA};
@@ -153,7 +152,7 @@ public class EventNewActivity extends AppCompatActivity {
                 event.setHabitId(((HabitEntity) spinnerHabitName.getSelectedItem()).getId());
                 event.setName(((HabitEntity) spinnerHabitName.getSelectedItem()).getType());
                 try {
-                    event.setDate((new SimpleDateFormat("yyyy/MM/dd")).parse(textViewDateOfOccurence.getText().toString()));
+                    event.setDate((new SimpleDateFormat("yyyy/MM/dd hh:mm:ss")).parse(textViewDateOfOccurence.getText().toString()));
                 } catch (ParseException ex) {
                     event.setDate(new Date());
                 }
@@ -181,7 +180,7 @@ public class EventNewActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQ_CODE_CAMERA ) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, CAM_REQUEST);
             } else {
                 Toast.makeText(this, "CannotAccessCamera", Toast.LENGTH_LONG).show();
@@ -204,7 +203,7 @@ public class EventNewActivity extends AppCompatActivity {
     // UI init
     private void bindToUi() {
         // Intialise variables
-        spinnerHabitName = (Spinner) findViewById(R.id.spinnerEventName);
+        spinnerHabitName = (Spinner) findViewById(R.id.textViewEventName);
         textViewDateOfOccurence = (TextView) findViewById(R.id.textViewDateOfOccurence);
         editTextEventComment = (EditText) findViewById(R.id.editTextEventComment);
         imageViewEventPhoto = (ImageView) findViewById(R.id.imageViewEventPhoto);

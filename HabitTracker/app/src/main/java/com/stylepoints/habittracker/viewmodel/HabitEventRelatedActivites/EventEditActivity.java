@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,10 +71,6 @@ public class EventEditActivity extends AppCompatActivity {
         return buttonDeleteEvent;
     }
 
-    public Intent getIntent() {
-        return intent;
-    }
-
     public List<HabitEntity> getHabitList() {
         return habitList;
     };
@@ -90,14 +85,15 @@ public class EventEditActivity extends AppCompatActivity {
     private Button buttonSaveEvent;
     private Button buttonDeleteEvent;
 
-    private Intent intent;
     private List<HabitEntity> habitList;
     private ArrayAdapter<HabitEntity> habitArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_new);
+        setContentView(R.layout.activity_event_edit);
+
+        System.out.println("EventEditActivity");
 
         // Get required repo
         HabitRepository habitRepo = HabitRepository.getInstance(AppDatabase.getAppDatabase(getApplicationContext()));
@@ -110,6 +106,7 @@ public class EventEditActivity extends AppCompatActivity {
 
 
         Intent inputIntent = getIntent();
+        System.out.println(inputIntent);
         if (!inputIntent.hasExtra("EVENT_ID")) {
             // nothing to edit! return back to previous page
             Log.e(TAG, "eventId was not passed in with the intent");
@@ -133,24 +130,20 @@ public class EventEditActivity extends AppCompatActivity {
             return;
         }
 
-
         // Inisitialise the activity to layout
         bindToUi();
         fillUi(event);
 
         // Initialise the data of occurence field
         Date date = new Date();
-        textViewDateOfOccurence.setText((new SimpleDateFormat("yyyy/MM/dd")).format(date));
-
-        // Initialise imageView for photos
-        imageViewEventPhoto.setImageDrawable(null);
+        textViewDateOfOccurence.setText((new SimpleDateFormat("yyyy/MM/dd hh:mm:ss")).format(date));
 
         // Initialise button to take picture
         buttonTakePicture.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view) {
                 if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, CAM_REQUEST);
                 } else {
                     String permissionRequest[] = {Manifest.permission.CAMERA};
@@ -172,20 +165,26 @@ public class EventEditActivity extends AppCompatActivity {
         buttonSaveEvent.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    event.setDate((new SimpleDateFormat("yyyy/MM/dd")).parse(textViewDateOfOccurence.getText().toString()));
-                } catch (ParseException ex) {
-                    event.setDate(new Date());
-                }
                 event.setComment(editTextEventComment.getText().toString());
                 if (imageViewEventPhoto.getDrawable() != null) {
                     event.setPhoto(((BitmapDrawable) imageViewEventPhoto.getDrawable()).getBitmap());
+                } else {
+                    event.setPhoto(null);
                 }
 //              event.setLocation();
                 eventRepo.save(event);
                 finish();
             }
         });
+
+        // Deletion process
+//        buttonDeleteEvent.setOnClickListener(new Button.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                eventRepo.delete(event);
+//                finish();
+//            }
+//        });
 
 //        checkBoxAttachLocation.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -201,7 +200,7 @@ public class EventEditActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQ_CODE_CAMERA ) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, CAM_REQUEST);
             } else {
                 Toast.makeText(this, "CannotAccessCamera", Toast.LENGTH_LONG).show();
@@ -231,14 +230,14 @@ public class EventEditActivity extends AppCompatActivity {
         checkBoxAttachLocation = (CheckBox) findViewById(R.id.checkBoxAttachLocation);
         buttonTakePicture = (Button) findViewById(R.id.buttonTakePhoto);
         buttonRemovePicture = (Button) findViewById(R.id.buttonRemovePhoto);
-        buttonSaveEvent = (Button) findViewById(R.id.buttonAddEvent);
-        buttonDeleteEvent = (Button) findViewById(R.id.buttonAddEvent);
+        buttonSaveEvent = (Button) findViewById(R.id.buttonSaveEvent);
+        buttonDeleteEvent = (Button) findViewById(R.id.buttonDeleteEvent);
     }
 
 
     private void fillUi(HabitEventEntity event) {
         textViewEventName.setText(event.getName());
-        textViewDateOfOccurence.setText((new SimpleDateFormat("yyyy/MM/dd")).format(event.getDate()));
+        textViewDateOfOccurence.setText((new SimpleDateFormat("yyyy/MM/dd hh:mm:ss")).format(event.getDate()));
         editTextEventComment.setText(event.getComment());
         imageViewEventPhoto.setImageBitmap(event.getPhoto());
     }

@@ -123,7 +123,8 @@ public class HabitEventEntity implements HabitEvent {
 
     public String toString() {
         return "Habit: " + this.getName() + "\n" +
-                "StartDate: " + (new SimpleDateFormat("yyyy/MM/dd").format(this.getDate())) + "\n";
+                "StartDate: " + (new SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format(this.getDate())) + "\n" +
+                "Comment: " + this.getComment();
     }
 
 }

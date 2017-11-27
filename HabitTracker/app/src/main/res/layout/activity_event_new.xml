@@ -22,7 +22,7 @@
         app:layout_constraintLeft_toRightOf="@+id/textViewEventNameTitle"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textViewDateOfOccTitle"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerEventName" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewEventName" />
 
     <TextView
         android:id="@+id/textViewDateOfOccTitle"
@@ -96,7 +96,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewDateOfOccTitle" />
 
     <Spinner
-        android:id="@+id/spinnerEventName"
+        android:id="@+id/textViewEventName"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginLeft="8dp"
