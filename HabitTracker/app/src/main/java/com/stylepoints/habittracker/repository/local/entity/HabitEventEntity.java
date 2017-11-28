@@ -3,6 +3,7 @@ package com.stylepoints.habittracker.repository.local.entity;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.support.annotation.Nullable;
 
@@ -23,6 +24,7 @@ public class HabitEventEntity implements HabitEvent {
     private Date date;
     private String comment;
     private Location location;
+    private Bitmap photo;
     // TODO: add photograph support
 
     public HabitEventEntity() {
@@ -39,6 +41,14 @@ public class HabitEventEntity implements HabitEvent {
         this.date = date;
         this.comment = comment;
         this.location = location;
+    }
+
+    public HabitEventEntity(int habitId, Date date, String comment, Location location, Bitmap photo) {
+        this.habitId = habitId;
+        this.date = date;
+        this.comment = comment;
+        this.location = location;
+        this.photo = photo;
     }
 
     public int getId() {
@@ -69,6 +79,10 @@ public class HabitEventEntity implements HabitEvent {
         this.location = location;
     }
 
+    public void setPhoto (Bitmap photo) {
+        this.photo = photo;
+    }
+
     @Override
     public Date getDate() {
         return date;
@@ -86,7 +100,11 @@ public class HabitEventEntity implements HabitEvent {
         return location;
     }
 
-
+    @Nullable
+    @Override
+    public Bitmap getPhoto () {
+        return photo;
+    };
 
 
 }

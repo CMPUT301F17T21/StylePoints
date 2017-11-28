@@ -12,14 +12,9 @@ import android.widget.Spinner;
 
 import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.repository.HabitEventRepository;
-import com.stylepoints.habittracker.repository.HabitRepository;
 import com.stylepoints.habittracker.repository.local.AppDatabase;
-import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
-import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
-import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitEditActivity;
-import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitNewActivity;
-import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitsMainActivity;
+import com.stylepoints.habittracker.viewmodel.CentralHubActivity.EventTodayNewActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +50,7 @@ public class EventsMainActivity extends AppCompatActivity {
         List<String> filterlist = new ArrayList<String>();
         filterlist.add("Reverse Chronology");
         filterlist.add("Key Word in Comment");
+        // Need to add all habit names
         filtersArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, filterlist);
         spinner_event_filter.setAdapter(filtersArrayAdapter);
 
@@ -62,7 +58,7 @@ public class EventsMainActivity extends AppCompatActivity {
         listview_habit_list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?>adapter, View v, int position, long l){
-                intent = new Intent(EventsMainActivity.this, EventEditActivity.class);
+                intent = new Intent(EventsMainActivity.this, EventTodayNewActivity.class);
                 startActivity(intent);
             }
         });
