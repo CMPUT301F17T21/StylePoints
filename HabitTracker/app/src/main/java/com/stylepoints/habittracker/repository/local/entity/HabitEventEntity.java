@@ -7,9 +7,10 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.support.annotation.Nullable;
 
+import com.google.gson.annotations.Expose;
 import com.stylepoints.habittracker.model.HabitEvent;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity(foreignKeys = @ForeignKey(entity = HabitEntity.class,
                                   parentColumns = "id",
@@ -21,8 +22,17 @@ public class HabitEventEntity implements HabitEvent {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int habitId;
-    private Date date;
+    private String elasticId;
+
+    @Expose
+    private String user;
+    @Expose
+    private String habitElasticId;
+    @Expose
+    private LocalDate date;
+    @Expose
     private String comment;
+    @Expose
     private Location location;
     private Bitmap photo;
     // TODO: add photograph support
@@ -30,20 +40,36 @@ public class HabitEventEntity implements HabitEvent {
     public HabitEventEntity() {
     }
 
-    public HabitEventEntity(int habitId, Date date, String comment) {
+    public HabitEventEntity(int habitId, LocalDate date, String comment) {
         this.habitId = habitId;
         this.date = date;
         this.comment = comment;
     }
 
-    public HabitEventEntity(int habitId, Date date, String comment, Location location) {
+    public HabitEventEntity(int habitId, LocalDate date, String comment, Location location) {
         this.habitId = habitId;
         this.date = date;
         this.comment = comment;
         this.location = location;
     }
 
-    public HabitEventEntity(int habitId, Date date, String comment, Location location, Bitmap photo) {
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getHabitElasticId() {
+        return habitElasticId;
+    }
+
+    public void setHabitElasticId(String habitElasticId) {
+        this.habitElasticId = habitElasticId;
+}
+
+    public HabitEventEntity(int habitId, LocalDate date, String comment, Location location, Bitmap photo) {
         this.habitId = habitId;
         this.date = date;
         this.comment = comment;
@@ -53,6 +79,15 @@ public class HabitEventEntity implements HabitEvent {
 
     public int getId() {
         return id;
+    }
+
+    public String getElasticId() {
+        return elasticId;
+    }
+
+    @Override
+    public void setElasticId(String elasticId) {
+        this.elasticId = elasticId;
     }
 
     public int getHabitId() {
@@ -67,7 +102,7 @@ public class HabitEventEntity implements HabitEvent {
         this.id = id;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -84,7 +119,7 @@ public class HabitEventEntity implements HabitEvent {
     }
 
     @Override
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -100,11 +135,20 @@ public class HabitEventEntity implements HabitEvent {
         return location;
     }
 
+    @Override
+    public String toString() {
+        return "HabitEventEntity{" +
+                "user='" + user + '\'' +
+                ", habitElasticId='" + habitElasticId + '\'' +
+                ", date=" + date +
+                ", comment='" + comment + '\'' +
+                ", location=" + location +
+                '}';
+    }
+
     @Nullable
     @Override
     public Bitmap getPhoto () {
         return photo;
-    };
-
-
+    }
 }

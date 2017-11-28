@@ -1,6 +1,7 @@
 package com.stylepoints.habittracker.viewmodel.CentralHubActivity;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.repository.DatabaseInitUtil;
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     Button eventButton;
     Button profileButton;
     Button socialButton;
+
+    TextView testTextView;
 
     ListView listView;
     ArrayAdapter<HabitEntity> adapter;

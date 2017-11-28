@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -39,10 +40,10 @@ public class HabitEventDaoTest {
 
     @Test
     public void insertAndGetEvent() throws Exception {
-        HabitEntity habit = new HabitEntity("Exercise", "get healthy", new Date(), DayOfWeek.MONDAY);
+        HabitEntity habit = new HabitEntity("Exercise", "get healthy", LocalDate.now(), DayOfWeek.MONDAY);
         int habitId = (int) db.habitDao().save(habit);
 
-        HabitEventEntity event = new HabitEventEntity(habitId, new Date(), "ran 5km");
+        HabitEventEntity event = new HabitEventEntity(habitId, LocalDate.now(), "ran 5km");
         db.habitEventDao().save(event);
         db.habitEventDao().loadAllEvents();
 
@@ -53,13 +54,13 @@ public class HabitEventDaoTest {
 
     @Test
     public void getEventsByHabitId() throws Exception {
-        HabitEntity habit = new HabitEntity("Exercise", "get healthy", new Date(), DayOfWeek.MONDAY);
+        HabitEntity habit = new HabitEntity("Exercise", "get healthy", LocalDate.now(), DayOfWeek.MONDAY);
         int habitId = (int) db.habitDao().save(habit);
 
-        HabitEventEntity event = new HabitEventEntity(habitId, new Date(), "ran 5km");
+        HabitEventEntity event = new HabitEventEntity(habitId, LocalDate.now(), "ran 5km");
         db.habitEventDao().save(event);
 
-        HabitEventEntity event2 = new HabitEventEntity(habitId, new Date(), "ran 6km");
+        HabitEventEntity event2 = new HabitEventEntity(habitId, LocalDate.now(), "ran 6km");
         db.habitEventDao().save(event2);
 
         List<HabitEventEntity> eventList = LiveDataTestUtil.getValue(db.habitEventDao().loadEventsByHabitId(habitId));

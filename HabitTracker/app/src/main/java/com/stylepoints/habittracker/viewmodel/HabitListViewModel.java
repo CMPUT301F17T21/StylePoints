@@ -21,6 +21,9 @@ public class HabitListViewModel extends ViewModel {
     public HabitListViewModel(HabitRepository habitRepo) {
         this.habitRepo = habitRepo;
         habitList = habitRepo.loadAll();
+
+        // remote example...
+        //habitList = habitRepo.getUsersHabits("mackenzie");
     }
 
     public LiveData<List<HabitEntity>> getHabitList() {
