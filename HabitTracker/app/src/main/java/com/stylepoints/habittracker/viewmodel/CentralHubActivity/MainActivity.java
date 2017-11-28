@@ -2,8 +2,10 @@ package com.stylepoints.habittracker.viewmodel.CentralHubActivity;
 
 import android.arch.lifecycle.LiveData;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,6 +27,10 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private AppDatabase db;
 
+    SharedPreferences pref;
+    SharedPreferences.Editor prefEdit;
+    static final int GET_USER_NAME = 1;
+
     Button habitButton;
     Button eventButton;
     Button profileButton;
@@ -41,6 +47,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Added for getting the user name and ID
+        pref = getPreferences(0);
+        if (pref.contains("username") == false){
+            //Go to Activity to get username. Should only be ran the first time
+            Intent getUserNameIntent = new Intent(this, NewUserActivity.class);
+            startActivityForResult(getUserNameIntent, GET_USER_NAME);
+        }
+        String username = pref.getString("username", "");
+        Log.i("debug", pref.getString("username", ""));
 
 
         AppDatabase db = AppDatabase.getAppDatabase(getApplicationContext());
@@ -95,5 +111,19 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        switch (requestCode) {
+            case GET_USER_NAME:
+                if (resultCode == RESULT_OK){
+                    prefEdit = pref.edit();
+                    prefEdit.putString("username", data.getStringExtra("username"));
+                    prefEdit.commit();
+                }
+                break;
+        }
+
     }
 }
