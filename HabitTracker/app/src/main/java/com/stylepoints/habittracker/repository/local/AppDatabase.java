@@ -7,6 +7,7 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import com.stylepoints.habittracker.repository.local.converter.LocalDateConverter;
+import com.stylepoints.habittracker.repository.local.converter.BitmapConverter;
 import com.stylepoints.habittracker.repository.local.converter.LocationConverter;
 import com.stylepoints.habittracker.repository.local.converter.ScheduleConverter;
 import com.stylepoints.habittracker.repository.local.dao.HabitDao;
@@ -19,8 +20,8 @@ import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
  * https://medium.com/@ajaysaini.official/building-database-with-room-persistence-library-ecf7d0b8f3e9
  *
  */
-@Database(entities = {HabitEntity.class, HabitEventEntity.class}, version = 5)
-@TypeConverters({LocalDateConverter.class, LocationConverter.class, ScheduleConverter.class})
+@Database(entities = {HabitEntity.class, HabitEventEntity.class}, version = 6)
+@TypeConverters({LocalDateConverter.class, LocationConverter.class, ScheduleConverter.class, BitmapConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 

@@ -2,23 +2,17 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "9be337bc9ac4358ac02912739a23efb5",
+    "identityHash": "2becb5526386acdb018a892823955e64",
     "entities": [
       {
         "tableName": "habits",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `elasticId` TEXT, `type` TEXT, `reason` TEXT, `user` TEXT, `startDate` INTEGER, `daysActive` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT, `reason` TEXT, `startDate` INTEGER, `daysActive` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "elasticId",
-            "columnName": "elasticId",
-            "affinity": "TEXT",
-            "notNull": false
           },
           {
             "fieldPath": "type",
@@ -29,12 +23,6 @@
           {
             "fieldPath": "reason",
             "columnName": "reason",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "user",
-            "columnName": "user",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -62,7 +50,7 @@
       },
       {
         "tableName": "habit_events",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `habitId` INTEGER NOT NULL, `elasticId` TEXT, `user` TEXT, `habitElasticId` TEXT, `date` INTEGER, `comment` TEXT, `location` TEXT, FOREIGN KEY(`habitId`) REFERENCES `habits`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `habitId` INTEGER NOT NULL, `date` INTEGER, `comment` TEXT, `location` TEXT, `photo` BLOB, FOREIGN KEY(`habitId`) REFERENCES `habits`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -75,24 +63,6 @@
             "columnName": "habitId",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "elasticId",
-            "columnName": "elasticId",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "user",
-            "columnName": "user",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "habitElasticId",
-            "columnName": "habitElasticId",
-            "affinity": "TEXT",
-            "notNull": false
           },
           {
             "fieldPath": "date",
@@ -110,6 +80,12 @@
             "fieldPath": "location",
             "columnName": "location",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "photo",
+            "columnName": "photo",
+            "affinity": "BLOB",
             "notNull": false
           }
         ],
@@ -137,7 +113,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"9be337bc9ac4358ac02912739a23efb5\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2becb5526386acdb018a892823955e64\")"
     ]
   }
 }

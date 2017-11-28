@@ -32,7 +32,9 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
 
     LocalDate date;
 
-    Button button_add_habit;
+    Button button_save_habit;
+    Button button_delete_habit;
+    Button button_habit_stats;
     Button button_set_date;
     EditText edittext_habit_name;
     EditText edittext_habit_reason;
@@ -87,7 +89,15 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
             }
         });
 
-        button_add_habit.setOnClickListener(new View.OnClickListener() {
+        button_habit_stats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HabitEditActivity.this, HabitStatActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        button_save_habit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (verifyFields()) {
@@ -112,7 +122,16 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
             }
         });
 
+        button_delete_habit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Enter deletion code here
+                finish();
+            }
+        });
     }
+
+
 
     private boolean verifyFields() {
         boolean valid = true;
@@ -128,6 +147,27 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
         return valid;
     }
 
+
+    /* Initialisation procedures */
+    // Assign widgets to specified variables
+    private void bindToUi() {
+        button_save_habit = (Button) findViewById(R.id.buttonSaveHabit);
+        button_delete_habit = (Button) findViewById(R.id.buttonDeleteHabit);
+        button_habit_stats = (Button) findViewById(R.id.buttonHabitStats);
+        button_set_date = (Button) findViewById(R.id.buttonSetDate);
+        edittext_habit_name = (EditText) findViewById(R.id.editTextHabitName);
+        edittext_habit_reason = (EditText) findViewById(R.id.editTextReason);
+        textview_habit_start_date = (TextView) findViewById(R.id.textViewDate);
+        checkbox_monday = (CheckBox) findViewById(R.id.checkBoxMonday);
+        checkbox_tuesday = (CheckBox) findViewById(R.id.checkBoxTuesday);
+        checkbox_wednesday = (CheckBox) findViewById(R.id.checkBoxWednesday);
+        checkbox_thursday = (CheckBox) findViewById(R.id.checkBoxThursday);
+        checkbox_friday = (CheckBox) findViewById(R.id.checkBoxFriday);
+        checkbox_saturday = (CheckBox) findViewById(R.id.checkBoxSaturday);
+        checkbox_sunday = (CheckBox) findViewById(R.id.checkBoxSunday);
+    }
+
+    // Fill the initialised UI with required values
     private void fillUi(HabitEntity habit) {
         date = habit.getStartDate();
 
@@ -141,21 +181,6 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
         checkbox_friday.setChecked(habit.getDaysActive().contains(DayOfWeek.FRIDAY));
         checkbox_saturday.setChecked(habit.getDaysActive().contains(DayOfWeek.SATURDAY));
         checkbox_sunday.setChecked(habit.getDaysActive().contains(DayOfWeek.SUNDAY));
-    }
-
-    private void bindToUi() {
-        button_add_habit = (Button) findViewById(R.id.buttonAddHabit);
-        button_set_date = (Button) findViewById(R.id.button_set_date);
-        edittext_habit_name = (EditText) findViewById(R.id.editTextHabitName);
-        edittext_habit_reason = (EditText) findViewById(R.id.editTextReason);
-        textview_habit_start_date = (TextView) findViewById(R.id.textViewDate);
-        checkbox_monday = (CheckBox) findViewById(R.id.checkBoxMonday);
-        checkbox_tuesday = (CheckBox) findViewById(R.id.checkBoxTuesday);
-        checkbox_wednesday = (CheckBox) findViewById(R.id.checkBoxWednesday);
-        checkbox_thursday = (CheckBox) findViewById(R.id.checkBoxThursday);
-        checkbox_friday = (CheckBox) findViewById(R.id.checkBoxFriday);
-        checkbox_saturday = (CheckBox) findViewById(R.id.checkBoxSaturday);
-        checkbox_sunday = (CheckBox) findViewById(R.id.checkBoxSunday);
     }
 
     @Override

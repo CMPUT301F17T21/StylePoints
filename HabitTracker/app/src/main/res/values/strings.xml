@@ -17,4 +17,5 @@
     <string name="attach_location">Attach Location</string>
     <string name="ran_3_km_today">Ran 3 km today!</string>
     <string name="photograph">Photograph</string>
+    <string name="placeholder">placeholder</string>
 </resources>

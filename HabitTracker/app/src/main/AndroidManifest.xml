@@ -3,6 +3,14 @@
     package="com.stylepoints.habittracker">
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,20 +25,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".viewmodel.CentralHubActivity.EventTodayNewActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".viewmodel.CentralHubActivity.MainActivity" />
+        </activity>
         <activity
             android:name=".viewmodel.HabitRelatedActivities.HabitsMainActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".viewmodel.CentralHubActivity.MainActivity" />
+        </activity>
         <activity
             android:name=".viewmodel.HabitRelatedActivities.HabitEditActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".viewmodel.HabitRelatedActivities.HabitsMainActivity" />
+        </activity>
         <activity
             android:name=".viewmodel.HabitRelatedActivities.HabitNewActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".viewmodel.HabitRelatedActivities.HabitsMainActivity" />
+        </activity>
         <activity
             android:name=".viewmodel.HabitEventRelatedActivites.EventsMainActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".viewmodel.HabitEventRelatedActivites.EventNewActivity" />
-        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventEditActivity"></activity>
+        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventEditActivity" />
+        <activity android:name=".viewmodel.CentralHubActivity.NewUserActivity"></activity>
     </application>
 
 </manifest>

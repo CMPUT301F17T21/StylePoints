@@ -1,5 +1,6 @@
 package com.stylepoints.habittracker.model;
 
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.support.annotation.Nullable;
 
@@ -18,6 +19,8 @@ public interface HabitEvent extends Id {
     String getComment();
     @Nullable
     Location getLocation();
+    @Nullable
+    Bitmap getPhoto();
 
     // TODO: Add photograph support
 }
