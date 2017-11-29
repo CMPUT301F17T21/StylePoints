@@ -51,7 +51,7 @@ public class HabitJsonSource {
                 try {
                     file.createNewFile();
                 } catch (IOException e1) {
-                    Log.e(TAG, "Error creating file for habits");
+                    Log.e(TAG, "Error creating file for habits" + e1.toString());
                     e1.printStackTrace();
                 }
                 INSTANCE = new HabitJsonSource(gson);
