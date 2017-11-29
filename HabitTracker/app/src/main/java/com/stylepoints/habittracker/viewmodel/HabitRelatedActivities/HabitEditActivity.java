@@ -15,15 +15,14 @@ import android.widget.TextView;
 
 import com.stylepoints.habittracker.DatePickerFragment;
 import com.stylepoints.habittracker.R;
+import com.stylepoints.habittracker.model.Habit;
+import com.stylepoints.habittracker.model.HabitReasonTooLongException;
+import com.stylepoints.habittracker.model.HabitTypeTooLongException;
 import com.stylepoints.habittracker.repository.HabitRepository;
-import com.stylepoints.habittracker.repository.local.AppDatabase;
-import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.EnumSet;
 
 public class HabitEditActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -53,7 +52,7 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
         setContentView(R.layout.activity_habit_edit);
         bindToUi();
 
-        repo = HabitRepository.getInstance(AppDatabase.getAppDatabase(getApplicationContext()));
+        repo = HabitRepository.getInstance();
 
         Intent inputIntent = getIntent();
         if (!inputIntent.hasExtra("HABIT_ID")) {
@@ -63,16 +62,16 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
             return;
         }
 
-        int habitId = inputIntent.getIntExtra("HABIT_ID", 0);
+        String habitId = inputIntent.getStringExtra("HABIT_ID");
         Log.d(TAG, "passed in habitId: " + String.valueOf(habitId));
-        if (habitId == 0) {
+        if (habitId.equals("")) {
             // invalid ID
-            Log.e(TAG, "habitId can not be 0");
+            Log.e(TAG, "habitId can not be empty string");
             finish();
             return;
         }
 
-        HabitEntity habit = repo.getHabitSync(habitId);
+        Habit habit = repo.getHabitSync(habitId);
         if (habit == null) {
             Log.e(TAG, "Unable to find habit with id: " + String.valueOf(habitId));
             finish();
@@ -101,8 +100,16 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
             @Override
             public void onClick(View view) {
                 if (verifyFields()) {
-                    habit.setReason(edittext_habit_reason.getText().toString());
-                    habit.setType(edittext_habit_name.getText().toString());
+                    try {
+                        habit.setReason(edittext_habit_reason.getText().toString());
+                    } catch (HabitReasonTooLongException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        habit.setType(edittext_habit_name.getText().toString());
+                    } catch (HabitTypeTooLongException e) {
+                        e.printStackTrace();
+                    }
 
                     habit.setStartDate(date);
 
@@ -168,7 +175,7 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
     }
 
     // Fill the initialised UI with required values
-    private void fillUi(HabitEntity habit) {
+    private void fillUi(Habit habit) {
         date = habit.getStartDate();
 
         edittext_habit_name.setText(habit.getType());

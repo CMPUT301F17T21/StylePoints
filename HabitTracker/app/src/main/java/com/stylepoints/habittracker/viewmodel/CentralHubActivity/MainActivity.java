@@ -1,7 +1,6 @@
 package com.stylepoints.habittracker.viewmodel.CentralHubActivity;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +13,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.stylepoints.habittracker.R;
-import com.stylepoints.habittracker.repository.DatabaseInitUtil;
+import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.repository.HabitRepository;
-import com.stylepoints.habittracker.repository.local.AppDatabase;
-import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.EventsMainActivity;
-import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
 import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitsMainActivity;
 
 import java.util.ArrayList;
@@ -27,7 +23,6 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
-    private AppDatabase db;
 
     SharedPreferences pref;
     SharedPreferences.Editor prefEdit;
@@ -41,10 +36,10 @@ public class MainActivity extends AppCompatActivity {
     TextView testTextView;
 
     ListView listView;
-    ArrayAdapter<HabitEntity> adapter;
+    ArrayAdapter<Habit> adapter;
 
-    private List<HabitEntity> habitList;
-    private LiveData<List<HabitEntity>> fullList;
+    private List<Habit> habitList;
+    private LiveData<List<Habit>> fullList;
     private HabitRepository repo;
 
     @Override
@@ -63,18 +58,14 @@ public class MainActivity extends AppCompatActivity {
         Log.i("debug", pref.getString("username", ""));
 
 
-        AppDatabase db = AppDatabase.getAppDatabase(getApplicationContext());
-        // for now, initialize database with a couple of test entries
-        // DatabaseInitUtil.initializeDbWithTestData(db);
-
-        repo = HabitRepository.getInstance(db);
+        repo = HabitRepository.getInstance();
         fullList = repo.loadAll();
         habitList = new ArrayList<>();
 
         bindToUi();
         subscribeToModel();
 
-        adapter = new ArrayAdapter<HabitEntity>(
+        adapter = new ArrayAdapter<Habit>(
                 this, android.R.layout.simple_list_item_1, habitList);
         listView.setAdapter(adapter);
     }
@@ -84,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             if (fullList == null) { return; }
             // TODO: do this a better way
             habitList.clear();
-            for (HabitEntity habit : fullList) {
+            for (Habit habit : fullList) {
                 if (habit.isActiveToday()) {
                     habitList.add(habit);
                 }

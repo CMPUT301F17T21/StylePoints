@@ -1,7 +1,7 @@
 package com.stylepoints.habittracker.repository.remote;
 
-import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
-import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
+import com.stylepoints.habittracker.model.Habit;
+import com.stylepoints.habittracker.model.HabitEvent;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -19,29 +19,29 @@ import retrofit2.http.Query;
 public interface ElasticSearch {
     // ====== Habits =====
     @GET("habit/{id}")
-    Call<ElasticResponse<HabitEntity>> getHabitById(@Path("id") String id);
+    Call<ElasticResponse<Habit>> getHabitById(@Path("id") String id);
 
     @GET("habit/_search")
     Call<ElasticHabitListResponse> searchHabit(@Query("q") String fieldAndTerm);
 
     @POST("habit/")
-    Call<ElasticRequestStatus> saveHabit(@Body HabitEntity habit);
+    Call<ElasticRequestStatus> saveHabit(@Body Habit habit);
 
     @PUT("habit/{id}")
-    Call<ElasticRequestStatus> updateHabit(@Path("id") String id, @Body HabitEntity habit);
+    Call<ElasticRequestStatus> updateHabit(@Path("id") String id, @Body Habit habit);
 
     @DELETE("habit/{id}")
     Call<ElasticRequestStatus> deleteHabit(@Path("id") String id);
 
     // ====== Events =====
     @GET("event/{id}")
-    Call<ElasticResponse<HabitEventEntity>> getEventById(@Path("id") String id);
+    Call<ElasticResponse<HabitEvent>> getEventById(@Path("id") String id);
 
     @POST("event/")
-    Call<ElasticRequestStatus> saveEvent(@Body HabitEventEntity habit);
+    Call<ElasticRequestStatus> saveEvent(@Body HabitEvent habit);
 
     @PUT("event/{id}")
-    Call<ElasticRequestStatus> updateEvent(@Path("id") String id, @Body HabitEventEntity habit);
+    Call<ElasticRequestStatus> updateEvent(@Path("id") String id, @Body HabitEvent habit);
 
     @DELETE("event/{id}")
     Call<ElasticRequestStatus> deleteEvent(@Path("id") String id);

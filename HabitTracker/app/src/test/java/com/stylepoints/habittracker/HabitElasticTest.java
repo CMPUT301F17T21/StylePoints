@@ -1,7 +1,7 @@
 package com.stylepoints.habittracker;
 
 
-import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
+import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.repository.remote.ElasticHabitListResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticRequestStatus;
 import com.stylepoints.habittracker.repository.remote.ElasticResponse;
@@ -36,8 +36,8 @@ public class HabitElasticTest {
     public void getHabitTest() throws Exception {
         // .execute() is sync, .enqueue() is async
 
-        Response<ElasticResponse<HabitEntity>> response = elastic.getHabitById("AV_sN6rwT651_e3dy3Dl").execute();
-        HabitEntity habit = response.body().getSource();
+        Response<ElasticResponse<Habit>> response = elastic.getHabitById("AV_sN6rwT651_e3dy3Dl").execute();
+        Habit habit = response.body().getSource();
 
         System.out.println(response);
         System.out.println(response.body());
@@ -47,8 +47,7 @@ public class HabitElasticTest {
 
     @Test
     public void saveAndDeleteHabitTest() throws Exception {
-        HabitEntity habit = new HabitEntity("run", "", LocalDate.now(), DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
-        habit.setUser("mackenzie");
+        Habit habit = new Habit("run", "", "testusername", LocalDate.now(), DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
 
         Response<ElasticRequestStatus> response = elastic.saveHabit(habit).execute();
         assert(response.isSuccessful());
@@ -75,12 +74,12 @@ public class HabitElasticTest {
     public void getUsersHabitsTest() throws Exception {
         Response<ElasticHabitListResponse> response = elastic.searchHabit("user:mackenzie").execute();
         assert(response.isSuccessful());
-        List<HabitEntity> habitList = response.body().getList();
+        List<Habit> habitList = response.body().getList();
         assert(habitList != null);
 
         System.out.println("Number of hits: " + response.body().getNumHits());
 
-        for (HabitEntity habit : habitList) {
+        for (Habit habit : habitList) {
             System.out.println(habit);
         }
         assert(habitList.size() > 0);

@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.repository.HabitRepository;
-import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
 
 public class EventNewActivity extends AppCompatActivity {
     static String TAG = "EventNewActivity";
@@ -59,7 +58,7 @@ public class EventNewActivity extends AppCompatActivity {
         buttonAddEvent.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HabitEventEntity event = new HabitEventEntity();
+                //HabitEventEntity event = new HabitEventEntity();
             }
         });
 

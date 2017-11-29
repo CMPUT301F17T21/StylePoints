@@ -1,6 +1,6 @@
 package com.stylepoints.habittracker;
 
-import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
+import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.repository.remote.ElasticEventListResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticRequestStatus;
 import com.stylepoints.habittracker.repository.remote.ElasticResponse;
@@ -33,9 +33,7 @@ public class EventElasticTest {
 
     @Test
     public void getEventTest() throws Exception {
-        HabitEventEntity event = new HabitEventEntity(1, LocalDate.now(), "testcomment");
-        event.setUser("mackenzie");
-        event.setHabitElasticId("AV_sN6rwT651_e3dy3Dl");
+        HabitEvent event = new HabitEvent("testusername", "testcomment", LocalDate.now(), "AV_sN6rwT651_e3dy3Dl");
 
         Response<ElasticRequestStatus> response = elastic.saveEvent(event).execute();
         assert(response.isSuccessful());
