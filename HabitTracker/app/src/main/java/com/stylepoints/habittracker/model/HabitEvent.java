@@ -24,23 +24,24 @@ public class HabitEvent implements Id {
     private Location location;
     private Bitmap photo;
 
-    public HabitEvent(String username) {
+    public HabitEvent(String username, String habitId) {
         elasticId = UUID.randomUUID().toString();
         this.username = username;
+        this.date = LocalDate.now();
     }
 
-    public HabitEvent(String username, String comment) {
-        this(username);
+    public HabitEvent(String username, String habitId, String comment) {
+        this(username, habitId);
         this.comment = comment;
     }
 
-    public HabitEvent(String username, String comment, LocalDate date) {
-        this(username, comment);
+    public HabitEvent(String username, String habitId, String comment, LocalDate date) {
+        this(username, habitId, comment);
         this.date = date;
     }
 
-    public HabitEvent(String username, String comment, LocalDate date, Location location) {
-        this(username, comment, date);
+    public HabitEvent(String username, String habitId, String comment, LocalDate date, Location location) {
+        this(username, habitId, comment, date);
         this.location = location;
     }
 

@@ -28,6 +28,9 @@ public interface ElasticSearch {
     Call<ElasticRequestStatus> saveHabit(@Body Habit habit);
 
     @PUT("habit/{id}")
+    Call<ElasticRequestStatus> createHabitWithId(@Path("id") String id, @Body Habit habit);
+
+    @PUT("habit/{id}")
     Call<ElasticRequestStatus> updateHabit(@Path("id") String id, @Body Habit habit);
 
     @DELETE("habit/{id}")
@@ -42,6 +45,9 @@ public interface ElasticSearch {
 
     @PUT("event/{id}")
     Call<ElasticRequestStatus> updateEvent(@Path("id") String id, @Body HabitEvent habit);
+
+    @PUT("event/{id}")
+    Call<ElasticRequestStatus> createEventWithId(@Path("id") String id, @Body HabitEvent habit);
 
     @DELETE("event/{id}")
     Call<ElasticRequestStatus> deleteEvent(@Path("id") String id);

@@ -11,6 +11,7 @@ import com.stylepoints.habittracker.model.Habit;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -23,6 +24,7 @@ import java.util.List;
  */
 
 public class HabitJsonSource {
+    private static final String TAG = "HabitJsonSource";
     private Gson gson;
     private static HabitJsonSource INSTANCE;
     private static String FILENAME = "habits.json";
@@ -38,11 +40,20 @@ public class HabitJsonSource {
         if (INSTANCE == null) {
             Gson gson = new GsonBuilder().create();
             try {
+                Log.d(TAG, "trying to read habit list from json file");
                 BufferedReader bufferedReader = new BufferedReader(new FileReader(FILENAME));
                 INSTANCE = gson.fromJson(bufferedReader, HabitJsonSource.class);
+                Log.d(TAG, "gson complete");
                 INSTANCE.setGson(gson);
             } catch (FileNotFoundException e) {
                 // return an empty list
+                File file = new File(FILENAME);
+                try {
+                    file.createNewFile();
+                } catch (IOException e1) {
+                    Log.e(TAG, "Error creating file for habits");
+                    e1.printStackTrace();
+                }
                 INSTANCE = new HabitJsonSource(gson);
             }
         }
@@ -93,7 +104,7 @@ public class HabitJsonSource {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILENAME));
             gson.toJson(INSTANCE, HabitJsonSource.class, bufferedWriter);
         } catch (IOException e) {
-            Log.e("DISK", "Error saving habit list to disk");
+            Log.e(TAG, "Error saving habit list to disk" + e.toString());
             e.printStackTrace();
         }
     }

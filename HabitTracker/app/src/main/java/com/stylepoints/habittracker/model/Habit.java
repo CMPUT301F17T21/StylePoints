@@ -1,5 +1,7 @@
 package com.stylepoints.habittracker.model;
 
+import android.support.annotation.NonNull;
+
 import com.stylepoints.habittracker.repository.remote.Id;
 
 import java.time.DayOfWeek;
@@ -71,7 +73,7 @@ public class Habit implements Id {
     }
 
     public void setType(String type) throws HabitTypeTooLongException {
-        if (reason.length() > MAX_TYPE_LENGTH) {
+        if (type.length() > MAX_TYPE_LENGTH) {
             throw new HabitTypeTooLongException();
         }
         this.type = type;
