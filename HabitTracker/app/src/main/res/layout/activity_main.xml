@@ -28,28 +28,32 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:elevation="0dp"
-            android:text="Events" />
+            android:text="@string/events"
+            android:background="?android:attr/selectableItemBackground"/>
 
         <Button
             android:id="@+id/habitsMenuButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Habits" />
+            android:text="@string/habits"
+            android:background="?android:attr/selectableItemBackground"/>
 
         <Button
             android:id="@+id/socialMenuButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Social" />
+            android:text="@string/social"
+            android:background="?android:attr/selectableItemBackground"/>
 
         <Button
             android:id="@+id/profileMenuButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Profile" />
+            android:text="@string/profile"
+            android:background="?android:attr/selectableItemBackground"/>
     </LinearLayout>
 
     <TextView

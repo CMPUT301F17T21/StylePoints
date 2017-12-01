@@ -26,21 +26,24 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:elevation="0dp"
-            android:text="@string/map_events" />
+            android:text="@string/map_events"
+            android:background="?android:attr/selectableItemBackground"/>
 
         <Button
             android:id="@+id/followersButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/followers" />
+            android:text="@string/followers"
+            android:background="?android:attr/selectableItemBackground"/>
 
         <Button
             android:id="@+id/followingButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/following" />
+            android:text="@string/following"
+            android:background="?android:attr/selectableItemBackground"/>
     </LinearLayout>
 
     <TextView

@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.stylepoints.habittracker.R;
-import com.stylepoints.habittracker.repository.local.AppDatabase;
 public class MapEvents extends AppCompatActivity {
 
     @Override
