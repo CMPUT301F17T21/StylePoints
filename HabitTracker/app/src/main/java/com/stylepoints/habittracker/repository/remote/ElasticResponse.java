@@ -33,4 +33,8 @@ public class ElasticResponse<T extends Id> {
                 ", _source=" + _source +
                 '}';
     }
+
+    public boolean wasFound() {
+        return this.found;
+    }
 }
