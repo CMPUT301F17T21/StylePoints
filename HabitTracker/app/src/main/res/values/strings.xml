@@ -64,6 +64,7 @@
     <string name="add_new_event">Add New Event</string>
     <string name="existing_events">Existing Events</string>
     <string name="commentary_key_word">Commentary Key Word</string>
+    <string name="todays_habits">Todays Habits</string>
 
     <string-array name="socialFeed_vals">
         <item>All</item>
