@@ -18,6 +18,7 @@
     <string name="ran_3_km_today">Ran 3 km today!</string>
     <string name="photograph">Photograph</string>
     <string name="placeholder">placeholder</string>
+
     <string name="requests">Requests</string>
     <string name="followers">Followers</string>
     <string name="reject">Reject</string>
@@ -32,4 +33,9 @@
     <string name="my_profile">My Profile</string>
     <string name="username">username</string>
     <string name="achievements">Achievements</string>
+    <string-array name="socialFeed_vals">
+        <item>All</item>
+        <item>My Events</item>
+        <item>Within 5 km</item>
+    </string-array>
     \</resources>
