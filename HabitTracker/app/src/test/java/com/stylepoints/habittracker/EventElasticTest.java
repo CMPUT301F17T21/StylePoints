@@ -1,6 +1,6 @@
 package com.stylepoints.habittracker;
 
-import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
+import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.repository.remote.ElasticEventListResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticRequestStatus;
 import com.stylepoints.habittracker.repository.remote.ElasticResponse;
@@ -33,39 +33,37 @@ public class EventElasticTest {
 
     @Test
     public void getEventTest() throws Exception {
-        HabitEventEntity event = new HabitEventEntity(1, LocalDate.now(), "testcomment");
-        event.setUser("mackenzie");
-        event.setHabitElasticId("AV_sN6rwT651_e3dy3Dl");
+        HabitEvent event = new HabitEvent("testusername", "8dfc7b93-9418-4ce0-b9e6-dd7ede287c1b", "testcomment");
 
-        Response<ElasticRequestStatus> response = elastic.saveEvent(event).execute();
+        Response<ElasticRequestStatus> response = elastic.createEventWithId(event.getElasticId(), event).execute();
         assert(response.isSuccessful());
         ElasticRequestStatus status = response.body();
 
         assertEquals("event", status.getType());
         assert(status.wasCreated());
 
-        Response<ElasticResponse<HabitEventEntity>> habitResponse = elastic.getEventById(status.getId()).execute();
+        Response<ElasticResponse<HabitEvent>> habitResponse = elastic.getEventById(status.getId()).execute();
         assert(habitResponse.isSuccessful());
-        HabitEventEntity event2 = habitResponse.body().getSource();
+        HabitEvent event2 = habitResponse.body().getSource();
 
-        assertEquals("mackenzie", event2.getUser());
+        assertEquals("testusername", event2.getUsername());
         assertEquals("testcomment", event2.getComment());
     }
 
     @Test
     public void saveAndDeleteEventTest() throws Exception {
-        HabitEventEntity event = new HabitEventEntity(1, LocalDate.now(), "testcomment");
-        event.setUser("mackenzie");
-        event.setHabitElasticId("AV_sN6rwT651_e3dy3Dl");
+        HabitEvent event = new HabitEvent("testusername", "8dfc7b93-9418-4ce0-b9e6-dd7ede287c1b", "testcomment");
 
-        Response<ElasticRequestStatus> response = elastic.saveEvent(event).execute();
+        Response<ElasticRequestStatus> response = elastic.createEventWithId(event.getElasticId(), event).execute();
         assert(response.isSuccessful());
         ElasticRequestStatus status = response.body();
+        System.out.println(status);
 
         assertEquals("event", status.getType());
         assert(status.wasCreated());
 
         // delete the event we just made
+
         Response<ElasticRequestStatus> delResponse = elastic.deleteEvent(status.getId()).execute();
         assert(delResponse.isSuccessful());
 
@@ -77,10 +75,9 @@ public class EventElasticTest {
     @Test
     public void searchCommentsTest() throws Exception {
         // save a temporary event to elastic
-        HabitEventEntity event = new HabitEventEntity(1, LocalDate.now(), "testcomment");
-        event.setUser("mackenzie");
-        event.setHabitElasticId("AV_sN6rwT651_e3dy3Dl");
-        Response<ElasticRequestStatus> saveResponse = elastic.saveEvent(event).execute();
+        HabitEvent event = new HabitEvent("testusername", "AV_sN6rwT651_e3dy3Dl", "testcomment");
+
+        Response<ElasticRequestStatus> saveResponse = elastic.createEventWithId(event.getElasticId(), event).execute();
         assert(saveResponse.isSuccessful());
         System.out.println(saveResponse.body());
 
@@ -93,9 +90,9 @@ public class EventElasticTest {
 
         System.out.println(response.body().getNumHits());
 
-        List<HabitEventEntity> eventList = response.body().getList();
+        List<HabitEvent> eventList = response.body().getList();
         assert(eventList != null);
-        for (HabitEventEntity e : eventList) {
+        for (HabitEvent e : eventList) {
             System.out.println(e);
         }
         assert(response.body().getNumHits() > 0);

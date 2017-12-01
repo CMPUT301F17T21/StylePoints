@@ -1,6 +1,6 @@
 package com.stylepoints.habittracker.repository.remote;
 
-import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
+import com.stylepoints.habittracker.model.HabitEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class ElasticEventListResponse {
     class Hits {
         private int total;
         private float max_score;
-        List<ElasticResponse<HabitEventEntity>> hits;
+        List<ElasticResponse<HabitEvent>> hits;
 
         @Override
         public String toString() {
@@ -29,9 +29,9 @@ public class ElasticEventListResponse {
         }
     }
 
-    public List<HabitEventEntity> getList() {
-        List<HabitEventEntity> list = new ArrayList<>();
-        for (ElasticResponse<HabitEventEntity> hit : this.hits.hits) {
+    public List<HabitEvent> getList() {
+        List<HabitEvent> list = new ArrayList<>();
+        for (ElasticResponse<HabitEvent> hit : this.hits.hits) {
             list.add(hit.getSource());
         }
         return list;

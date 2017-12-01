@@ -13,9 +13,9 @@ import com.stylepoints.habittracker.repository.HabitRepository;
 
 public class HabitViewModelFactory implements ViewModelProvider.Factory {
     private final HabitRepository habitRepo;
-    private final int habitId;
+    private final String habitId;
 
-    public HabitViewModelFactory(HabitRepository habitRepo, int habitId) {
+    public HabitViewModelFactory(HabitRepository habitRepo, String habitId) {
         this.habitRepo = habitRepo;
         this.habitId = habitId;
     }

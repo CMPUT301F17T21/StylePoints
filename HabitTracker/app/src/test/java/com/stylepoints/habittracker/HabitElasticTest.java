@@ -1,7 +1,7 @@
 package com.stylepoints.habittracker;
 
 
-import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
+import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.repository.remote.ElasticHabitListResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticRequestStatus;
 import com.stylepoints.habittracker.repository.remote.ElasticResponse;
@@ -36,21 +36,19 @@ public class HabitElasticTest {
     public void getHabitTest() throws Exception {
         // .execute() is sync, .enqueue() is async
 
-        Response<ElasticResponse<HabitEntity>> response = elastic.getHabitById("AV_sN6rwT651_e3dy3Dl").execute();
-        HabitEntity habit = response.body().getSource();
-
+        Response<ElasticResponse<Habit>> response = elastic.getHabitById("8dfc7b93-9418-4ce0-b9e6-dd7ede287c1b").execute();
         System.out.println(response);
-        System.out.println(response.body());
+        Habit habit = response.body().getSource();
+        System.out.println(habit);
 
         assertEquals("run", habit.getType());
     }
 
     @Test
     public void saveAndDeleteHabitTest() throws Exception {
-        HabitEntity habit = new HabitEntity("run", "", LocalDate.now(), DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
-        habit.setUser("mackenzie");
+        Habit habit = new Habit("run", "", "testusername", LocalDate.now(), DayOfWeek.MONDAY, DayOfWeek.TUESDAY);
 
-        Response<ElasticRequestStatus> response = elastic.saveHabit(habit).execute();
+        Response<ElasticRequestStatus> response = elastic.createHabitWithId(habit.getElasticId(), habit).execute();
         assert(response.isSuccessful());
         System.out.println(response);
         ElasticRequestStatus status = response.body();
@@ -60,6 +58,7 @@ public class HabitElasticTest {
         assertEquals("cmput301f17t21_stylepoints", status.getIndex());
         assertEquals(1, status.getVersion());
         assertEquals("habit", status.getType());
+
 
         // delete the habit we just added
         Response<ElasticRequestStatus> delResponse = elastic.deleteHabit(status.getId()).execute();
@@ -75,12 +74,12 @@ public class HabitElasticTest {
     public void getUsersHabitsTest() throws Exception {
         Response<ElasticHabitListResponse> response = elastic.searchHabit("user:mackenzie").execute();
         assert(response.isSuccessful());
-        List<HabitEntity> habitList = response.body().getList();
+        List<Habit> habitList = response.body().getList();
         assert(habitList != null);
 
         System.out.println("Number of hits: " + response.body().getNumHits());
 
-        for (HabitEntity habit : habitList) {
+        for (Habit habit : habitList) {
             System.out.println(habit);
         }
         assert(habitList.size() > 0);

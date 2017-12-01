@@ -1,43 +1,57 @@
 package com.stylepoints.habittracker.repository;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Transformations;
+import android.content.Context;
 
-import com.stylepoints.habittracker.repository.local.AppDatabase;
-import com.stylepoints.habittracker.repository.local.dao.HabitEventDao;
-import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
+import com.stylepoints.habittracker.model.Habit;
+import com.stylepoints.habittracker.model.HabitEvent;
+import com.stylepoints.habittracker.repository.local.EventJsonSource;
 
 import java.util.List;
 
 public class HabitEventRepository {
     private static HabitEventRepository INSTANCE;
-    private final HabitEventDao dao;
+    private final EventJsonSource source;
 
-    private HabitEventRepository(HabitEventDao dao) {
-        this.dao = dao;
+    private HabitEventRepository(EventJsonSource source) {
+        this.source = source;
     }
 
-    public LiveData<List<HabitEventEntity>> getEventsByHabitId(int habitId) {
-        return dao.loadEventsByHabitId(habitId);
+    private HabitEventRepository(Context context) {
+        this.source = EventJsonSource.getInstance(context);
     }
 
-    public LiveData<List<HabitEventEntity>> getAllEvents() {
-        return dao.loadAllEvents();
+    public LiveData<List<HabitEvent>> getEventsByHabitId(String habitId) {
+        LiveData<List<HabitEvent>> filtered = Transformations.map(getAllEvents(), eventList -> {
+            for (HabitEvent event : eventList) {
+                if (!event.getHabitId().equals(habitId)) {
+                    eventList.remove(event);
+                }
+            }
+            return eventList;
+        });
+        return filtered;
     }
 
-    public LiveData<HabitEventEntity> getEventById(int eventId) {
-        return dao.load(eventId);
+    public LiveData<List<HabitEvent>> getAllEvents() {
+        return source.getEvents();
+    }
+
+    public LiveData<HabitEvent> getEventById(String eventId) {
+        return source.getEvent(eventId);
     }
 
     // TODO: change to off main thread
-    public long save(HabitEventEntity event) {
+    public void saveEvent(HabitEvent event) {
         // TODO: make sure that the habit this references is actually in the database
         // TODO: verify data is correct (comment length is not too long)
-        return dao.save(event);
+        source.saveEvent(event);
     }
 
-    public static HabitEventRepository getInstance(AppDatabase db) {
+    public static HabitEventRepository getInstance(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new HabitEventRepository(db.habitEventDao());
+            INSTANCE = new HabitEventRepository(context);
         }
         return INSTANCE;
     }

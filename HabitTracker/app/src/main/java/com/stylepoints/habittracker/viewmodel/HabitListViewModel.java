@@ -3,9 +3,8 @@ package com.stylepoints.habittracker.viewmodel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
+import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.repository.HabitRepository;
-import com.stylepoints.habittracker.repository.local.AppDatabase;
-import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
  */
 
 public class HabitListViewModel extends ViewModel {
-    private LiveData<List<HabitEntity>> habitList;
+    private LiveData<List<Habit>> habitList;
     private HabitRepository habitRepo;
 
     public HabitListViewModel(HabitRepository habitRepo) {
@@ -26,7 +25,7 @@ public class HabitListViewModel extends ViewModel {
         //habitList = habitRepo.getUsersHabits("mackenzie");
     }
 
-    public LiveData<List<HabitEntity>> getHabitList() {
+    public LiveData<List<Habit>> getHabitList() {
         return habitList;
     }
 }

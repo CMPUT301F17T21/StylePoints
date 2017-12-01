@@ -2,13 +2,10 @@ package com.stylepoints.habittracker.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.os.AsyncTask;
-import android.util.Log;
+import android.content.Context;
 
 import com.stylepoints.habittracker.model.Habit;
-import com.stylepoints.habittracker.repository.local.AppDatabase;
-import com.stylepoints.habittracker.repository.local.dao.HabitDao;
-import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
+import com.stylepoints.habittracker.repository.local.HabitJsonSource;
 import com.stylepoints.habittracker.repository.remote.ElasticHabitListResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticSearch;
@@ -30,11 +27,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HabitRepository {
     private static HabitRepository INSTANCE;
-    private final HabitDao habitDao;
+    private final HabitJsonSource source;
     private ElasticSearch elastic;
 
-    private HabitRepository(HabitDao habitDao) {
-        this.habitDao = habitDao;
+    private HabitRepository(HabitJsonSource source) {
+        this.source = source;
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://cmput301.softwareprocess.es:8080/cmput301f17t21_stylepoints/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -42,45 +39,58 @@ public class HabitRepository {
         this.elastic = retrofit.create(ElasticSearch.class);
     }
 
-    public LiveData<HabitEntity> getHabit(int habitId) {
-        return habitDao.load(habitId);
+    private HabitRepository(Context context) {
+        this.source = HabitJsonSource.getInstance(context);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://cmput301.softwareprocess.es:8080/cmput301f17t21_stylepoints/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        this.elastic = retrofit.create(ElasticSearch.class);
     }
 
-    public HabitEntity getHabitSync(int habitId) {
-        return habitDao.loadSync(habitId);
+    public LiveData<Habit> getHabit(String habitId) {
+        return source.getHabit(habitId);
     }
 
-    public LiveData<List<HabitEntity>> loadAll() {
-        return habitDao.loadAllHabits();
+    public Habit getHabitSync(String habitId) {
+        return source.getHabitSync(habitId);
     }
 
-    public int getHabitIdFromType(String type) {
-        return habitDao.findIdOfHabitType(type);
+    public LiveData<List<Habit>> loadAll() {
+        return source.getHabits();
     }
 
     // TODO: change to off main thread
-    public long save(HabitEntity habit) {
-        return habitDao.save(habit);
+    public void save(Habit habit) {
+        source.saveHabit(habit);
     }
 
-    public LiveData<HabitEntity> getRemoteHabit(String habitId) {
-        final MutableLiveData<HabitEntity> data = new MutableLiveData<>();
-        elastic.getHabitById(habitId).enqueue(new Callback<ElasticResponse<HabitEntity>>() {
+    public void update(String id, Habit habit) {
+        source.updateHabit(id, habit);
+    }
+
+    public void delete(String id) {
+        source.deleteHabit(id);
+    }
+
+    public LiveData<Habit> getRemoteHabit(String habitId) {
+        final MutableLiveData<Habit> data = new MutableLiveData<>();
+        elastic.getHabitById(habitId).enqueue(new Callback<ElasticResponse<Habit>>() {
             @Override
-            public void onResponse(Call<ElasticResponse<HabitEntity>> call, Response<ElasticResponse<HabitEntity>> response) {
+            public void onResponse(Call<ElasticResponse<Habit>> call, Response<ElasticResponse<Habit>> response) {
                 data.setValue(response.body().getSource());
             }
 
             @Override
-            public void onFailure(Call<ElasticResponse<HabitEntity>> call, Throwable t) {
+            public void onFailure(Call<ElasticResponse<Habit>> call, Throwable t) {
                 // TODO: add failure case
             }
         });
         return data;
     }
 
-    public LiveData<List<HabitEntity>> getUsersHabits(String elasticUsername) {
-        final MutableLiveData<List<HabitEntity>> data = new MutableLiveData<>();
+    public LiveData<List<Habit>> getUsersHabits(String elasticUsername) {
+        final MutableLiveData<List<Habit>> data = new MutableLiveData<>();
         elastic.searchHabit("user:" + elasticUsername).enqueue(new Callback<ElasticHabitListResponse>() {
             @Override
             public void onResponse(Call<ElasticHabitListResponse> call, Response<ElasticHabitListResponse> response) {
@@ -95,9 +105,9 @@ public class HabitRepository {
         return data;
     }
 
-    public static HabitRepository getInstance(AppDatabase db) {
+    public static HabitRepository getInstance(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new HabitRepository(db.habitDao());
+            INSTANCE = new HabitRepository(context);
         }
         return INSTANCE;
     }
