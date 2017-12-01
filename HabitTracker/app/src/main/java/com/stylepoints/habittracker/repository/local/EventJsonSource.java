@@ -119,17 +119,15 @@ public class EventJsonSource {
     }
 
     private void saveToDisk() {
+        liveEvents.setValue(eventList);
         try {
             FileOutputStream fos = this.context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fos));
-            gson.toJson(this.eventList, bufferedWriter);
-            bufferedWriter.flush();
-            fos.close();
-            Log.d(TAG, "saved eventList to disk");
-        } catch (IOException e) {
-            Log.e(TAG, "Error saving event list to disk" + e.toString());
-            e.printStackTrace();
+            AsyncFileWriter task = new AsyncFileWriter();
+            task.doInBackground(new AsyncFileWriterParams(eventList, fos));
+        } catch (FileNotFoundException e) {
+            // should never get this exception, openFileOutput will create the file if
+            // it is not found, this exception is only thrown when the directory can't be found
+            Log.e(TAG, "Could not find application directory");
         }
-        liveEvents.setValue(eventList);
     }
 }

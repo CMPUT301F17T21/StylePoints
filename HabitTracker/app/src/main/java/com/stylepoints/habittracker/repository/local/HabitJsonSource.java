@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -136,18 +137,15 @@ public class HabitJsonSource {
     }
 
     private void saveToDisk() {
+        liveHabits.setValue(habitList);
         try {
             FileOutputStream fos = this.context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fos));
-            gson.toJson(this.habitList, bufferedWriter);
-            bufferedWriter.flush();
-            fos.close();
-            Log.d(TAG, "saved habitList to disk");
-        } catch (IOException e) {
-            Log.e(TAG, "Error saving habit list to disk" + e.toString());
-            e.printStackTrace();
+            AsyncFileWriter task = new AsyncFileWriter();
+            task.doInBackground(new AsyncFileWriterParams(habitList, fos));
+        } catch (FileNotFoundException e) {
+            // should never get this exception, openFileOutput will create the file if
+            // it is not found, this exception is only thrown when the directory can't be found
+            Log.e(TAG, "Could not find application directory");
         }
-        // update our livedata, so our observers are notified of the change
-        liveHabits.setValue(habitList);
     }
 }
