@@ -21,6 +21,7 @@ import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.EventsMainActivity;
 import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
 import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitsMainActivity;
+import com.stylepoints.habittracker.viewmodel.Profile.ProfileMain;
 import com.stylepoints.habittracker.viewmodel.SocialFeed.SocialFeed;
 
 import java.util.ArrayList;
@@ -120,6 +121,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SocialFeed.class);
+                startActivity(intent);
+            }
+        });
+        profileButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ProfileMain.class);
                 startActivity(intent);
             }
         });
