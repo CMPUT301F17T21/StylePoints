@@ -60,11 +60,6 @@ public class HabitRepository {
         return source.getHabits();
     }
 
-    /*
-    public int getHabitIdFromType(String type) {
-        return habitDao.findIdOfHabitType(type);
-    }*/
-
     // TODO: change to off main thread
     public void save(Habit habit) {
         source.saveHabit(habit);

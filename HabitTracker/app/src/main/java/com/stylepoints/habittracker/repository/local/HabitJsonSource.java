@@ -43,6 +43,7 @@ public class HabitJsonSource {
     private MutableLiveData<List<Habit>> liveHabits;
 
     private HabitJsonSource(Context context) {
+        // This must use getApplicationContext() to help prevent memory leaks
         this.context = context.getApplicationContext();
         this.gson = new Gson();
 

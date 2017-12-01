@@ -2,19 +2,28 @@ package com.stylepoints.habittracker.repository.local;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
+import com.google.gson.reflect.TypeToken;
 import com.stylepoints.habittracker.model.HabitEvent;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,44 +32,67 @@ import java.util.List;
  */
 
 public class EventJsonSource {
-    private Gson gson;
+    private static final String TAG = "EventJsonSource";
     private static EventJsonSource INSTANCE;
     private static String FILENAME = "events.json";
-    @Expose
-    private List<HabitEvent> eventList;
 
-    public EventJsonSource(Gson gson) {
-        eventList = new ArrayList<>();
-        this.gson = gson;
+    private Gson gson;
+    private Context context;
+    private List<HabitEvent> eventList;
+    private MutableLiveData<List<HabitEvent>> liveEvents;
+
+    private EventJsonSource(Context context) {
+        // This must use getApplicationContext() to help prevent memory leaks
+        this.context = context.getApplicationContext();
+        this.gson = new Gson();
+
+        try {
+            FileInputStream fis = this.context.openFileInput(FILENAME);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fis));
+            Type listType = new TypeToken<ArrayList<HabitEvent>>(){}.getType();
+            eventList = gson.fromJson(bufferedReader, listType);
+
+            if (eventList == null) {
+                Log.w(TAG, "Gson returned a null list");
+                eventList = new ArrayList<>();
+                File file = new File(this.context.getFilesDir(), FILENAME);
+                if(file.delete()) {
+                    Log.i(TAG, "Corrupt event json file deleted");
+                } else {
+                    Log.i(TAG, "Event json file not deleted!");
+                }
+            }
+        } catch (FileNotFoundException e) {
+            Log.i(TAG, "Event json file not found, using empty list");
+            eventList = new ArrayList<>();
+        }
+
+        liveEvents = new MutableLiveData<>();
+        liveEvents.setValue(eventList);
     }
 
-    public static EventJsonSource getInstance() {
+    public static EventJsonSource getInstance(Context context) {
         if (INSTANCE == null) {
-            Gson gson = new GsonBuilder().create();
-            try {
-                BufferedReader bufferedReader = new BufferedReader(new FileReader(FILENAME));
-                INSTANCE = gson.fromJson(bufferedReader, EventJsonSource.class);
-                INSTANCE.setGson(gson);
-            } catch (FileNotFoundException e) {
-                // return an empty list
-                INSTANCE = new EventJsonSource(gson);
-            }
+            INSTANCE = new EventJsonSource(context);
         }
         return INSTANCE;
     }
 
     public LiveData<List<HabitEvent>> getEvents() {
-        MutableLiveData<List<HabitEvent>> data = new MutableLiveData<>();
-        data.setValue(eventList);
-        return data;
+        liveEvents.setValue(eventList);
+        return liveEvents;
     }
 
     public LiveData<HabitEvent> getEvent(String id) {
-        MutableLiveData<HabitEvent> data = new MutableLiveData<>();
-        if (eventList.contains(id)) {
-            data.setValue(eventList.get(eventList.indexOf(id)));
-        }
-        return data;
+        return Transformations.map(getEvents(), eList -> {
+            for (HabitEvent event : eList) {
+                if (event.getElasticId().equals(id)) {
+                    return event;
+                }
+            }
+            // couldn't find that event in our list
+            return null;
+        });
     }
 
     public void deleteEvent(String id) {
@@ -69,9 +101,14 @@ public class EventJsonSource {
     }
 
     public void updateEvent(String id, HabitEvent event) {
+        Log.i(TAG, "Updating HabitEvent " + id);
         event.setElasticId(id);
-        eventList.remove(id);
-        eventList.add(event);
+        for (int i = 0; i < eventList.size(); i++) {
+            if (eventList.get(i).getElasticId().equals(id)) {
+                eventList.set(i, event);
+                break;
+            }
+        }
         saveToDisk();
     }
 
@@ -83,15 +120,16 @@ public class EventJsonSource {
 
     private void saveToDisk() {
         try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILENAME));
-            gson.toJson(INSTANCE, EventJsonSource.class, bufferedWriter);
+            FileOutputStream fos = this.context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fos));
+            gson.toJson(this.eventList, bufferedWriter);
+            bufferedWriter.flush();
+            fos.close();
+            Log.d(TAG, "saved eventList to disk");
         } catch (IOException e) {
-            Log.e("DISK", "Error saving event list to disk");
+            Log.e(TAG, "Error saving event list to disk" + e.toString());
             e.printStackTrace();
         }
-    }
-
-    private void setGson(Gson gson) {
-        this.gson = gson;
+        liveEvents.setValue(eventList);
     }
 }
