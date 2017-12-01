@@ -29,4 +29,7 @@
     <string name="filter">Filter:</string>
     <string name="range">Range:</string>
     <string name="recent_events">Recent Events</string>
+    <string name="my_profile">My Profile</string>
+    <string name="username">username</string>
+    <string name="achievements">Achievements</string>
     \</resources>
