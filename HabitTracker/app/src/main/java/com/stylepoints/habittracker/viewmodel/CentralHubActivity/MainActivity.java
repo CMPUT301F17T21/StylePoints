@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i("debug", pref.getString("username", ""));
 
 
-        repo = HabitRepository.getInstance();
+        repo = HabitRepository.getInstance(getApplicationContext());
         fullList = repo.loadAll();
         habitList = new ArrayList<>();
 

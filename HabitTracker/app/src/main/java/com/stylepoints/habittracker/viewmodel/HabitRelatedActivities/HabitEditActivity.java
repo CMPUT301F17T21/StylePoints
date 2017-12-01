@@ -52,7 +52,7 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
         setContentView(R.layout.activity_habit_edit);
         bindToUi();
 
-        repo = HabitRepository.getInstance();
+        repo = HabitRepository.getInstance(getApplicationContext());
 
         Intent inputIntent = getIntent();
         if (!inputIntent.hasExtra("HABIT_ID")) {

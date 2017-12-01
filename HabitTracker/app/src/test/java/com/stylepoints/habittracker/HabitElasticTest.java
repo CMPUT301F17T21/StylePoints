@@ -39,7 +39,6 @@ public class HabitElasticTest {
         Response<ElasticResponse<Habit>> response = elastic.getHabitById("8dfc7b93-9418-4ce0-b9e6-dd7ede287c1b").execute();
         System.out.println(response);
         Habit habit = response.body().getSource();
-
         System.out.println(habit);
 
         assertEquals("run", habit.getType());

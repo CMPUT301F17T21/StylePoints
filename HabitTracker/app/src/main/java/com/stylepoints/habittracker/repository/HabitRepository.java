@@ -2,6 +2,7 @@ package com.stylepoints.habittracker.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
 
 import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.repository.local.HabitJsonSource;
@@ -38,8 +39,8 @@ public class HabitRepository {
         this.elastic = retrofit.create(ElasticSearch.class);
     }
 
-    private HabitRepository() {
-        this.source = HabitJsonSource.getInstance();
+    private HabitRepository(Context context) {
+        this.source = HabitJsonSource.getInstance(context);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://cmput301.softwareprocess.es:8080/cmput301f17t21_stylepoints/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -101,9 +102,9 @@ public class HabitRepository {
         return data;
     }
 
-    public static HabitRepository getInstance() {
+    public static HabitRepository getInstance(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new HabitRepository();
+            INSTANCE = new HabitRepository(context);
         }
         return INSTANCE;
     }
