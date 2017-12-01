@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.stylepoints.habittracker.viewmodel.SocialFeed.Following">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="87dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteX="9dp"
+        tools:layout_editor_absoluteY="416dp"
+        android:id="@+id/linearLayout"
+        app:layout_constraintHorizontal_bias="0.6">
+
+        <SearchView
+            android:id="@+id/searchUser"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:elevation="0dp"
+            android:iconifiedByDefault="false"
+            android:queryHint="Search User to Follow" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/followingTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Following"
+        android:textSize="24sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <ListView
+        android:id="@+id/followingList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/notificationsTitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/followingTitle" />
+
+
+    <TextView
+        android:id="@+id/notificationsTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Notifications"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/notificationsList"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/followingList"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintHorizontal_bias="0.0" />
+    <ListView
+        android:id="@+id/notificationsList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationsTitle" />
+
+</android.support.constraint.ConstraintLayout>
