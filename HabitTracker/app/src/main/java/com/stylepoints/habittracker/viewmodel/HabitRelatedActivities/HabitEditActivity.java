@@ -123,7 +123,7 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
                     if (checkbox_sunday.isChecked()) { schedule.add(DayOfWeek.SUNDAY); }
                     habit.setDaysActive(schedule);
 
-                    repo.save(habit);
+                    repo.update(habit.getElasticId(), habit);
                     finish();
                 }
             }
@@ -132,7 +132,7 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
         button_delete_habit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Enter deletion code here
+                repo.delete(habit.getElasticId());
                 finish();
             }
         });

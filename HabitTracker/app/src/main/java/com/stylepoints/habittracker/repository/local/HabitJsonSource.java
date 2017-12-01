@@ -85,7 +85,6 @@ public class HabitJsonSource {
     }
 
     public LiveData<Habit> getHabit(String id) {
-
         return Transformations.map(getHabits(), hList -> {
             for (Habit habit : hList) {
                 if (habit.getElasticId().equals(id)) {
@@ -117,12 +116,12 @@ public class HabitJsonSource {
     }
 
     public void updateHabit(String id, Habit habit) {
+        Log.i(TAG, "Updating habit " + id);
         habit.setElasticId(id);
-        for (Habit h : habitList) {
-            if (h.getElasticId().equals(id)) {
-                habitList.remove(h);
-                habitList.add(habit);
-                //h = habit;
+        for (int i = 0; i < habitList.size(); i++) {
+            if (habitList.get(i).getElasticId().equals(id)) {
+                Log.d(TAG, "Found habit to replace");
+                habitList.set(i, habit);
                 break;
             }
         }
@@ -130,6 +129,7 @@ public class HabitJsonSource {
     }
 
     public void saveHabit(Habit habit) {
+        Log.d(TAG, "Adding a habit with id: " + habit.getElasticId());
         habitList.add(habit);
         saveToDisk();
     }

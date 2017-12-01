@@ -70,6 +70,14 @@ public class HabitRepository {
         source.saveHabit(habit);
     }
 
+    public void update(String id, Habit habit) {
+        source.updateHabit(id, habit);
+    }
+
+    public void delete(String id) {
+        source.deleteHabit(id);
+    }
+
     public LiveData<Habit> getRemoteHabit(String habitId) {
         final MutableLiveData<Habit> data = new MutableLiveData<>();
         elastic.getHabitById(habitId).enqueue(new Callback<ElasticResponse<Habit>>() {
