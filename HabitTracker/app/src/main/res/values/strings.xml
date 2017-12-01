@@ -18,4 +18,15 @@
     <string name="ran_3_km_today">Ran 3 km today!</string>
     <string name="photograph">Photograph</string>
     <string name="placeholder">placeholder</string>
-</resources>
+    <string name="requests">Requests</string>
+    <string name="followers">Followers</string>
+    <string name="reject">Reject</string>
+    <string name="accept">Accept</string>
+    <string name="following">Following</string>
+    <string name="notifications">Notifications</string>
+    <string name="map_events">Map Events</string>
+    <string name="social_feed">Social Feed</string>
+    <string name="filter">Filter:</string>
+    <string name="range">Range:</string>
+    <string name="recent_events">Recent Events</string>
+    \</resources>

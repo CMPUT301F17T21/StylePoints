@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:elevation="0dp"
-            android:text="Accept"
+            android:text="@string/accept"
             app:layout_constraintStart_toStartOf="parent"
             />
 
@@ -36,7 +36,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:elevation="0dp"
-            android:text="Reject"
+            android:text="@string/reject"
             app:layout_constraintEnd_toEndOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 
@@ -47,7 +47,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:text="Followers"
+        android:text="@string/followers"
         android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -78,7 +78,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:text="Requests"
+        android:text="@string/requests"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/requestsList"
         app:layout_constraintLeft_toLeftOf="parent"

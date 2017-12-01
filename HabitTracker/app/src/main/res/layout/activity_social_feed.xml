@@ -26,21 +26,21 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:elevation="0dp"
-            android:text="Map Events" />
+            android:text="@string/map_events" />
 
         <Button
             android:id="@+id/followersButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Followers" />
+            android:text="@string/followers" />
 
         <Button
             android:id="@+id/followingButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Following" />
+            android:text="@string/following" />
     </LinearLayout>
 
     <TextView
@@ -50,7 +50,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:text="Social Feed"
+        android:text="@string/social_feed"
         android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
