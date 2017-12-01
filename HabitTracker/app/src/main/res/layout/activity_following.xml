@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.stylepoints.habittracker.viewmodel.SocialFeed.Following">
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="87dp"
         android:layout_marginBottom="8dp"
@@ -29,7 +29,7 @@
             android:iconifiedByDefault="false"
             android:queryHint="Search User to Follow" />
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
     <TextView
         android:id="@+id/followingTitle"

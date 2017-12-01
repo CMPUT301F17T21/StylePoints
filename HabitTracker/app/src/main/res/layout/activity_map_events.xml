@@ -5,47 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.stylepoints.habittracker.viewmodel.SocialFeed.MapEvents">
-    <LinearLayout
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteX="9dp"
-        tools:layout_editor_absoluteY="416dp"
-        android:id="@+id/linearLayout"
-        app:layout_constraintHorizontal_bias="0.6">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/filterSpinner"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Filter: "
             android:textSize="20sp"
-            android:text="Filter: " />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sortSpinner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <Spinner
             android:id="@+id/sortSpinner"
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="@+id/filterSpinner"
+            android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:layout_constraintHorizontal_bias="0.0"
-            android:layout_constraintStart_toEndof="@+id/filterSpinner"
-            android:layout_constraintRight_toRightOf="parent"
-            android:layout_constraintTop_toTopOf="parent"
-            />
-    </LinearLayout>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/filterSpinner"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
     <ImageView
         android:id="@+id/placeholder"
         android:layout_width="wrap_content"
@@ -59,7 +55,7 @@
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -76,32 +72,35 @@
 
         <TextView
             android:id="@+id/rangeTitle"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_weight="1"
+            android:text="Range: "
             android:textSize="20sp"
-            android:text="Range: " />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/rangeSpinner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <Spinner
             android:id="@+id/rangeSpinner"
-            android:layout_width="0dp"
-            android:layout_weight="2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_constraintHorizontal_bias="0.0"
-            android:layout_constraintStart_toEndof="@+id/rangeTitle"
-            android:layout_constraintRight_toRightOf="parent"
-            android:layout_constraintTop_toTopOf="parent"
-            />
-    </LinearLayout>
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/rangeTitle"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/linearLayoutThree"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -120,7 +119,7 @@
             android:id="@+id/eventsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
@@ -135,6 +134,8 @@
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp" />
-    </LinearLayout>
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toEndOf="@+id/eventsTitle"
+            />
+    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>
