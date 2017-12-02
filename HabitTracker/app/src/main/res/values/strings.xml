@@ -72,6 +72,7 @@
     <string name="counter_description">Counter Description</string>
     <string name="add_event">Add Event</string>
     <string name="search_user_to_follow">Search User to Follow</string>
+    <string name="go">GO</string>
 
     <string-array name="socialFeed_vals">
         <item>All</item>

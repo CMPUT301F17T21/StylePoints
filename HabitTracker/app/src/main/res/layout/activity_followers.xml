@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/test2"
     tools:context="com.stylepoints.habittracker.viewmodel.SocialFeed.Followers">
     <android.support.constraint.ConstraintLayout
         android:layout_width="fill_parent"
@@ -21,23 +22,23 @@
         app:layout_constraintHorizontal_bias="0.6">
 
         <Button
-            android:id="@+id/acceptRequest"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:elevation="0dp"
-            android:text="@string/accept"
-            app:layout_constraintStart_toStartOf="parent"
-            android:background="?android:attr/selectableItemBackground"
-            />
-
-        <Button
             android:id="@+id/rejectRequest"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:elevation="0dp"
             android:text="@string/reject"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="?android:attr/selectableItemBackground"
+            />
+
+        <Button
+            android:id="@+id/acceptRequest"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:elevation="0dp"
+            android:text="@string/accept"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="?android:attr/selectableItemBackground"/>
     </android.support.constraint.ConstraintLayout>

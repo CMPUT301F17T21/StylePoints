@@ -27,9 +27,13 @@ public class Following extends AppCompatActivity {
         searchButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast toast = Toast.makeText(getApplicationContext(), "Sorry! No Such Username", Toast.LENGTH_LONG);
+                String username = usernameInput.getText().toString();
+                Toast toast = Toast.makeText(getApplicationContext(),"Searching " + username + "...", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER,0,0);
                 toast.show();
+                //run username against database, request to follow,
+                //a follow request function...
+
             }
         });
     }

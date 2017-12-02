@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitNewActivity"
     tools:layout_editor_absoluteY="81dp"
+    android:background="@drawable/test2"
     tools:layout_editor_absoluteX="0dp">
 
     <CheckBox
