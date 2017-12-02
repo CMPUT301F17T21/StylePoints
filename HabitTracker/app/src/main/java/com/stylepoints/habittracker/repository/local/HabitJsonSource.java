@@ -136,6 +136,15 @@ public class HabitJsonSource {
         saveToDisk();
     }
 
+    public boolean contains(String id) {
+        for (Habit habit : habitList) {
+            if (habit.getElasticId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void saveToDisk() {
         liveHabits.setValue(habitList);
         try {
