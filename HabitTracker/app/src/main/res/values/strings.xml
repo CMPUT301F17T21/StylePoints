@@ -73,6 +73,10 @@
     <string name="add_event">Add Event</string>
     <string name="search_user_to_follow">Search User to Follow</string>
     <string name="go">GO</string>
+    <string name="welcome_to_habittracker">Welcome to HabitTracker</string>
+    <string name="please_enter_username">Please enter username:</string>
+    <string name="login">Login</string>
+    <string name="existing_habits">Existing Habits</string>
 
     <string-array name="socialFeed_vals">
         <item>All</item>

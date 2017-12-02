@@ -20,12 +20,16 @@ public class MapEvents extends AppCompatActivity {
 
         filter = (Spinner) findViewById(R.id.sortSpinner);
 
+
         filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast toast = Toast.makeText(getApplicationContext(), "maDe a selection!", Toast.LENGTH_LONG);
+                String testing = filter.getItemAtPosition(i).toString();
+
+                Toast toast = Toast.makeText(getApplicationContext(), "Showing " + testing + "...", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER,0,0);
                 toast.show();
+                //the three different mapping implementations here
             }
 
             @Override

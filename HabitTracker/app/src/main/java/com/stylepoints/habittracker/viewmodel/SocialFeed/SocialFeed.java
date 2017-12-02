@@ -3,11 +3,15 @@ package com.stylepoints.habittracker.viewmodel.SocialFeed;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
 import android.view.View;
+import android.widget.Toast;
+
 import com.stylepoints.habittracker.R;
 
 public class SocialFeed extends AppCompatActivity {
@@ -29,6 +33,25 @@ public class SocialFeed extends AppCompatActivity {
         setContentView(R.layout.activity_social_feed);
 
         bindToUi();
+
+        spinner_social_filter = (Spinner) findViewById(R.id.sort_by_spinner);
+        spinner_social_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String testing = spinner_social_filter.getItemAtPosition(i).toString();
+                Toast toast = Toast.makeText(getApplicationContext(), "Showing " + testing + "...", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER,0,0);
+                toast.show();
+                // the three different filtering methods here
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Toast toast = Toast.makeText(getApplicationContext(), "make a selection!", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER,0,0);
+                toast.show();
+            }
+        });
 
     }
     private void bindToUi() {

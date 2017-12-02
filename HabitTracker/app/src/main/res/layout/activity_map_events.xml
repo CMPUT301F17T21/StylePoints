@@ -51,6 +51,7 @@
             app:layout_constraintStart_toEndOf="@+id/filterSpinner"
             app:layout_constraintTop_toTopOf="parent" />
 
+
     </android.support.constraint.ConstraintLayout>
     <ImageView
         android:id="@+id/placeholder"
