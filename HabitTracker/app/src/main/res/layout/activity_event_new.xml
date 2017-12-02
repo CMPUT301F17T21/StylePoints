@@ -34,7 +34,8 @@
         android:text=" Date Of Occurrence"
         android:textAppearance="@android:style/TextAppearance.Material.Small"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewEventNameTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewEventNameTitle"
+        android:layout_marginStart="8dp" />
 
     <TextView
         android:id="@+id/textViewEventNameTitle"
@@ -104,7 +105,6 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:gravity="center"
-        android:gravity="start"
         android:hint="@string/counter_description"
         android:inputType="textPersonName"
         android:text="@string/ran_3_km_today"

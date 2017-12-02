@@ -97,8 +97,6 @@
         android:ems="10"
         android:gravity="left"
         android:hint="30 characters max"
-        android:gravity="start"
-        android:hint="@string/counter_description"
         android:inputType="textPersonName"
         android:maxLength="30"
         android:textSize="14sp"

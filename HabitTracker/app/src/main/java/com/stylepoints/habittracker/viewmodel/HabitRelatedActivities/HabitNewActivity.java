@@ -90,12 +90,7 @@ public class HabitNewActivity extends AppCompatActivity implements DatePickerDia
                     if (checkbox_sunday.isChecked()) { schedule.add(DayOfWeek.SUNDAY); }
                     habit.setDaysActive(schedule);
 
-                    try {
-                        repo.save(habit);
-                    } catch (NonUniqueException e) {
-                        edittext_habit_name.setError("A habit of this type already exists!");
-                        return;
-                    }
+                    repo.save(habit);
                     finish();
                 }
             }
