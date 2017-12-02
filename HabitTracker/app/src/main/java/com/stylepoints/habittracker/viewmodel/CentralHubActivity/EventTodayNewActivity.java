@@ -6,10 +6,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,20 +21,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stylepoints.habittracker.R;
+import com.stylepoints.habittracker.model.Habit;
+import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.repository.HabitEventRepository;
 import com.stylepoints.habittracker.repository.HabitRepository;
-import com.stylepoints.habittracker.repository.local.AppDatabase;
-import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
-import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
-import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.Auxiliary.HabitEventListViewModel;
-import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.Auxiliary.HabitEventListViewModelFactory;
-import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.EventNewActivity;
-import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.Auxiliary.HabitListViewModel;
-import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.Auxiliary.HabitListViewModelFactory;
+import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.HabitEventAux.HabitEventListViewModel;
+import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.HabitEventAux.HabitEventListViewModelFactory;
+import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
+import com.stylepoints.habittracker.viewmodel.HabitListViewModelFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -68,7 +67,7 @@ public class EventTodayNewActivity extends AppCompatActivity {
         return buttonAddEvent;
     }
 
-    public List<HabitEntity> getHabitList() {
+    public List<Habit> getHabitList() {
         return habitList;
     };
 
@@ -81,8 +80,8 @@ public class EventTodayNewActivity extends AppCompatActivity {
     private Button buttonRemovePicture;
     private Button buttonAddEvent;
 
-    private List<HabitEntity> habitList;
-    private ArrayAdapter<HabitEntity> habitArrayAdapter;
+    private List<Habit> habitList;
+    private ArrayAdapter<Habit> habitArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,11 +89,11 @@ public class EventTodayNewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_today_new);
 
         // Get required repo
-        HabitRepository habitRepo = HabitRepository.getInstance(AppDatabase.getAppDatabase(getApplicationContext()));
+        HabitRepository habitRepo = HabitRepository.getInstance(getApplicationContext());
         HabitListViewModelFactory habitFactory = new HabitListViewModelFactory(habitRepo);
         HabitListViewModel habitModel = ViewModelProviders.of(this, habitFactory).get(HabitListViewModel.class);
 
-        HabitEventRepository eventRepo = HabitEventRepository.getInstance(AppDatabase.getAppDatabase(getApplicationContext()));
+        HabitEventRepository eventRepo = HabitEventRepository.getInstance(getApplicationContext());
         HabitEventListViewModelFactory eventFactory = new HabitEventListViewModelFactory(eventRepo);
         HabitEventListViewModel eventModel = ViewModelProviders.of(this, eventFactory).get(HabitEventListViewModel.class);
 
@@ -106,16 +105,16 @@ public class EventTodayNewActivity extends AppCompatActivity {
             return;
         }
 
-        int habitId = inputIntent.getIntExtra("HABIT_ID", 0);
+        String habitId = inputIntent.getStringExtra("HABIT_ID");
         Log.d(TAG, "passed in habitId: " + String.valueOf(habitId));
-        if (habitId == 0) {
+        if (habitId == null) {
             // invalid ID
             Log.e(TAG, "habitId can not be 0");
             finish();
             return;
         }
 
-        HabitEntity habit = habitRepo.getHabitSync(habitId);
+        Habit habit = habitRepo.getHabitSync(habitId);
         if (habit == null) {
             Log.e(TAG, "Unable to find habit with id: " + String.valueOf(habitId));
             finish();
@@ -125,13 +124,12 @@ public class EventTodayNewActivity extends AppCompatActivity {
         // Inisitialise the activity to layout
         bindToUi();
 
-        // Initialise the data of occurence field
-        Date date = new Date();
-        textViewDateOfOccurence.setText((new SimpleDateFormat("yyyy/MM/dd hh:mm:ss")).format(date));
-
         // Initialise the habit field
-        textViewHabitName.setText(habit.toString());
-        System.out.println(getIntent());
+        textViewHabitName.setText(habit.getType());
+
+        // Initialise the data of occurence field
+        LocalDate date = LocalDate.now();
+        textViewDateOfOccurence.setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
 
         // Initialise imageView for photos
         imageViewEventPhoto.setImageDrawable(null);
@@ -163,20 +161,16 @@ public class EventTodayNewActivity extends AppCompatActivity {
         buttonAddEvent.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HabitEventEntity event = new HabitEventEntity();
-                event.setHabitId(habit.getId());
-                event.setName(habit.getType());
-                try {
-                    event.setDate((new SimpleDateFormat("yyyy/MM/dd hh:mm:ss")).parse(textViewDateOfOccurence.getText().toString()));
-                } catch (ParseException ex) {
-                    event.setDate(new Date());
-                }
+                String habitId = habit.getElasticId();
+                String type = habit.getType();
+                HabitEvent event = new HabitEvent("username", habitId, type);
+                event.setDate(date);
                 event.setComment(editTextEventComment.getText().toString());
                 if (imageViewEventPhoto.getDrawable() != null) {
                     event.setPhoto(((BitmapDrawable) imageViewEventPhoto.getDrawable()).getBitmap());
                 }
 //              event.setLocation();
-                eventRepo.save(event);
+                eventRepo.saveEvent(event);
                 finish();
             }
         });

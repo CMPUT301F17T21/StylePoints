@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/test2"
+
     tools:context="com.stylepoints.habittracker.viewmodel.CentralHubActivity.MainActivity">
 
 
@@ -28,28 +30,32 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:elevation="0dp"
-            android:text="Events" />
+            android:text="@string/events"
+            android:background="?android:attr/selectableItemBackground"/>
 
         <Button
             android:id="@+id/habitsMenuButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Habits" />
+            android:text="@string/habits"
+            android:background="?android:attr/selectableItemBackground"/>
 
         <Button
             android:id="@+id/socialMenuButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Social" />
+            android:text="@string/social"
+            android:background="?android:attr/selectableItemBackground"/>
 
         <Button
             android:id="@+id/profileMenuButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Profile" />
+            android:text="@string/profile"
+            android:background="?android:attr/selectableItemBackground"/>
     </LinearLayout>
 
     <TextView
@@ -59,25 +65,27 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:text="Todays Habits"
+        android:text="@string/todays_habits"
         android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
+        android:gravity="center"
         app:layout_constraintHorizontal_bias="0.0" />
 
     <ListView
         android:id="@+id/todaysHabitsList"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/todayMainTitle"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/todayMainTitle" />
+
 </android.support.constraint.ConstraintLayout>

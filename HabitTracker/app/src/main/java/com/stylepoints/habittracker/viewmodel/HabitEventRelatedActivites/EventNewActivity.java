@@ -21,18 +21,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stylepoints.habittracker.R;
+import com.stylepoints.habittracker.model.Habit;
+import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.repository.HabitEventRepository;
 import com.stylepoints.habittracker.repository.HabitRepository;
-import com.stylepoints.habittracker.repository.local.AppDatabase;
-import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
-import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
-import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.Auxiliary.HabitEventListViewModel;
-import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.Auxiliary.HabitEventListViewModelFactory;
-import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.Auxiliary.HabitListViewModel;
-import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.Auxiliary.HabitListViewModelFactory;
+import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.HabitEventAux.HabitEventListViewModel;
+import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.HabitEventAux.HabitEventListViewModelFactory;
+import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
+import com.stylepoints.habittracker.viewmodel.HabitListViewModelFactory;
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -67,7 +69,7 @@ public class EventNewActivity extends AppCompatActivity {
         return buttonAddEvent;
     }
 
-    public List<HabitEntity> getHabitList() {
+    public List<Habit> getHabitList() {
         return habitList;
     };
 
@@ -80,8 +82,8 @@ public class EventNewActivity extends AppCompatActivity {
     private Button buttonRemovePicture;
     private Button buttonAddEvent;
 
-    private List<HabitEntity> habitList;
-    private ArrayAdapter<HabitEntity> habitArrayAdapter;
+    private List<Habit> habitList;
+    private ArrayAdapter<Habit> habitArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,11 +93,11 @@ public class EventNewActivity extends AppCompatActivity {
         System.out.println("EventNewActivity");
 
         // Get required repo
-        HabitRepository habitRepo = HabitRepository.getInstance(AppDatabase.getAppDatabase(getApplicationContext()));
+        HabitRepository habitRepo = HabitRepository.getInstance(getApplicationContext());
         HabitListViewModelFactory habitFactory = new HabitListViewModelFactory(habitRepo);
         HabitListViewModel habitModel = ViewModelProviders.of(this, habitFactory).get(HabitListViewModel.class);
 
-        HabitEventRepository eventRepo = HabitEventRepository.getInstance(AppDatabase.getAppDatabase(getApplicationContext()));
+        HabitEventRepository eventRepo = HabitEventRepository.getInstance(getApplicationContext());
         HabitEventListViewModelFactory eventFactory = new HabitEventListViewModelFactory(eventRepo);
         HabitEventListViewModel eventModel = ViewModelProviders.of(this, eventFactory).get(HabitEventListViewModel.class);
 
@@ -105,16 +107,16 @@ public class EventNewActivity extends AppCompatActivity {
         bindToUi();
 
         // Initialise the data of occurence field
-        Date date = new Date();
-        textViewDateOfOccurence.setText((new SimpleDateFormat("yyyy/MM/dd hh:mm:ss")).format(date));
+        LocalDate date = LocalDate.now();
+        textViewDateOfOccurence.setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
 
         // Initialise the spinner for habit input
-        habitList = new ArrayList<HabitEntity>();
+        habitList = new ArrayList<Habit>();
         habitModel.getHabitList().observe(this, habitList -> {
-            for (HabitEntity habit : habitList) {
+            for (Habit habit : habitList) {
                 EventNewActivity.this.getHabitList().add(habit);
             }
-            habitArrayAdapter = new ArrayAdapter<HabitEntity>(EventNewActivity.this, android.R.layout.simple_list_item_1, EventNewActivity.this.getHabitList());
+            habitArrayAdapter = new ArrayAdapter<Habit>(EventNewActivity.this, android.R.layout.simple_list_item_1, EventNewActivity.this.getHabitList());
             spinnerHabitName.setAdapter(habitArrayAdapter);
         });
 
@@ -148,21 +150,21 @@ public class EventNewActivity extends AppCompatActivity {
         buttonAddEvent.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HabitEventEntity event = new HabitEventEntity();
-                event.setHabitId(((HabitEntity) spinnerHabitName.getSelectedItem()).getId());
-                event.setName(((HabitEntity) spinnerHabitName.getSelectedItem()).getType());
-                try {
-                    event.setDate((new SimpleDateFormat("yyyy/MM/dd hh:mm:ss")).parse(textViewDateOfOccurence.getText().toString()));
-                } catch (ParseException ex) {
-                    event.setDate(new Date());
+                if (spinnerHabitName.getSelectedItem() != null) {
+                    String habitId = ((Habit) spinnerHabitName.getSelectedItem()).getElasticId();
+                    String type = ((Habit) spinnerHabitName.getSelectedItem()).getType();
+                    HabitEvent event = new HabitEvent("username", habitId, type);
+                    event.setDate(date);
+                    event.setComment(editTextEventComment.getText().toString());
+                    if (imageViewEventPhoto.getDrawable() != null) {
+                        event.setPhoto(((BitmapDrawable) imageViewEventPhoto.getDrawable()).getBitmap());
+                    }
+                    //              event.setLocation();
+                    eventRepo.saveEvent(event);
+                    finish();
+                } else {
+                    Toast.makeText(EventNewActivity.this, "No associated habit (event name) is provided.", Toast.LENGTH_LONG).show();
                 }
-                event.setComment(editTextEventComment.getText().toString());
-                if (imageViewEventPhoto.getDrawable() != null) {
-                    event.setPhoto(((BitmapDrawable) imageViewEventPhoto.getDrawable()).getBitmap());
-                }
-//              event.setLocation();
-                eventRepo.save(event);
-                finish();
             }
         });
 
@@ -180,10 +182,11 @@ public class EventNewActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQ_CODE_CAMERA ) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                System.out.println("granted");
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, CAM_REQUEST);
             } else {
-                Toast.makeText(this, "CannotAccessCamera", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Cannot Access Camera", Toast.LENGTH_LONG).show();
             }
         }
     }

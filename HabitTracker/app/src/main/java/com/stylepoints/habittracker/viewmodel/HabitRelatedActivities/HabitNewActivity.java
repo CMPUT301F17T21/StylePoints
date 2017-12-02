@@ -13,15 +13,14 @@ import android.widget.TextView;
 
 import com.stylepoints.habittracker.DatePickerFragment;
 import com.stylepoints.habittracker.R;
+import com.stylepoints.habittracker.model.Habit;
+import com.stylepoints.habittracker.model.HabitReasonTooLongException;
+import com.stylepoints.habittracker.model.HabitTypeTooLongException;
 import com.stylepoints.habittracker.repository.HabitRepository;
-import com.stylepoints.habittracker.repository.local.AppDatabase;
-import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.EnumSet;
 
 public class HabitNewActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -49,7 +48,7 @@ public class HabitNewActivity extends AppCompatActivity implements DatePickerDia
         setContentView(R.layout.activity_habit_new);
         bindToUi();
 
-        repo = HabitRepository.getInstance(AppDatabase.getAppDatabase(getApplicationContext()));
+        repo = HabitRepository.getInstance(getApplicationContext());
         date = LocalDate.now();
         textview_habit_start_date.setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
 
@@ -65,15 +64,21 @@ public class HabitNewActivity extends AppCompatActivity implements DatePickerDia
             @Override
             public void onClick(View view) {
                 if (verifyFields()) {
-                    HabitEntity habit = new HabitEntity();
+                    String reason = edittext_habit_reason.getText().toString();
+                    String type = edittext_habit_name.getText().toString();
+                    Habit habit = null;
+                    try {
+                        habit = new Habit(type, reason, "username");
+                    } catch (HabitReasonTooLongException e) {
+                        e.printStackTrace();
+                    } catch (HabitTypeTooLongException e) {
+                        e.printStackTrace();
+                    }
+                    if (habit == null) {
+                        return;
+                    }
 
-                    habit.setReason(edittext_habit_reason.getText().toString());
-                    habit.setType(edittext_habit_name.getText().toString());
-
-                    // https://stackoverflow.com/questions/22929237/convert-java-time-localdate-into-java-util-date-type
-                    // 2017-11-12
-                    Date d = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                    habit.setStartDate(d);
+                    habit.setStartDate(date);
 
                     EnumSet<DayOfWeek> schedule = EnumSet.noneOf(DayOfWeek.class);
                     if (checkbox_monday.isChecked()) { schedule.add(DayOfWeek.MONDAY); }
@@ -90,7 +95,6 @@ public class HabitNewActivity extends AppCompatActivity implements DatePickerDia
                 }
             }
         });
-
     }
 
     private boolean verifyFields() {

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/test2"
     tools:context=".viewmodel.HabitRelatedActivities.HabitStatActivity">
 
     <com.github.mikephil.charting.charts.PieChart
@@ -27,6 +28,7 @@
         android:text="@string/placeholder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="?android:attr/selectableItemBackground"/>
 
 </android.support.constraint.ConstraintLayout>

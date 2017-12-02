@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/test2"
     tools:context=".viewmodel.HabitEventRelatedActivites.EventNewActivity">
 
     <TextView
@@ -168,7 +169,7 @@
         android:layout_height="40dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="16dp"
-        android:text="@string/remove_photo"
+        android:text="remove_photo"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonTakePhoto" />

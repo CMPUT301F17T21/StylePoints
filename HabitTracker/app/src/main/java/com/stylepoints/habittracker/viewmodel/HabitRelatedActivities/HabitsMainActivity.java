@@ -11,11 +11,10 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.stylepoints.habittracker.R;
+import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.repository.HabitRepository;
-import com.stylepoints.habittracker.repository.local.AppDatabase;
-import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
-import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.Auxiliary.HabitListViewModel;
-import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.Auxiliary.HabitListViewModelFactory;
+import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
+import com.stylepoints.habittracker.viewmodel.HabitListViewModelFactory;
 
 import java.util.List;
 
@@ -28,8 +27,8 @@ public class HabitsMainActivity extends AppCompatActivity {
     private ListView listview_habit_list;
 
     // Test properties, will be replaced
-    List<HabitEntity> habitList;
-    private ArrayAdapter<HabitEntity> habitArrayAdapter; // adapter for the array of counters
+    List<Habit> habitList;
+    private ArrayAdapter<Habit> habitArrayAdapter; // adapter for the array of counters
 
 
     @Override
@@ -37,7 +36,7 @@ public class HabitsMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habits_main);
 
-        HabitRepository repo = HabitRepository.getInstance(AppDatabase.getAppDatabase(getApplicationContext()));
+        HabitRepository repo = HabitRepository.getInstance(getApplicationContext());
         HabitListViewModelFactory factory = new HabitListViewModelFactory(repo);
         HabitListViewModel model = ViewModelProviders.of(this, factory).get(HabitListViewModel.class);
 
@@ -50,7 +49,7 @@ public class HabitsMainActivity extends AppCompatActivity {
         listview_habit_list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?>adapter, View v, int position, long l){
-                int habitId = model.getHabitList().getValue().get(position).getId();
+                String habitId = model.getHabitList().getValue().get(position).getElasticId();
                 intent = new Intent(HabitsMainActivity.this, HabitEditActivity.class);
                 intent.putExtra("HABIT_ID", habitId);
                 startActivity(intent);
@@ -72,7 +71,7 @@ public class HabitsMainActivity extends AppCompatActivity {
     private void subscribeToModel(HabitListViewModel model) {
 
         model.getHabitList().observe(this, habitList -> {
-            ArrayAdapter<HabitEntity> adapter = new ArrayAdapter<HabitEntity>(
+            ArrayAdapter<Habit> adapter = new ArrayAdapter<Habit>(
                     this, android.R.layout.simple_list_item_1, habitList);
             listview_habit_list.setAdapter(adapter);
         });

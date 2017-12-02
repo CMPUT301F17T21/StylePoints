@@ -10,7 +10,7 @@
     <string name="_2015_01_20">2015-01-20</string>
     <string name="take_photo">Take Photo</string>
     <string name="delete_event">Delete event</string>
-    <string name="date_of_occurence">Date of Occurence</string>
+    <string name="date_of_occurence">Date of Occurrence</string>
     <string name="example_chicken">Example: Chicken</string>
     <string name="event_name">Event Name</string>
     <string name="jogging">Jogging</string>
@@ -18,8 +18,69 @@
     <string name="ran_3_km_today">Ran 3 km today!</string>
     <string name="photograph">Photograph</string>
     <string name="placeholder">placeholder</string>
+
+    <string name="requests">Requests</string>
+    <string name="followers">Followers</string>
+    <string name="reject">Reject</string>
+    <string name="accept">Accept</string>
+    <string name="following">Following</string>
+    <string name="notifications">Notifications</string>
+    <string name="map_events">Map Events</string>
+    <string name="social_feed">Social Feed</string>
+    <string name="filter">Filter:</string>
+    <string name="range">Range:</string>
+    <string name="recent_events">Recent Events</string>
+    <string name="my_profile">My Profile</string>
+    <string name="username">username</string>
+    <string name="achievements">Achievements</string>
+
+    <string name="events">Events</string>
+    <string name="habits">Habits</string>
+    <string name="social">Social</string>
+    <string name="profile">Profile</string>
+
+    <string name="add_new_habit">Add New Habit</string>
+    <string name="add_habit">Add Habit</string>
+
+    <string name="habit_name">Habit Name</string>
+    <string name="starting_date">Starting Date</string>
+    <string name="weekly_schedule">Weekly Schedule</string>
+    <string name="reason">Reason</string>
+    <string name="name_of_habit">Name of Habit</string>
+    <string name="reason_of_habit">Reason for Habit</string>
+    <string name="set_date">Set Date</string>
+    <string name="date">Date</string>
+
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+
+    <string name="statistics">Statistics</string>
+    <string name="save_habit">Save Habit</string>
+    <string name="delete_habit">Delete Habit</string>
     <string name="add_new_event">Add New Event</string>
+    <string name="existing_events">Existing Events</string>
     <string name="commentary_key_word">Commentary Key Word</string>
-    <string name="search_word">search_word</string>
-    <string name="remove_photo">remove photo</string>
-</resources>
+    <string name="todays_habits">Todays Habits</string>
+    <string name="search">Search</string>
+    <string name="comment">Comment</string>
+    <string name="update_event">Update Event</string>
+    <string name="counter_description">Counter Description</string>
+    <string name="add_event">Add Event</string>
+    <string name="search_user_to_follow">Search User to Follow</string>
+    <string name="go">GO</string>
+    <string name="welcome_to_habittracker">Welcome to HabitTracker</string>
+    <string name="please_enter_username">Please enter username:</string>
+    <string name="login">Login</string>
+    <string name="existing_habits">Existing Habits</string>
+
+    <string-array name="socialFeed_vals">
+        <item>All</item>
+        <item>My Events</item>
+        <item>Within 5 km</item>
+    </string-array>
+    \</resources>

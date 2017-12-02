@@ -21,18 +21,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stylepoints.habittracker.R;
+import com.stylepoints.habittracker.model.Habit;
+import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.repository.HabitEventRepository;
 import com.stylepoints.habittracker.repository.HabitRepository;
-import com.stylepoints.habittracker.repository.local.AppDatabase;
-import com.stylepoints.habittracker.repository.local.entity.HabitEntity;
-import com.stylepoints.habittracker.repository.local.entity.HabitEventEntity;
-import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.Auxiliary.HabitEventListViewModel;
-import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.Auxiliary.HabitEventListViewModelFactory;
-import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.Auxiliary.HabitListViewModel;
-import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.Auxiliary.HabitListViewModelFactory;
+import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.HabitEventAux.HabitEventListViewModel;
+import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.HabitEventAux.HabitEventListViewModelFactory;
+import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
+import com.stylepoints.habittracker.viewmodel.HabitListViewModelFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,7 +71,7 @@ public class EventEditActivity extends AppCompatActivity {
         return buttonDeleteEvent;
     }
 
-    public List<HabitEntity> getHabitList() {
+    public List<Habit> getHabitList() {
         return habitList;
     };
 
@@ -85,8 +85,8 @@ public class EventEditActivity extends AppCompatActivity {
     private Button buttonSaveEvent;
     private Button buttonDeleteEvent;
 
-    private List<HabitEntity> habitList;
-    private ArrayAdapter<HabitEntity> habitArrayAdapter;
+    private List<Habit> habitList;
+    private ArrayAdapter<Habit> habitArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +96,11 @@ public class EventEditActivity extends AppCompatActivity {
         System.out.println("EventEditActivity");
 
         // Get required repo
-        HabitRepository habitRepo = HabitRepository.getInstance(AppDatabase.getAppDatabase(getApplicationContext()));
+        HabitRepository habitRepo = HabitRepository.getInstance(getApplicationContext());
         HabitListViewModelFactory habitFactory = new HabitListViewModelFactory(habitRepo);
         HabitListViewModel habitModel = ViewModelProviders.of(this, habitFactory).get(HabitListViewModel.class);
 
-        HabitEventRepository eventRepo = HabitEventRepository.getInstance(AppDatabase.getAppDatabase(getApplicationContext()));
+        HabitEventRepository eventRepo = HabitEventRepository.getInstance(getApplicationContext());
         HabitEventListViewModelFactory eventFactory = new HabitEventListViewModelFactory(eventRepo);
         HabitEventListViewModel eventModel = ViewModelProviders.of(this, eventFactory).get(HabitEventListViewModel.class);
 
@@ -114,16 +114,16 @@ public class EventEditActivity extends AppCompatActivity {
             return;
         }
 
-        int eventId = inputIntent.getIntExtra("EVENT_ID", 0);
+        String eventId = inputIntent.getStringExtra("EVENT_ID");
         Log.d(TAG, "passed in eventId: " + String.valueOf(eventId));
-        if (eventId == 0) {
+        if (eventId == null) {
             // invalid ID
             Log.e(TAG, "eventId can not be 0");
             finish();
             return;
         }
 
-        HabitEventEntity event = eventRepo.getEventSync(eventId);
+        HabitEvent event = eventRepo.getEventSync(eventId);
         if (event == null) {
             Log.e(TAG, "Unable to find event with id: " + String.valueOf(eventId));
             finish();
@@ -133,10 +133,6 @@ public class EventEditActivity extends AppCompatActivity {
         // Inisitialise the activity to layout
         bindToUi();
         fillUi(event);
-
-        // Initialise the data of occurence field
-        Date date = new Date();
-        textViewDateOfOccurence.setText((new SimpleDateFormat("yyyy/MM/dd hh:mm:ss")).format(date));
 
         // Initialise button to take picture
         buttonTakePicture.setOnClickListener(new Button.OnClickListener(){
@@ -172,7 +168,7 @@ public class EventEditActivity extends AppCompatActivity {
                     event.setPhoto(null);
                 }
 //              event.setLocation();
-                eventRepo.save(event);
+                eventRepo.updateEvent(event.getElasticId(), event);
                 finish();
             }
         });
@@ -181,7 +177,7 @@ public class EventEditActivity extends AppCompatActivity {
         buttonDeleteEvent.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                eventRepo.delete(event);
+                eventRepo.deleteEvent(event.getElasticId());
                 finish();
             }
         });
@@ -235,9 +231,9 @@ public class EventEditActivity extends AppCompatActivity {
     }
 
 
-    private void fillUi(HabitEventEntity event) {
-        textViewEventName.setText(event.getName());
-        textViewDateOfOccurence.setText((new SimpleDateFormat("yyyy/MM/dd hh:mm:ss")).format(event.getDate()));
+    private void fillUi(HabitEvent event) {
+        textViewEventName.setText(event.getType());
+        textViewDateOfOccurence.setText(event.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
         editTextEventComment.setText(event.getComment());
         imageViewEventPhoto.setImageBitmap(event.getPhoto());
     }

@@ -2,13 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.stylepoints.habittracker">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -67,11 +69,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".viewmodel.HabitEventRelatedActivites.EventsMainActivity" />
         </activity>
-        <activity android:name=".viewmodel.HabitRelatedActivities.HabitStatActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".viewmodel.HabitEventRelatedActivites.EventEditActivity" />
-        </activity>
+        <activity android:name=".viewmodel.CentralHubActivity.NewUserActivity" />
+        <activity android:name=".viewmodel.SocialFeed.SocialFeed" />
+        <activity android:name=".viewmodel.SocialFeed.Followers" />
+        <activity android:name=".viewmodel.SocialFeed.Following" />
+        <activity android:name=".viewmodel.SocialFeed.MapEvents" />
+        <activity android:name=".viewmodel.Profile.ProfileMain"></activity>
+
     </application>
 
 </manifest>
