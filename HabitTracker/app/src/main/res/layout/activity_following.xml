@@ -19,7 +19,7 @@
         tools:layout_editor_absoluteY="416dp"
         android:id="@+id/linearLayout">
 
-        <SearchView
+        <EditText
             android:id="@+id/searchUser"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
             android:layout_weight="1"
             android:elevation="0dp"
             android:iconifiedByDefault="false"
-            android:queryHint="Search User to Follow"
+            android:hint="@string/search_user_to_follow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/searchButton"
             app:layout_constraintStart_toStartOf="parent"
