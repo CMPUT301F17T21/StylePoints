@@ -43,6 +43,8 @@ public class HabitModelTest {
         Habit habit = new Habit("testType", "testReason", "testUsername");
         assertEquals("testType", habit.getType());
         assertEquals("testReason", habit.getReason());
-        
+        assert(habit.getElasticId() != null);
+        assert(habit.getDaysActive() != null);
+        assert(habit.getStartDate() != null);
     }
 }
