@@ -37,14 +37,12 @@ public class NewUserActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.userLoginButton);
         usernameInput = (EditText) findViewById(R.id.userNameInput);
 
-        userRepo = UserRepository.getINSTANCE();
-        userRepo.sethR(HabitRepository.getInstance(getApplicationContext()));
-        userRepo.sethER(HabitEventRepository.getInstance(getApplicationContext()));
-
         loginButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view){
                 try {
+                    userRepo = new UserRepository(HabitRepository.getInstance(getApplicationContext()),
+                            HabitEventRepository.getInstance(getApplicationContext()));
                     username = usernameInput.getText().toString();
                     Integer result = userRepo.execute(username).get();
                     if (result.equals(0)){

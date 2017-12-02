@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.stylepoints.habittracker.model.Habit;
+import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.model.User;
 import com.stylepoints.habittracker.repository.local.HabitJsonSource;
 import com.stylepoints.habittracker.repository.local.UserJsonSource;
@@ -16,6 +17,7 @@ import com.stylepoints.habittracker.repository.remote.ElasticSearch;
 
 import java.io.IOException;
 import java.lang.reflect.Parameter;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,24 +33,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class UserRepository extends AsyncTask<String, Void, Integer>{
 
     private static final String TAG = "UserRepository";
-    private static UserRepository INSTANCE = new UserRepository();
     private ElasticSearch elastic;
     private HabitRepository hR;
     private HabitEventRepository hER;
+    private List<Habit> habitList;
+    private List<HabitEvent> eventList;
 
-    private UserRepository() {
+    public UserRepository(HabitRepository hR, HabitEventRepository hER) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://cmput301.softwareprocess.es:8080/cmput301f17t21_stylepoints/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         this.elastic = retrofit.create(ElasticSearch.class);
-    }
-
-    public void sethR(HabitRepository hR) {
         this.hR = hR;
-    }
-
-    public void sethER(HabitEventRepository hER) {
         this.hER = hER;
     }
 
@@ -58,24 +55,28 @@ public class UserRepository extends AsyncTask<String, Void, Integer>{
 
     public Boolean checkUserExists(String username) throws IOException{
         Response<ElasticResponse<User>> response = elastic.getUserByName(username).execute();
-        if (response.isSuccessful()){
-            return response.body().wasFound();
+        if (response.body().wasFound()){
+            return true;
+        } else {
+            return false;
         }
-        throw new IOException("Elastic Search Request Unsuccessful");
     }
 
     public void loadUser(String username) throws IOException {
+
         if (checkUserExists(username)) {
             Response<ElasticHabitListResponse> responseHabits = elastic.searchHabit("user:" + username).execute();
+            if (!responseHabits.isSuccessful()) {
+                throw new IOException("Elastic Search Request Unsuccessful");
+            }
+            habitList = responseHabits.body().getList();
+
             Response<ElasticEventListResponse> responseEvents = elastic.searchEvent("user:" + username).execute();
-            if (responseHabits.isSuccessful()) {
+            if (!responseEvents.isSuccessful()) {
                 throw new IOException("Elastic Search Request Unsuccessful");
             }
-            this.hR.saveList(responseHabits.body().getList());
-            if (responseEvents.isSuccessful()) {
-                throw new IOException("Elastic Search Request Unsuccessful");
-            }
-            this.hER.saveList(responseEvents.body().getList());
+            eventList = responseEvents.body().getList();
+
         } else {
             elastic.createUser(username).execute();
         }
@@ -84,13 +85,6 @@ public class UserRepository extends AsyncTask<String, Void, Integer>{
 
     public void deleteUser(){
 
-    }
-
-    public static UserRepository getINSTANCE(){
-        if (INSTANCE == null) {
-            INSTANCE = new UserRepository();
-        }
-        return INSTANCE;
     }
 
     @Override
@@ -102,6 +96,12 @@ public class UserRepository extends AsyncTask<String, Void, Integer>{
             e.printStackTrace();
             return 0;
         }
+    }
+
+    @Override
+    protected void onPostExecute(Integer i){
+        this.hR.saveList(this.habitList);
+        this.hER.saveList(this.eventList);
     }
 
 }
