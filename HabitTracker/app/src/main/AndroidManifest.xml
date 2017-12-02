@@ -63,6 +63,7 @@
         <activity android:name=".viewmodel.SocialFeed.Following" />
         <activity android:name=".viewmodel.SocialFeed.MapEvents" />
         <activity android:name=".viewmodel.Profile.ProfileMain"></activity>
+
     </application>
 
 </manifest>

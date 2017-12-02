@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+      
         profileButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view) {

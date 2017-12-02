@@ -129,6 +129,12 @@ public class HabitRepository {
         });
     }
 
+    public void saveList(List<Habit> habitList){
+        for (Habit h: habitList){
+            save(h);
+        }
+    }
+
     public LiveData<Habit> getRemoteHabit(String habitId) {
         final MutableLiveData<Habit> data = new MutableLiveData<>();
         elastic.getHabitById(habitId).enqueue(new Callback<ElasticResponse<Habit>>() {

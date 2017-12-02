@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+
 import android.view.View;
 import com.stylepoints.habittracker.R;
 
 public class SocialFeed extends AppCompatActivity {
+
 
     // Internals
     private Intent intent;
@@ -59,5 +61,4 @@ public class SocialFeed extends AppCompatActivity {
             }
         });
     }
-
 }

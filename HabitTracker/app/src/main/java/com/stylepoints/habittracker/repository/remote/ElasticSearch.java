@@ -2,6 +2,7 @@ package com.stylepoints.habittracker.repository.remote;
 
 import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.model.HabitEvent;
+import com.stylepoints.habittracker.model.User;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -54,4 +55,8 @@ public interface ElasticSearch {
 
     @GET("event/_search")
     Call<ElasticEventListResponse> searchEvent(@Query("q") String fieldAndTerms);
+
+    // ===== User =====
+    @GET("user/{username}")
+    Call<ElasticResponse<User>> getUserByName(@Path("username") String username);
 }
