@@ -1,16 +1,19 @@
 package com.stylepoints.habittracker.repository;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.content.ComponentName;
 import android.content.Context;
-import android.util.Log;
+import android.os.PersistableBundle;
 
 import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.repository.local.HabitJsonSource;
 import com.stylepoints.habittracker.repository.remote.ElasticHabitListResponse;
-import com.stylepoints.habittracker.repository.remote.ElasticRequestStatus;
 import com.stylepoints.habittracker.repository.remote.ElasticResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticSearch;
+import com.stylepoints.habittracker.repository.remote.RemoteHabitJob;
 
 import java.util.List;
 
@@ -32,6 +35,8 @@ public class HabitRepository {
     private static HabitRepository INSTANCE;
     private final HabitJsonSource source;
     private ElasticSearch elastic;
+    private JobScheduler jobScheduler;
+    private Context context;
 
     private HabitRepository(HabitJsonSource source) {
         this.source = source;
@@ -49,6 +54,8 @@ public class HabitRepository {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         this.elastic = retrofit.create(ElasticSearch.class);
+        this.context = context.getApplicationContext();
+        this.jobScheduler = (JobScheduler) context.getApplicationContext().getSystemService(Context.JOB_SCHEDULER_SERVICE);
     }
 
     public LiveData<Habit> getHabit(String habitId) {
@@ -70,63 +77,49 @@ public class HabitRepository {
     public void save(Habit habit) {
         // save habit locally
         source.saveHabit(habit);
-        // save habit in elastic search async
-        elastic.createHabitWithId(habit.getElasticId(), habit).enqueue(new Callback<ElasticRequestStatus>() {
-            @Override
-            public void onResponse(Call<ElasticRequestStatus> call, Response<ElasticRequestStatus> response) {
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "create habit network request success");
-                    if (response.body().wasCreated()) {
-                        Log.i(TAG, "Habit successfully stored in remote " + habit.getElasticId());
-                    }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<ElasticRequestStatus> call, Throwable t) {
-                Log.d(TAG, "network request failed saving habit " + habit.getElasticId());
-            }
-        });
+        // save habit in elastic search async
+        PersistableBundle bundle = new PersistableBundle();
+        bundle.putString("HABIT_ID", habit.getElasticId());
+        bundle.putInt("OPERATION", Util.CREATE);
+        jobScheduler.schedule(new JobInfo.Builder(Util.getUniqueJobId(jobScheduler),
+                new ComponentName(context, RemoteHabitJob.class))
+                .setExtras(bundle)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .build()
+        );
     }
 
     public void update(String id, Habit habit) {
         // update local version
         source.updateHabit(id, habit);
         // update remote version
-        elastic.updateHabit(id, habit).enqueue(new Callback<ElasticRequestStatus>() {
-            @Override
-            public void onResponse(Call<ElasticRequestStatus> call, Response<ElasticRequestStatus> response) {
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "habit update network request success");
-                    if (response.body().wasCreated()) {
-                        Log.i(TAG, "Habit successfully stored in remote " + habit.getElasticId());
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<ElasticRequestStatus> call, Throwable t) {
-                Log.d(TAG, "network request failed to update habit " + habit.getElasticId());
-            }
-        });
+        removePreviousJobs(id);
+        PersistableBundle bundle = new PersistableBundle();
+        bundle.putString("HABIT_ID", habit.getElasticId());
+        bundle.putInt("OPERATION", Util.UPDATE);
+        jobScheduler.schedule(new JobInfo.Builder(Util.getUniqueJobId(jobScheduler),
+                new ComponentName(context, RemoteHabitJob.class))
+                .setExtras(bundle)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .build()
+        );
     }
 
     public void delete(String id) {
         // delete from local
         source.deleteHabit(id);
         // delete from remote
-        elastic.deleteHabit(id).enqueue(new Callback<ElasticRequestStatus>() {
-            @Override
-            public void onResponse(Call<ElasticRequestStatus> call, Response<ElasticRequestStatus> response) {
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "habit delete network request success");
-                    Log.d(TAG, response.body().toString());
-                }
-            }
-            @Override
-            public void onFailure(Call<ElasticRequestStatus> call, Throwable t) {
-                Log.d(TAG, "network request failed for habit delete " + id);
-            }
-        });
+        removePreviousJobs(id);
+        PersistableBundle bundle = new PersistableBundle();
+        bundle.putString("HABIT_ID", id);
+        bundle.putInt("OPERATION", Util.DELETE);
+        jobScheduler.schedule(new JobInfo.Builder(Util.getUniqueJobId(jobScheduler),
+                new ComponentName(context, RemoteHabitJob.class))
+                .setExtras(bundle)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .build()
+        );
     }
 
     public void saveList(List<Habit> habitList){
@@ -165,6 +158,20 @@ public class HabitRepository {
             }
         });
         return data;
+    }
+
+    private void removePreviousJobs(String id) {
+        String jobHabitId = null;
+        for (JobInfo job : jobScheduler.getAllPendingJobs()) {
+            jobHabitId = job.getExtras().getString("HABIT_ID");
+            if (jobHabitId != null && jobHabitId.equals(id)) {
+                // remove previous job that was scheduled with this id
+                // so we don't do something like "update" and then "create"
+                jobScheduler.cancel(job.getId());
+                // should only ever be one job with that habitId
+                return;
+            }
+        }
     }
 
     public static HabitRepository getInstance(Context context) {
