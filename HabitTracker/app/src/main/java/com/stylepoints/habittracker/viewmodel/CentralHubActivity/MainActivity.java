@@ -67,16 +67,13 @@ public class MainActivity extends AppCompatActivity {
         String username = pref.getString("username", "");
         Log.i("debug", pref.getString("username", ""));
 
-
-//        repo = HabitRepository.getInstance(getApplicationContext());
-//        fullList = repo.loadAll();
-//        habitList = new ArrayList<>();
-
         HabitRepository habitRepo = HabitRepository.getInstance(getApplicationContext());
         HabitListViewModelFactory habitFactory = new HabitListViewModelFactory(habitRepo);
         HabitListViewModel habitModel = ViewModelProviders.of(this, habitFactory).get(HabitListViewModel.class);
 
+
         bindToUi();
+
 
 
         habitModel.getHabitList().observe(this, habitList -> {

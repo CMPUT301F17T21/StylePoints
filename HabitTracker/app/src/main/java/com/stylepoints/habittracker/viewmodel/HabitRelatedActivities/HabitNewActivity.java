@@ -90,7 +90,12 @@ public class HabitNewActivity extends AppCompatActivity implements DatePickerDia
                     if (checkbox_sunday.isChecked()) { schedule.add(DayOfWeek.SUNDAY); }
                     habit.setDaysActive(schedule);
 
-                    repo.save(habit);
+                    try {
+                        repo.save(habit);
+                    } catch (NonUniqueException e) {
+                        edittext_habit_name.setError("A habit of this type already exists!");
+                        return;
+                    }
                     finish();
                 }
             }
@@ -99,11 +104,8 @@ public class HabitNewActivity extends AppCompatActivity implements DatePickerDia
 
     private boolean verifyFields() {
         boolean valid = true;
-
-        // TODO: check if type is empty string
-
-        if (edittext_habit_reason.getText().toString().length() > 30) {
-            edittext_habit_reason.setError("Reason must be less than 30 characters");
+        if (edittext_habit_name.getText().toString().length() == 0) {
+            edittext_habit_name.setError("Must have a type");
             valid = false;
         }
 

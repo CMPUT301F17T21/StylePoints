@@ -1,8 +1,12 @@
 package com.stylepoints.habittracker.repository;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
+import android.content.ComponentName;
 import android.content.Context;
+import android.os.PersistableBundle;
 import android.util.Log;
 
 import com.stylepoints.habittracker.model.Habit;
@@ -10,6 +14,7 @@ import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.repository.local.EventJsonSource;
 import com.stylepoints.habittracker.repository.remote.ElasticRequestStatus;
 import com.stylepoints.habittracker.repository.remote.ElasticSearch;
+import com.stylepoints.habittracker.repository.remote.RemoteEventJob;
 
 import java.util.List;
 
@@ -23,6 +28,7 @@ public class HabitEventRepository {
     private static final String TAG = "HabitEventRepository";
     private static HabitEventRepository INSTANCE;
     private final EventJsonSource source;
+  
     private ElasticSearch elastic; // new code
 
     private HabitEventRepository(EventJsonSource source) {
@@ -86,7 +92,7 @@ public class HabitEventRepository {
             }
         });
     }
-
+  
     public static HabitEventRepository getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = new HabitEventRepository(context);

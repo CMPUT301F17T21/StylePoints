@@ -1,9 +1,13 @@
 package com.stylepoints.habittracker.repository;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.content.Context;
 import android.util.Log;
+import android.content.ComponentName;
+import android.content.Context;
+import android.os.PersistableBundle;
 
 import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.repository.local.HabitJsonSource;
@@ -11,6 +15,7 @@ import com.stylepoints.habittracker.repository.remote.ElasticHabitListResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticRequestStatus;
 import com.stylepoints.habittracker.repository.remote.ElasticResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticSearch;
+import com.stylepoints.habittracker.repository.remote.RemoteHabitJob;
 
 import java.util.List;
 
@@ -66,6 +71,7 @@ public class HabitRepository {
     public LiveData<List<Habit>> loadAll() {
         return source.getHabits();
     }
+
 
     public void save(Habit habit) {
         // save habit locally
@@ -165,6 +171,7 @@ public class HabitRepository {
             }
         });
         return data;
+
     }
 
     public static HabitRepository getInstance(Context context) {

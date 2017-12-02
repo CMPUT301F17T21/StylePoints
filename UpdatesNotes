@@ -1,0 +1,8 @@
+Novemebr 11, Qikai
+1. Habit Controller is mostly done, though error checking is not yet carried out, should be a priority.
+2. HabitEvent class is renamed as Event for simplicity.
+3. Habit class is changed slightly to throw the proper (CommentTooLong) exceptions; WeekSchedule class is modified by adding a toString function.
+4. Habit can now be added without crashing, however, local saves are not yet done.
+5. It is prudent to work on EventController and ProfileController as soon as possible. I will take the ProfileController, as it must be implmented
+    for the habits to save properly. Suggestions are welcomed.
+6. For most cases, a factory design pattern (integrate with MVC) is suficient.

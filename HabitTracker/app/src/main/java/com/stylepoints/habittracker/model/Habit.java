@@ -16,8 +16,9 @@ import java.util.UUID;
  */
 
 public class Habit implements Id {
-    private transient final int MAX_REASON_LENGTH = 30;
-    private transient final int MAX_TYPE_LENGTH = 20;
+  
+    public static transient final int MAX_REASON_LENGTH = 30;
+    public static transient final int MAX_TYPE_LENGTH = 20;
 
     // the id used with elastic search. i.e., /habit/{elasticId}
     private String elasticId;
@@ -127,6 +128,7 @@ public class Habit implements Id {
 
     @Override
     public String toString() {
+
         return "type:" + type;
 //        return "Habit{" +
 //                "elasticId='" + elasticId + '\'' +

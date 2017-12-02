@@ -19,6 +19,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <service
+            android:name=".repository.remote.RemoteHabitJob"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true"/>
+
+        <service android:name=".repository.remote.RemoteEventJob"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true"/>
+
         <activity android:name=".viewmodel.CentralHubActivity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -69,6 +79,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".viewmodel.HabitEventRelatedActivites.EventsMainActivity" />
         </activity>
+
         <activity android:name=".viewmodel.CentralHubActivity.NewUserActivity" />
         <activity android:name=".viewmodel.SocialFeed.SocialFeed" />
         <activity android:name=".viewmodel.SocialFeed.Followers" />

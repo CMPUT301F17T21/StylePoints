@@ -38,4 +38,5 @@ public class HabitViewModel extends ViewModel {
     public void saveHabit(Habit habit) {
         habitRepo.save(habit);
     }
+
 }

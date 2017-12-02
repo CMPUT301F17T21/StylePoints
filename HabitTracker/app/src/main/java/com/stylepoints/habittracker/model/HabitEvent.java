@@ -6,6 +6,8 @@ import android.location.Location;
 import com.stylepoints.habittracker.repository.remote.Id;
 
 import java.time.LocalDate;
+
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -17,6 +19,7 @@ public class HabitEvent implements Id {
     private String elasticId;
     private String habitId;
     private String type;
+
     private String username;
     private String comment;
     private LocalDate date;
@@ -30,6 +33,7 @@ public class HabitEvent implements Id {
         this.username = username;
         this.date = LocalDate.now();
     }
+
 
     public HabitEvent(String username, String habitId, String type, String comment) {
         this(username, habitId, type);
