@@ -22,126 +22,22 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/userInfo"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title">
+        android:text="@string/username"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
-        <TextView
-            android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/username"
-            android:textSize="18sp"
-            android:textStyle="italic"
-            app:layout_constraintEnd_toStartOf="@id/followingTxt"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
-
-        <TextView
-            android:id="@+id/followingTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/following"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/username" />
-
-        <TextView
-            android:id="@+id/followingVal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/number"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@id/followerTxt"
-            app:layout_constraintStart_toEndOf="@id/followingTxt" />
-
-        <TextView
-            android:id="@+id/followerTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/followers"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@id/followerVal"
-            app:layout_constraintStart_toEndOf="@id/followingVal" />
-
-        <TextView
-            android:id="@+id/followerVal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/number"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@id/levelTxt"
-            app:layout_constraintStart_toEndOf="@id/followerTxt" />
-
-        <TextView
-            android:id="@+id/levelTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/level"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@id/levelVal"
-            app:layout_constraintStart_toEndOf="@id/followerVal" />
-
-        <TextView
-            android:id="@+id/levelVal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/number"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@id/question"
-            app:layout_constraintStart_toEndOf="@id/levelTxt" />
-
-        <Button
-            android:id="@+id/question"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:text="@string/question"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/levelVal" />
-
-
-    </LinearLayout>
-
-
-    <Button
+    <TextView
         android:id="@+id/achievements"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -151,11 +47,7 @@
         android:gravity="center"
         android:text="@string/achievements"
         android:textSize="24sp"
-        android:background="?android:attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userInfo"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-
+        app:layout_constraintTop_toBottomOf="@+id/username" />
 </android.support.constraint.ConstraintLayout>

@@ -16,7 +16,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:id="@+id/linearLayout">
+        tools:layout_editor_absoluteX="9dp"
+        tools:layout_editor_absoluteY="416dp"
+        android:id="@+id/linearLayout"
+        app:layout_constraintHorizontal_bias="0.6">
 
         <Button
             android:id="@+id/mapEventsButton"
