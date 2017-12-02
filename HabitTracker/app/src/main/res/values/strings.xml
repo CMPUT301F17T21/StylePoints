@@ -65,7 +65,7 @@
     <string name="add_new_event">Add New Event</string>
     <string name="existing_events">Existing Events</string>
     <string name="commentary_key_word">Commentary Key Word</string>
-    <string name="todays_habits">Todays Habits</string>
+    <string name="todays_habits">Today\'s Habits</string>
     <string name="search">Search</string>
     <string name="comment">Comment</string>
     <string name="update_event">Update Event</string>
@@ -77,10 +77,18 @@
     <string name="please_enter_username">Please enter username:</string>
     <string name="login">Login</string>
     <string name="existing_habits">Existing Habits</string>
+    <string name="most_common_habit">Most Common Habit: </string>
+    <string name="insert_val_here">insert common habit here</string>
+    <string name="number">###?</string>
+    <string name="level">Level:</string>
+    <string name="question">\?</string>
+    <string name="tenPlus">Habits Recorded 10+ times:</string>
+    <string name="hundredPlus">Habits Recorded 100+ times:</string>
 
     <string-array name="socialFeed_vals">
         <item>All</item>
         <item>My Events</item>
         <item>Within 5 km</item>
     </string-array>
-    \</resources>
+    \
+</resources>

@@ -2,11 +2,11 @@ package com.stylepoints.habittracker.model;
 
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.support.annotation.Nullable;
 
 import com.stylepoints.habittracker.repository.remote.Id;
 
 import java.time.LocalDate;
-
 import java.util.Date;
 import java.util.UUID;
 
@@ -18,35 +18,30 @@ public class HabitEvent implements Id {
 
     private String elasticId;
     private String habitId;
-    private String type;
-
     private String username;
     private String comment;
     private LocalDate date;
     private Location location;
     private Bitmap photo;
 
-    public HabitEvent(String username, String habitId, String type) {
+    public HabitEvent(String username, String habitId) {
         elasticId = UUID.randomUUID().toString();
-        this.habitId = habitId;
-        this.type = type;
         this.username = username;
         this.date = LocalDate.now();
     }
 
-
-    public HabitEvent(String username, String habitId, String type, String comment) {
-        this(username, habitId, type);
+    public HabitEvent(String username, String habitId, String comment) {
+        this(username, habitId);
         this.comment = comment;
     }
 
-    public HabitEvent(String username, String habitId, String type, String comment, LocalDate date) {
-        this(username, habitId, type, comment);
+    public HabitEvent(String username, String habitId, String comment, LocalDate date) {
+        this(username, habitId, comment);
         this.date = date;
     }
 
-    public HabitEvent(String username, String habitId, String type, String comment, LocalDate date, Location location) {
-        this(username, habitId, type, comment, date);
+    public HabitEvent(String username, String habitId, String comment, LocalDate date, Location location) {
+        this(username, habitId, comment, date);
         this.location = location;
     }
 
@@ -107,25 +102,15 @@ public class HabitEvent implements Id {
         this.photo = photo;
     }
 
-    // new code
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     @Override
     public String toString() {
-        return "Type: " + type + "\nDate: " + date;
-//        return "HabitEvent{" +
-//                "elasticId='" + elasticId + '\'' +
-//                ", username='" + username + '\'' +
-//                ", comment='" + comment + '\'' +
-//                ", date=" + date +
-//                ", location=" + location +
-//                '}';
+        return "HabitEvent{" +
+                "elasticId='" + elasticId + '\'' +
+                ", username='" + username + '\'' +
+                ", comment='" + comment + '\'' +
+                ", date=" + date +
+                ", location=" + location +
+                '}';
     }
 
     @Override

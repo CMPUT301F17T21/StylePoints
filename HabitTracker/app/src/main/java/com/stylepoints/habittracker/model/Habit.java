@@ -16,7 +16,6 @@ import java.util.UUID;
  */
 
 public class Habit implements Id {
-  
     public static transient final int MAX_REASON_LENGTH = 30;
     public static transient final int MAX_TYPE_LENGTH = 20;
 
@@ -128,15 +127,13 @@ public class Habit implements Id {
 
     @Override
     public String toString() {
-
-        return "type:" + type;
-//        return "Habit{" +
-//                "elasticId='" + elasticId + '\'' +
-//                ", type='" + type + '\'' +
-//                ", reason='" + reason + '\'' +
-//                ", username='" + username + '\'' +
-//                ", startDate=" + startDate +
-//                ", daysActive=" + daysActive +
-//                '}';
+        return "Habit{" +
+                "elasticId='" + elasticId + '\'' +
+                ", type='" + type + '\'' +
+                ", reason='" + reason + '\'' +
+                ", username='" + username + '\'' +
+                ", startDate=" + startDate +
+                ", daysActive=" + daysActive +
+                '}';
     }
 }
