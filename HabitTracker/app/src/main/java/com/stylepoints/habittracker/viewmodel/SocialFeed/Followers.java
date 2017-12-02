@@ -8,6 +8,8 @@ import com.stylepoints.habittracker.R;
 
 public class Followers extends AppCompatActivity {
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
