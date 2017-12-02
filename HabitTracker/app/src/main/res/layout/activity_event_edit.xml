@@ -28,7 +28,6 @@
         android:id="@+id/textViewEventNameTitle"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/event_name"
@@ -41,7 +40,6 @@
         android:id="@+id/textViewDateOfOccurenceTitle"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
@@ -55,9 +53,8 @@
         android:id="@+id/textViewCommentTitle"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="16dp"
         android:gravity="center"
-        android:text="Comment"
+        android:text="@string/comment"
         android:textSize="14sp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginStart="16dp"
@@ -80,7 +77,6 @@
         android:id="@+id/buttonTakePhoto"
         android:layout_width="100dp"
         android:layout_height="80dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/take_photo"
@@ -93,12 +89,13 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp"
         android:gravity="center"
-        android:text="Update Event"
+        android:text="@string/update_event"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:background="?android:attr/selectableItemBackground"/>
 
     <Button
         android:id="@+id/buttonDeleteEvent"
@@ -110,7 +107,8 @@
         android:text="@string/delete_event"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="?android:attr/selectableItemBackground"/>
 
     <TextView
         android:id="@+id/spinnerEventName"
@@ -142,8 +140,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:gravity="left"
-        android:hint="Counter Description"
+        android:gravity="start"
+        android:hint="@string/counter_description"
         android:inputType="textPersonName"
         android:text="@string/ran_3_km_today"
         android:textSize="14sp"
@@ -170,7 +168,6 @@
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/attach_location"

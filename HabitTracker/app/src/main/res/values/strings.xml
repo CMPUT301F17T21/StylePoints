@@ -65,6 +65,12 @@
     <string name="existing_events">Existing Events</string>
     <string name="commentary_key_word">Commentary Key Word</string>
     <string name="todays_habits">Todays Habits</string>
+    <string name="search">Search</string>
+    <string name="comment">Comment</string>
+    <string name="update_event">Update Event</string>
+    <string name="counter_description">Counter Description</string>
+    <string name="add_event">Add Event</string>
+    <string name="jogging">Jogging</string>
 
     <string-array name="socialFeed_vals">
         <item>All</item>
