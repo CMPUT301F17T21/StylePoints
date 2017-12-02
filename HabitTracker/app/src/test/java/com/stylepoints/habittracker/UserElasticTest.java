@@ -25,6 +25,7 @@ public class UserElasticTest {
     }
 
     @Test
+
     public void testNewUser(){
 
     }

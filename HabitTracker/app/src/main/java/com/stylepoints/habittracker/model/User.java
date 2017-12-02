@@ -1,5 +1,6 @@
 package com.stylepoints.habittracker.model;
 
+
 import com.stylepoints.habittracker.repository.remote.Id;
 
 import java.time.LocalDate;
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 /**
  * Created by nikosomos on 2017-11-27.
  */
+
 
 public class User implements Id {
 
@@ -32,4 +34,5 @@ public class User implements Id {
     public void setElasticId(String id) {
         elasticId = id;
     }
+
 }

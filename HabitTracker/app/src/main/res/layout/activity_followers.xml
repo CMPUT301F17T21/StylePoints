@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.stylepoints.habittracker.viewmodel.SocialFeed.SocialFeed">
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="87dp"
+    tools:context="com.stylepoints.habittracker.viewmodel.SocialFeed.Followers">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
@@ -21,39 +21,35 @@
         app:layout_constraintHorizontal_bias="0.6">
 
         <Button
-            android:id="@+id/mapEventsButton"
-            android:layout_width="wrap_content"
+            android:id="@+id/acceptRequest"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:elevation="0dp"
-            android:text="@string/map_events"
-            android:background="?android:attr/selectableItemBackground"/>
+            android:text="@string/accept"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="?android:attr/selectableItemBackground"
+            />
 
         <Button
-            android:id="@+id/followersButton"
-            android:layout_width="wrap_content"
+            android:id="@+id/rejectRequest"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/followers"
+            android:elevation="0dp"
+            android:text="@string/reject"
+            app:layout_constraintEnd_toEndOf="parent"
             android:background="?android:attr/selectableItemBackground"/>
-
-        <Button
-            android:id="@+id/followingButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/following"
-            android:background="?android:attr/selectableItemBackground"/>
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
     <TextView
-        android:id="@+id/socialFeed"
+        android:id="@+id/followersTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/social_feed"
+        android:text="@string/followers"
         android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -61,19 +57,41 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:gravity="center" />
-    <Spinner
-        android:id="@+id/sort_by_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+
+
+    <ListView
+        android:id="@+id/followersList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:entries="@array/socialFeed_vals"
-        app:layout_constraintTop_toBottomOf="@id/socialFeed"/>
+        app:layout_constraintBottom_toTopOf="@+id/followersRequests"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/followersTitle" />
+
+
+    <TextView
+        android:id="@+id/followersRequests"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/requests"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/requestsList"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/followersList"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center" />
 
     <ListView
-        android:id="@+id/socialList"
+        android:id="@+id/requestsList"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -83,6 +101,7 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sort_by_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/followersRequests" />
+
 
 </android.support.constraint.ConstraintLayout>

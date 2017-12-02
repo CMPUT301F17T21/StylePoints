@@ -58,7 +58,12 @@
         <activity android:name=".viewmodel.HabitEventRelatedActivites.EventNewActivity" />
         <activity android:name=".viewmodel.HabitEventRelatedActivites.EventEditActivity" />
         <activity android:name=".viewmodel.CentralHubActivity.NewUserActivity" />
-        <activity android:name=".viewmodel.SocialFeed.SocialFeed"></activity>
+        <activity android:name=".viewmodel.SocialFeed.SocialFeed" />
+        <activity android:name=".viewmodel.SocialFeed.Followers" />
+        <activity android:name=".viewmodel.SocialFeed.Following" />
+        <activity android:name=".viewmodel.SocialFeed.MapEvents" />
+        <activity android:name=".viewmodel.Profile.ProfileMain"></activity>
+
     </application>
 
 </manifest>

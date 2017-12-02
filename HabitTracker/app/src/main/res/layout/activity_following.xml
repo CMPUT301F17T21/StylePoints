@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.stylepoints.habittracker.viewmodel.SocialFeed.SocialFeed">
-    <LinearLayout
+    tools:context="com.stylepoints.habittracker.viewmodel.SocialFeed.Following">
+    <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="87dp"
         android:layout_marginBottom="8dp"
@@ -17,43 +17,26 @@
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_editor_absoluteX="9dp"
         tools:layout_editor_absoluteY="416dp"
-        android:id="@+id/linearLayout"
-        app:layout_constraintHorizontal_bias="0.6">
-
-        <Button
-            android:id="@+id/mapEventsButton"
+        android:id="@+id/linearLayout">
+        <SearchView
+            android:id="@+id/searchUser"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:elevation="0dp"
-            android:text="@string/map_events"
-            android:background="?android:attr/selectableItemBackground"/>
+            android:iconifiedByDefault="false"
+            android:queryHint="Search User to Follow" />
 
-        <Button
-            android:id="@+id/followersButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/followers"
-            android:background="?android:attr/selectableItemBackground"/>
-
-        <Button
-            android:id="@+id/followingButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/following"
-            android:background="?android:attr/selectableItemBackground"/>
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
     <TextView
-        android:id="@+id/socialFeed"
+        android:id="@+id/followingTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/social_feed"
+        android:text="@string/following"
         android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -61,19 +44,40 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:gravity="center" />
-    <Spinner
-        android:id="@+id/sort_by_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+
+
+    <ListView
+        android:id="@+id/followingList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:entries="@array/socialFeed_vals"
-        app:layout_constraintTop_toBottomOf="@id/socialFeed"/>
+        app:layout_constraintBottom_toTopOf="@+id/notificationsTitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/followingTitle" />
 
+
+    <TextView
+        android:id="@+id/notificationsTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/notifications"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/notificationsList"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/followingList"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center" />
     <ListView
-        android:id="@+id/socialList"
+        android:id="@+id/notificationsList"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -83,6 +87,6 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sort_by_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/notificationsTitle" />
 
 </android.support.constraint.ConstraintLayout>
