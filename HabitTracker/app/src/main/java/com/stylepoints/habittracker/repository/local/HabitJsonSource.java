@@ -136,6 +136,11 @@ public class HabitJsonSource {
         saveToDisk();
     }
 
+    public void saveHabits(List<Habit> habits) {
+        habitList.addAll(habits);
+        saveToDisk();
+    }
+
     public boolean contains(String id) {
         for (Habit habit : habitList) {
             if (habit.getElasticId().equals(id)) {
