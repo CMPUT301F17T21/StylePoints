@@ -74,7 +74,10 @@ public class HabitRepository {
         return source.getHabits();
     }
 
-    public void save(Habit habit) {
+    public void save(Habit habit) throws NonUniqueException {
+        if (source.hasHabitWithType(habit.getType())) {
+            throw new NonUniqueException();
+        }
         // save habit locally
         source.saveHabit(habit);
         // save habit in elastic search async
