@@ -64,9 +64,22 @@
         </activity>
         <activity
             android:name=".viewmodel.HabitEventRelatedActivites.EventsMainActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventNewActivity" />
-        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventEditActivity" />
+            android:windowSoftInputMode="adjustPan">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".viewmodel.CentralHubActivity.MainActivity" />
+        </activity>
+        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventNewActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".viewmodel.HabitEventRelatedActivites.EventsMainActivity" />
+        </activity>
+        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventEditActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".viewmodel.HabitEventRelatedActivites.EventsMainActivity" />
+        </activity>
+
         <activity android:name=".viewmodel.CentralHubActivity.NewUserActivity" />
         <activity android:name=".viewmodel.SocialFeed.SocialFeed" />
         <activity android:name=".viewmodel.SocialFeed.Followers" />

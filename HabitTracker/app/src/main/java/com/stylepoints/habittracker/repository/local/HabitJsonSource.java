@@ -150,15 +150,6 @@ public class HabitJsonSource {
         return false;
     }
 
-    public boolean hasHabitWithType(String type) {
-        for (Habit habit : habitList) {
-            if (habit.getType().equals(type)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void saveToDisk() {
         liveHabits.setValue(habitList);
         try {

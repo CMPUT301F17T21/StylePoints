@@ -17,7 +17,6 @@ import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.model.HabitReasonTooLongException;
 import com.stylepoints.habittracker.model.HabitTypeTooLongException;
 import com.stylepoints.habittracker.repository.HabitRepository;
-import com.stylepoints.habittracker.repository.NonUniqueException;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -71,10 +70,11 @@ public class HabitNewActivity extends AppCompatActivity implements DatePickerDia
                     try {
                         habit = new Habit(type, reason, "username");
                     } catch (HabitReasonTooLongException e) {
-                        edittext_habit_reason.setError("Must be less than " + String.valueOf(Habit.MAX_REASON_LENGTH) + " characters");
-                        return;
+                        e.printStackTrace();
                     } catch (HabitTypeTooLongException e) {
-                        edittext_habit_name.setError("Must be less than " + String.valueOf(Habit.MAX_TYPE_LENGTH) + " characters");
+                        e.printStackTrace();
+                    }
+                    if (habit == null) {
                         return;
                     }
 
