@@ -2,6 +2,7 @@ package com.stylepoints.habittracker.model;
 
 import android.support.annotation.NonNull;
 
+import com.google.gson.annotations.Expose;
 import com.stylepoints.habittracker.repository.remote.Id;
 
 import java.time.DayOfWeek;
@@ -15,8 +16,8 @@ import java.util.UUID;
  */
 
 public class Habit implements Id {
-    private final int MAX_REASON_LENGTH = 30;
-    private final int MAX_TYPE_LENGTH = 20;
+    private transient final int MAX_REASON_LENGTH = 30;
+    private transient final int MAX_TYPE_LENGTH = 20;
 
     // the id used with elastic search. i.e., /habit/{elasticId}
     private String elasticId;
@@ -134,20 +135,5 @@ public class Habit implements Id {
                 ", startDate=" + startDate +
                 ", daysActive=" + daysActive +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Habit habit = (Habit) o;
-
-        return elasticId.equals(habit.elasticId);
-    }
-
-    @Override
-    public int hashCode() {
-        return elasticId.hashCode();
     }
 }

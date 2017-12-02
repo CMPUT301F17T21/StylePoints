@@ -2,10 +2,13 @@ package com.stylepoints.habittracker.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
+import android.util.Log;
 
 import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.repository.local.HabitJsonSource;
 import com.stylepoints.habittracker.repository.remote.ElasticHabitListResponse;
+import com.stylepoints.habittracker.repository.remote.ElasticRequestStatus;
 import com.stylepoints.habittracker.repository.remote.ElasticResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticSearch;
 
@@ -25,6 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class HabitRepository {
+    private static final String TAG = "HabitRepository";
     private static HabitRepository INSTANCE;
     private final HabitJsonSource source;
     private ElasticSearch elastic;
@@ -38,8 +42,8 @@ public class HabitRepository {
         this.elastic = retrofit.create(ElasticSearch.class);
     }
 
-    private HabitRepository() {
-        this.source = HabitJsonSource.getInstance();
+    private HabitRepository(Context context) {
+        this.source = HabitJsonSource.getInstance(context);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://cmput301.softwareprocess.es:8080/cmput301f17t21_stylepoints/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -48,7 +52,11 @@ public class HabitRepository {
     }
 
     public LiveData<Habit> getHabit(String habitId) {
-        return source.getHabit(habitId);
+        if (source.contains(habitId)){
+            return source.getHabit(habitId);
+        } else {
+            return getRemoteHabit(habitId);
+        }
     }
 
     public Habit getHabitSync(String habitId) {
@@ -59,14 +67,66 @@ public class HabitRepository {
         return source.getHabits();
     }
 
-    /*
-    public int getHabitIdFromType(String type) {
-        return habitDao.findIdOfHabitType(type);
-    }*/
-
-    // TODO: change to off main thread
     public void save(Habit habit) {
+        // save habit locally
         source.saveHabit(habit);
+        // save habit in elastic search async
+        elastic.createHabitWithId(habit.getElasticId(), habit).enqueue(new Callback<ElasticRequestStatus>() {
+            @Override
+            public void onResponse(Call<ElasticRequestStatus> call, Response<ElasticRequestStatus> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "create habit network request success");
+                    if (response.body().wasCreated()) {
+                        Log.i(TAG, "Habit successfully stored in remote " + habit.getElasticId());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ElasticRequestStatus> call, Throwable t) {
+                Log.d(TAG, "network request failed saving habit " + habit.getElasticId());
+            }
+        });
+    }
+
+    public void update(String id, Habit habit) {
+        // update local version
+        source.updateHabit(id, habit);
+        // update remote version
+        elastic.updateHabit(id, habit).enqueue(new Callback<ElasticRequestStatus>() {
+            @Override
+            public void onResponse(Call<ElasticRequestStatus> call, Response<ElasticRequestStatus> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "habit update network request success");
+                    if (response.body().wasCreated()) {
+                        Log.i(TAG, "Habit successfully stored in remote " + habit.getElasticId());
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<ElasticRequestStatus> call, Throwable t) {
+                Log.d(TAG, "network request failed to update habit " + habit.getElasticId());
+            }
+        });
+    }
+
+    public void delete(String id) {
+        // delete from local
+        source.deleteHabit(id);
+        // delete from remote
+        elastic.deleteHabit(id).enqueue(new Callback<ElasticRequestStatus>() {
+            @Override
+            public void onResponse(Call<ElasticRequestStatus> call, Response<ElasticRequestStatus> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "habit delete network request success");
+                    Log.d(TAG, response.body().toString());
+                }
+            }
+            @Override
+            public void onFailure(Call<ElasticRequestStatus> call, Throwable t) {
+                Log.d(TAG, "network request failed for habit delete " + id);
+            }
+        });
     }
 
     public void saveList(List<Habit> habitList){
@@ -107,9 +167,9 @@ public class HabitRepository {
         return data;
     }
 
-    public static HabitRepository getInstance() {
+    public static HabitRepository getInstance(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new HabitRepository();
+            INSTANCE = new HabitRepository(context);
         }
         return INSTANCE;
     }

@@ -36,7 +36,7 @@ public class HabitsMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habits_main);
 
-        HabitRepository repo = HabitRepository.getInstance();
+        HabitRepository repo = HabitRepository.getInstance(getApplicationContext());
         HabitListViewModelFactory factory = new HabitListViewModelFactory(repo);
         HabitListViewModel model = ViewModelProviders.of(this, factory).get(HabitListViewModel.class);
 

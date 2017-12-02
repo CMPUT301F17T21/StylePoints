@@ -2,6 +2,7 @@ package com.stylepoints.habittracker.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
+import android.content.Context;
 
 import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.model.HabitEvent;
@@ -17,8 +18,8 @@ public class HabitEventRepository {
         this.source = source;
     }
 
-    private HabitEventRepository() {
-        this.source = EventJsonSource.getInstance();
+    private HabitEventRepository(Context context) {
+        this.source = EventJsonSource.getInstance(context);
     }
 
     public LiveData<List<HabitEvent>> getEventsByHabitId(String habitId) {
@@ -48,9 +49,9 @@ public class HabitEventRepository {
         source.saveEvent(event);
     }
 
-    public static HabitEventRepository getInstance() {
+    public static HabitEventRepository getInstance(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new HabitEventRepository();
+            INSTANCE = new HabitEventRepository(context);
         }
         return INSTANCE;
     }

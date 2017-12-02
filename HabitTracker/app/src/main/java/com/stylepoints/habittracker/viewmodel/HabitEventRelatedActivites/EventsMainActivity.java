@@ -38,7 +38,7 @@ public class EventsMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events_main);
 
-        HabitEventRepository repo = HabitEventRepository.getInstance();
+        HabitEventRepository repo = HabitEventRepository.getInstance(getApplicationContext());
 
         button_new_habit = (Button) findViewById(R.id.addNewEventButton);
         listview_habit_list = (ListView) findViewById(R.id.eventListView);

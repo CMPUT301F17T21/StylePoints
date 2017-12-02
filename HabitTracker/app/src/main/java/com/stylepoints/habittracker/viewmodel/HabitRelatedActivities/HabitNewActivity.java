@@ -48,7 +48,7 @@ public class HabitNewActivity extends AppCompatActivity implements DatePickerDia
         setContentView(R.layout.activity_habit_new);
         bindToUi();
 
-        repo = HabitRepository.getInstance();
+        repo = HabitRepository.getInstance(getApplicationContext());
         date = LocalDate.now();
         textview_habit_start_date.setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
 
