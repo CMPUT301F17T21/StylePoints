@@ -33,10 +33,4 @@ public class HabitViewModel extends ViewModel {
     public LiveData<Habit> getHabit() {
         return habit;
     }
-
-    // temporary saving stuff
-    public void saveHabit(Habit habit) {
-        habitRepo.save(habit);
-    }
-
 }

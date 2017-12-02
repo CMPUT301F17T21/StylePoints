@@ -22,25 +22,13 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/textViewEventNameTitle"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewDateOfOccTitle"
-        app:layout_constraintTop_toBottomOf="@+id/textViewEventName" />
-
-    <TextView
-        android:id="@+id/textViewDateOfOccTitle"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text=" Date Of Occurrence"
-        android:textAppearance="@android:style/TextAppearance.Material.Small"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewEventNameTitle" />
+        app:layout_constraintStart_toEndOf="@+id/textViewDateOfOccurenceTitle"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerEventName" />
 
     <TextView
         android:id="@+id/textViewEventNameTitle"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/event_name"
@@ -50,16 +38,29 @@
         android:layout_marginStart="16dp" />
 
     <TextView
+        android:id="@+id/textViewDateOfOccurenceTitle"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/date_of_occurence"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewEventNameTitle" />
+
+    <TextView
         android:id="@+id/textViewCommentTitle"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/comment"
         android:textSize="14sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDateOfOccTitle" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDateOfOccurenceTitle" />
 
     <TextView
         android:id="@+id/textViewPhotographTitle"
@@ -73,69 +74,70 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewCommentTitle" />
 
-    <EditText
-        android:id="@+id/editTextEventComment"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:gravity="left"
-        android:hint="30 characters max"
-        android:inputType="textPersonName"
-        android:maxLength="30"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toRightOf="@+id/textViewCommentTitle"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewCommentTitle"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDateOfOccTitle" />
-
     <TextView
-        android:id="@+id/textViewEventName"
+        android:id="@+id/spinnerEventName"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:gravity="center"
+        android:inputType="textPersonName"
+        android:text="@string/jogging"
         android:textSize="14sp"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/textViewEventNameTitle"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/editTextEventComment"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:gravity="start"
+        android:hint="@string/counter_description"
+        android:inputType="textPersonName"
+        android:text="@string/ran_3_km_today"
+        android:textSize="14sp"
+        android:maxLength="30"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toRightOf="@+id/textViewCommentTitle"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewCommentTitle"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDateOfOccurence" />
+
     <ImageView
         android:id="@+id/imageViewEventPhoto"
         android:layout_width="125dp"
         android:layout_height="125dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
         android:contentDescription="TODO"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonTakePhoto"
         app:layout_constraintEnd_toEndOf="@+id/editTextEventComment"
-        app:layout_constraintHorizontal_bias="0.611"
         app:layout_constraintStart_toStartOf="@+id/editTextEventComment"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCommentTitle"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEventComment"
         app:srcCompat="@android:drawable/alert_dark_frame" />
 
     <CheckBox
         android:id="@+id/checkBoxAttachLocation"
         android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/attach_location"
-        app:layout_constraintBottom_toTopOf="@+id/buttonAddEvent"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewEventPhoto"
+        app:layout_constraintHorizontal_bias="0.216"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonRemovePhoto"
-        app:layout_constraintVertical_bias="0.366" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonTakePhoto" />
 
     <Button
         android:id="@+id/buttonAddEvent"
@@ -151,26 +153,13 @@
 
     <Button
         android:id="@+id/buttonTakePhoto"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="8dp"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/take_photo"
-        app:layout_constraintEnd_toEndOf="@+id/buttonRemovePhoto"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewPhotographTitle" />
-
-    <Button
-        android:id="@+id/buttonRemovePhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="16dp"
-        android:text="remove_photo"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonTakePhoto" />
 
 </android.support.constraint.ConstraintLayout>
