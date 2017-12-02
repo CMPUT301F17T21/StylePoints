@@ -95,6 +95,15 @@ public class EventJsonSource {
         });
     }
 
+    public HabitEvent getEventSync(String id) {
+        for (HabitEvent event : eventList) {
+            if (event.getElasticId().equals(id)) {
+                return event;
+            }
+        }
+        return null;
+    }
+
     public void deleteEvent(String id) {
         eventList.remove(id);
         saveToDisk();
