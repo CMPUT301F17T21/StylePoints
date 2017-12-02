@@ -100,6 +100,11 @@ public class EventJsonSource {
         saveToDisk();
     }
 
+    public void deleteAllEvents(){
+        eventList.clear();
+        saveToDisk();
+    }
+
     public void updateEvent(String id, HabitEvent event) {
         Log.i(TAG, "Updating HabitEvent " + id);
         event.setElasticId(id);

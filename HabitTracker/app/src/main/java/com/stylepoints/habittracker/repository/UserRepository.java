@@ -1,6 +1,7 @@
 package com.stylepoints.habittracker.repository;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -30,7 +31,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by nikosomos on 2017-11-28.
  */
 
-public class UserRepository extends AsyncTask<String, Void, Integer>{
+public class UserRepository{
 
     private static final String TAG = "UserRepository";
     private ElasticSearch elastic;
@@ -38,6 +39,7 @@ public class UserRepository extends AsyncTask<String, Void, Integer>{
     private HabitEventRepository hER;
     private List<Habit> habitList;
     private List<HabitEvent> eventList;
+    private SharedPreferences pref;
 
     public UserRepository(HabitRepository hR, HabitEventRepository hER) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -47,23 +49,28 @@ public class UserRepository extends AsyncTask<String, Void, Integer>{
         this.elastic = retrofit.create(ElasticSearch.class);
         this.hR = hR;
         this.hER = hER;
+        this.pref = getSharedPreferences();
     }
 
 
+    public String getUserName(){
+    }
 
+    public Boolean isUserNameSet(){
+
+    }
 
 
     public Boolean checkUserExists(String username) throws IOException{
         Response<ElasticResponse<User>> response = elastic.getUserByName(username).execute();
-        if (response.body().wasFound()){
+        if (response.isSuccessful()){
             return true;
         } else {
             return false;
         }
     }
 
-    public void loadUser(String username) throws IOException {
-
+    public void requestUser(String username) throws IOException {
         if (checkUserExists(username)) {
             Response<ElasticHabitListResponse> responseHabits = elastic.searchHabit("user:" + username).execute();
             if (!responseHabits.isSuccessful()) {
@@ -78,7 +85,7 @@ public class UserRepository extends AsyncTask<String, Void, Integer>{
             eventList = responseEvents.body().getList();
 
         } else {
-            elastic.createUser(username).execute();
+            elastic.createUser(username, new User(username)).execute();
         }
 
     }
@@ -87,19 +94,7 @@ public class UserRepository extends AsyncTask<String, Void, Integer>{
 
     }
 
-    @Override
-    protected Integer doInBackground(String... str) {
-        try {
-            loadUser(str[0]);
-            return -1;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-    @Override
-    protected void onPostExecute(Integer i){
+    public void loadUser(){
         this.hR.saveList(this.habitList);
         this.hER.saveList(this.eventList);
     }

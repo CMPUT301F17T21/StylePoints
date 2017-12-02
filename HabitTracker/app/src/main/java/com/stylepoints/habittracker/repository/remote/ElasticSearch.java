@@ -61,5 +61,7 @@ public interface ElasticSearch {
     Call<ElasticResponse<User>> getUserByName(@Path("username") String username);
 
     @PUT("user/{username}")
-    Call<ElasticRequestStatus> createUser(@Path("username") String username);
+    Call<ElasticRequestStatus> createUser(@Path("username") String username, @Body User user);
+
+
 }

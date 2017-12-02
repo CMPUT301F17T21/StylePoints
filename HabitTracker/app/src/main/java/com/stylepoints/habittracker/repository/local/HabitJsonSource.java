@@ -117,6 +117,11 @@ public class HabitJsonSource {
         saveToDisk();
     }
 
+    public void deleteAllHabits(){
+        habitList.clear();
+        saveToDisk();
+    }
+
     public void updateHabit(String id, Habit habit) {
         Log.i(TAG, "Updating habit " + id);
         habit.setElasticId(id);

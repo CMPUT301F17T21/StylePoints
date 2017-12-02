@@ -129,6 +129,10 @@ public class HabitRepository {
         });
     }
 
+    public void deleteAll(){
+        source.deleteAllHabits();
+    }
+
     public void saveList(List<Habit> habitList){
         source.saveHabits(habitList);
     }

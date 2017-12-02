@@ -53,6 +53,10 @@ public class HabitEventRepository {
         source.saveEvents(list);
     }
 
+    public void deleteAll(){
+        source.deleteAllEvents();
+    }
+
     public static HabitEventRepository getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = new HabitEventRepository(context);

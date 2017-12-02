@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.stylepoints.habittracker.R;
+import com.stylepoints.habittracker.repository.AsyncUserLoader;
 import com.stylepoints.habittracker.repository.HabitEventRepository;
 import com.stylepoints.habittracker.repository.HabitRepository;
 import com.stylepoints.habittracker.repository.UserRepository;
@@ -25,7 +26,10 @@ public class NewUserActivity extends AppCompatActivity {
     Button loginButton;
     EditText usernameInput;
 
-    UserRepository userRepo;
+    HabitRepository hR;
+    HabitEventRepository hER;
+
+    AsyncUserLoader userLoader;
 
     SharedPreferences.Editor prefEdit;
 
@@ -37,14 +41,20 @@ public class NewUserActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.userLoginButton);
         usernameInput = (EditText) findViewById(R.id.userNameInput);
 
+        hR = HabitRepository.getInstance(getApplicationContext());
+        hER = HabitEventRepository.getInstance(getApplicationContext());
+
+        hR.deleteAll();
+        hER.deleteAll();
+
         loginButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view){
                 try {
-                    userRepo = new UserRepository(HabitRepository.getInstance(getApplicationContext()),
-                            HabitEventRepository.getInstance(getApplicationContext()));
+                    userLoader = new AsyncUserLoader(new UserRepository(hR, hER));
                     username = usernameInput.getText().toString();
-                    Integer result = userRepo.execute(username).get();
+
+                    Integer result = userLoader.execute(username).get();
                     if (result.equals(0)){
                         throw new IOException("Problem Contacting Server");
                     }
