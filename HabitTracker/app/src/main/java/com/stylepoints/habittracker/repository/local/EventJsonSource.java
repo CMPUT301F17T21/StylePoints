@@ -118,6 +118,11 @@ public class EventJsonSource {
         saveToDisk();
     }
 
+    public void saveEvents(List<HabitEvent> events){
+        eventList.addAll(events);
+        saveToDisk();
+    }
+
     private void saveToDisk() {
         liveEvents.setValue(eventList);
         try {

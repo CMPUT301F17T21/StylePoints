@@ -49,6 +49,10 @@ public class HabitEventRepository {
         source.saveEvent(event);
     }
 
+    public void saveList(List<HabitEvent> list){
+        source.saveEvents(list);
+    }
+
     public static HabitEventRepository getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = new HabitEventRepository(context);

@@ -59,4 +59,7 @@ public interface ElasticSearch {
     // ===== User =====
     @GET("user/{username}")
     Call<ElasticResponse<User>> getUserByName(@Path("username") String username);
+
+    @PUT("user/{username}")
+    Call<ElasticRequestStatus> createUser(@Path("username") String username);
 }

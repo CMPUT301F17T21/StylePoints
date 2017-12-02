@@ -130,9 +130,7 @@ public class HabitRepository {
     }
 
     public void saveList(List<Habit> habitList){
-        for (Habit h: habitList){
-            save(h);
-        }
+        source.saveHabits(habitList);
     }
 
     public LiveData<Habit> getRemoteHabit(String habitId) {

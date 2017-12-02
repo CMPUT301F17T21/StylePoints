@@ -51,11 +51,11 @@ public class MainActivity extends AppCompatActivity {
 
         //Added for getting the user name and ID
         pref = getPreferences(0);
-        if (pref.contains("username") == false){
+        //if (pref.contains("username") == false){
             //Go to Activity to get username. Should only be ran the first time
             Intent getUserNameIntent = new Intent(this, NewUserActivity.class);
             startActivityForResult(getUserNameIntent, GET_USER_NAME);
-        }
+        //}
         String username = pref.getString("username", "");
         Log.i("debug", pref.getString("username", ""));
 
@@ -130,9 +130,6 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case GET_USER_NAME:
                 if (resultCode == RESULT_OK){
-                    prefEdit = pref.edit();
-                    prefEdit.putString("username", data.getStringExtra("username"));
-                    prefEdit.commit();
                 }
                 break;
         }
