@@ -77,55 +77,26 @@ public class HabitRepository {
     public void save(Habit habit) {
         // save habit locally
         source.saveHabit(habit);
-
         // save habit in elastic search async
-        PersistableBundle bundle = new PersistableBundle();
-        bundle.putString("HABIT_ID", habit.getElasticId());
-        bundle.putInt("OPERATION", Util.CREATE);
-        jobScheduler.schedule(new JobInfo.Builder(Util.getUniqueJobId(jobScheduler),
-                new ComponentName(context, RemoteHabitJob.class))
-                .setExtras(bundle)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .build()
-        );
+        remoteOperation(habit.getElasticId(), Util.CREATE);
     }
 
     public void update(String id, Habit habit) {
         // update local version
         source.updateHabit(id, habit);
         // update remote version
-        removePreviousJobs(id);
-        PersistableBundle bundle = new PersistableBundle();
-        bundle.putString("HABIT_ID", habit.getElasticId());
-        bundle.putInt("OPERATION", Util.UPDATE);
-        jobScheduler.schedule(new JobInfo.Builder(Util.getUniqueJobId(jobScheduler),
-                new ComponentName(context, RemoteHabitJob.class))
-                .setExtras(bundle)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .build()
-        );
+        remoteOperation(id, Util.UPDATE);
     }
 
     public void delete(String id) {
         // delete from local
         source.deleteHabit(id);
         // delete from remote
-        removePreviousJobs(id);
-        PersistableBundle bundle = new PersistableBundle();
-        bundle.putString("HABIT_ID", id);
-        bundle.putInt("OPERATION", Util.DELETE);
-        jobScheduler.schedule(new JobInfo.Builder(Util.getUniqueJobId(jobScheduler),
-                new ComponentName(context, RemoteHabitJob.class))
-                .setExtras(bundle)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .build()
-        );
+        remoteOperation(id, Util.DELETE);
     }
 
     public void saveList(List<Habit> habitList){
-        for (Habit h: habitList){
-            save(h);
-        }
+        source.saveHabits(habitList);
     }
 
     public LiveData<Habit> getRemoteHabit(String habitId) {
@@ -160,6 +131,14 @@ public class HabitRepository {
         return data;
     }
 
+    /**
+     * This function removes all previous RemoteHabitJob that have the same
+     * elasticId. This must be done because the JobScheduler does not execute
+     * jobs in order, so if we create a Habit offline then delete it offline
+     * there is no guarantee that it will be done in that order, causing a
+     * mismatch between the local and remote data.
+     * @param id the elasticId of a Habit
+     */
     private void removePreviousJobs(String id) {
         String jobHabitId = null;
         for (JobInfo job : jobScheduler.getAllPendingJobs()) {
@@ -172,6 +151,25 @@ public class HabitRepository {
                 return;
             }
         }
+    }
+
+    /**
+     * Schedules a RemoteHabitJob that guarantees that the network request will
+     * be done. Persists across app closes as well
+     * @param id the elasticId of the Habit we are doing an operation on
+     * @param operation an integer representing the operation (Util.CREATE, Util.UPDATE, Util.DELETE)
+     */
+    private void remoteOperation(String id, int operation) {
+        removePreviousJobs(id);
+        PersistableBundle bundle = new PersistableBundle();
+        bundle.putString("HABIT_ID", id);
+        bundle.putInt("OPERATION", operation);
+        jobScheduler.schedule(new JobInfo.Builder(Util.getUniqueJobId(jobScheduler),
+                new ComponentName(context, RemoteHabitJob.class))
+                .setExtras(bundle) // send eventId, and operation (create, update, or delete)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY) // must have network
+                .build()
+        );
     }
 
     public static HabitRepository getInstance(Context context) {
