@@ -12,41 +12,27 @@ import android.util.Log;
 import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.repository.local.EventJsonSource;
-import com.stylepoints.habittracker.repository.remote.ElasticRequestStatus;
-import com.stylepoints.habittracker.repository.remote.ElasticSearch;
 import com.stylepoints.habittracker.repository.remote.RemoteEventJob;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HabitEventRepository {
     private static final String TAG = "HabitEventRepository";
     private static HabitEventRepository INSTANCE;
     private final EventJsonSource source;
-  
-    private ElasticSearch elastic; // new code
+    private HabitRepository habitRepo;
+    private JobScheduler jobScheduler;
+    private Context context;
 
     private HabitEventRepository(EventJsonSource source) {
         this.source = source;
-        Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://cmput301.softwareprocess.es:8080/cmput301f17t21_stylepoints/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-        this.elastic = retrofit.create(ElasticSearch.class);
     }
 
     private HabitEventRepository(Context context) {
         this.source = EventJsonSource.getInstance(context);
-        Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://cmput301.softwareprocess.es:8080/cmput301f17t21_stylepoints/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-        this.elastic = retrofit.create(ElasticSearch.class);
+        this.habitRepo = HabitRepository.getInstance(context);
+        this.context = context.getApplicationContext();
+        this.jobScheduler = (JobScheduler) this.context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
     }
 
     public LiveData<List<HabitEvent>> getEventsByHabitId(String habitId) {
@@ -69,80 +55,66 @@ public class HabitEventRepository {
         return source.getEvent(eventId);
     }
 
-    // TODO: change to off main thread
-    public void saveEvent(HabitEvent event) {
-        // TODO: make sure that the habit this references is actually in the database
-        // TODO: verify data is correct (comment length is not too long)
-        source.saveEvent(event);
-        /// new code elastic
-        elastic.createEventWithId(event.getElasticId(), event).enqueue(new Callback<ElasticRequestStatus>() {
-            @Override
-            public void onResponse(Call<ElasticRequestStatus> call, Response<ElasticRequestStatus> response) {
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "create event network request success");
-                    if (response.body().wasCreated()) {
-                        Log.i(TAG, "Event successfully stored in remote " + event.getElasticId());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ElasticRequestStatus> call, Throwable t) {
-                Log.d(TAG, "network request failed saving event " + event.getElasticId());
-            }
-        });
+    public HabitEvent getEventSync(String eventId) {
+        return source.getEventSync(eventId);
     }
-  
+
+    public void saveEvent(HabitEvent event) {
+        if (habitRepo.getHabitSync(event.getHabitId()) == null) {
+            Log.d(TAG, "Could not find local habit with id: " + event.getHabitId());
+            return;
+        }
+        source.saveEvent(event);
+        remoteOperation(event.getElasticId(), Util.CREATE);
+    }
+
+    public void updateEvent(String eventId, HabitEvent event) {
+        source.updateEvent(eventId, event);
+        remoteOperation(eventId, Util.UPDATE);
+    }
+
+    public void deleteEvent(String eventId) {
+        source.deleteEvent(eventId);
+        remoteOperation(eventId, Util.DELETE);
+    }
+
+    public void deleteEventsByHabitId(String habitId) {
+        for (String eventId : source.getEventIdsForHabitId(habitId)) {
+            deleteEvent(eventId);
+        }
+    }
+
+    private void remoteOperation(String id, int operation) {
+        removePreviousJobs(id);
+        PersistableBundle bundle = new PersistableBundle();
+        bundle.putString("EVENT_ID", id);
+        bundle.putInt("OPERATION", operation);
+        jobScheduler.schedule(new JobInfo.Builder(Util.getUniqueJobId(jobScheduler),
+                new ComponentName(context, RemoteEventJob.class))
+                .setExtras(bundle) // send eventId, and operation (create, update, or delete)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY) // must have network
+                .build()
+        );
+    }
+
+    private void removePreviousJobs(String id) {
+        String jobEventId = null;
+        for (JobInfo job : jobScheduler.getAllPendingJobs()) {
+            jobEventId = job.getExtras().getString("EVENT_ID");
+            if (jobEventId != null && jobEventId.equals(id)) {
+                // remove previous job that was scheduled with this id
+                // so we don't do something like "update" and then "create"
+                jobScheduler.cancel(job.getId());
+                // should only ever be one job with that habitId
+                return;
+            }
+        }
+    }
+
     public static HabitEventRepository getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = new HabitEventRepository(context);
         }
         return INSTANCE;
-    }
-
-    public HabitEvent getEventSync(String eventId) {
-        return source.getEventSync(eventId);
-    }
-
-    /// new code
-    public void updateEvent(String id, HabitEvent event) {
-        // update local version
-        source.updateEvent(id, event);
-        // update remote version
-        elastic.updateEvent(id, event).enqueue(new Callback<ElasticRequestStatus>() {
-            @Override
-            public void onResponse(Call<ElasticRequestStatus> call, Response<ElasticRequestStatus> response) {
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "event update network request success");
-                    if (response.body().wasCreated()) {
-                        Log.i(TAG, "Event successfully stored in remote " + event.getElasticId());
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<ElasticRequestStatus> call, Throwable t) {
-                Log.d(TAG, "network request failed to update event " + event.getElasticId());
-            }
-        });
-    }
-
-    /// new code
-    public void deleteEvent(String id) {
-        // delete from local
-        source.deleteEvent(id);
-        // delete from remote
-        elastic.deleteEvent(id).enqueue(new Callback<ElasticRequestStatus>() {
-            @Override
-            public void onResponse(Call<ElasticRequestStatus> call, Response<ElasticRequestStatus> response) {
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "event delete network request success");
-                    Log.d(TAG, response.body().toString());
-                }
-            }
-            @Override
-            public void onFailure(Call<ElasticRequestStatus> call, Throwable t) {
-                Log.d(TAG, "network request failed for event delete " + id);
-            }
-        });
     }
 }
