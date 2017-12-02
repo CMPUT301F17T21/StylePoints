@@ -78,6 +78,12 @@ public class HabitEventRepository {
         remoteOperation(eventId, Util.DELETE);
     }
 
+    public void deleteEventsByHabitId(String habitId) {
+        for (String eventId : source.getEventIdsForHabitId(habitId)) {
+            deleteEvent(eventId);
+        }
+    }
+
     private void remoteOperation(String id, int operation) {
         removePreviousJobs(id);
         PersistableBundle bundle = new PersistableBundle();

@@ -91,6 +91,7 @@ public class HabitRepository {
     public void delete(String id) {
         // delete from local
         source.deleteHabit(id);
+        HabitEventRepository.getInstance(context).deleteEventsByHabitId(id);
         // delete from remote
         remoteOperation(id, Util.DELETE);
     }
