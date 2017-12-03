@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.model.Habit;
+import com.stylepoints.habittracker.repository.HabitEventRepository;
 import com.stylepoints.habittracker.repository.HabitRepository;
+import com.stylepoints.habittracker.repository.UserRepository;
 import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.EventsMainActivity;
 import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitsMainActivity;
 import com.stylepoints.habittracker.viewmodel.Profile.ProfileMain;
@@ -28,8 +30,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    SharedPreferences pref;
-    SharedPreferences.Editor prefEdit;
     static final int GET_USER_NAME = 1;
 
     Button habitButton;
@@ -45,23 +45,30 @@ public class MainActivity extends AppCompatActivity {
     private List<Habit> habitList;
     private LiveData<List<Habit>> fullList;
     private HabitRepository repo;
+    private UserRepository userRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        userRepo = new UserRepository(HabitRepository.getInstance(getApplicationContext()),
+                HabitEventRepository.getInstance(getApplicationContext()),
+                getApplicationContext());
+
         Toast toast = Toast.makeText(getApplicationContext(), "Welcome to Habit Tracker!", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
+
         //Added for getting the user name and ID
-        pref = getPreferences(0);
-        if (pref.contains("username") == false){
+        if (!userRepo.isUserNameSet()){
             //Go to Activity to get username. Should only be ran the first time
             Intent getUserNameIntent = new Intent(this, NewUserActivity.class);
             startActivityForResult(getUserNameIntent, GET_USER_NAME);
         }
-        String username = pref.getString("username", "");
-        Log.i("debug", pref.getString("username", ""));
+
+        String username = userRepo.getUserName();
+        Log.i("debug", userRepo.getUserName());
 
 
         repo = HabitRepository.getInstance(getApplicationContext());
@@ -134,9 +141,6 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case GET_USER_NAME:
                 if (resultCode == RESULT_OK){
-                    prefEdit = pref.edit();
-                    prefEdit.putString("username", data.getStringExtra("username"));
-                    prefEdit.commit();
                 }
                 break;
         }

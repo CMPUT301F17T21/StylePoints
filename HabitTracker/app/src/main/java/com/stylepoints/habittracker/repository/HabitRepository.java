@@ -99,6 +99,10 @@ public class HabitRepository {
         remoteOperation(id, Util.DELETE);
     }
 
+    public void deleteAll(){
+        source.deleteAllHabits();
+    }
+
     public void saveList(List<Habit> habitList){
         source.saveHabits(habitList);
     }

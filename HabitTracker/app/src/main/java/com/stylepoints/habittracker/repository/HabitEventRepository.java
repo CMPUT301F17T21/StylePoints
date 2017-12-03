@@ -111,6 +111,14 @@ public class HabitEventRepository {
         }
     }
 
+    public void saveList(List<HabitEvent> list){
+        source.saveEvents(list);
+    }
+
+    public void deleteAll(){
+        source.deleteAllEvents();
+    }
+
     public static HabitEventRepository getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = new HabitEventRepository(context);
