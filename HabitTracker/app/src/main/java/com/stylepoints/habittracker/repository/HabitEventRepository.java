@@ -110,6 +110,7 @@ public class HabitEventRepository {
      * @param eventId unique id representing a HabitEvent
      */
     public void deleteEvent(String eventId) {
+        Log.d(TAG, "Deleting " + eventId);
         source.deleteEvent(eventId);
         remoteOperation(eventId, Util.DELETE);
     }
@@ -142,6 +143,7 @@ public class HabitEventRepository {
                 new ComponentName(context, RemoteEventJob.class))
                 .setExtras(bundle) // send eventId, and operation (create, update, or delete)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY) // must have network
+                .setOverrideDeadline(5000)
                 .build()
         );
     }
@@ -164,6 +166,7 @@ public class HabitEventRepository {
             if (jobEventId != null && jobEventId.equals(id)) {
                 // remove previous job that was scheduled with this id
                 // so we don't do something like "update" and then "create"
+                Log.d(TAG, "Removing job with id: " + String.valueOf(job.getId()));
                 jobScheduler.cancel(job.getId());
                 // should only ever be one job with that habitId
                 return;

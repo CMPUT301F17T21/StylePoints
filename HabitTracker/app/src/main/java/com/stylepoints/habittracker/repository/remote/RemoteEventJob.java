@@ -4,6 +4,7 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.repository.HabitEventRepository;
 import com.stylepoints.habittracker.repository.HabitRepository;
@@ -38,6 +39,7 @@ public class RemoteEventJob extends JobService {
     public boolean onStartJob(JobParameters jobParameters) {
         String eventId = jobParameters.getExtras().getString("EVENT_ID");
         int operation = jobParameters.getExtras().getInt("OPERATION", -1);
+        Log.d(TAG, "Job started: " + eventId + " operation: " + String.valueOf(operation) + " jobId: " + jobParameters.getJobId());
 
         if (eventId == null || operation == -1) {
             Log.e(TAG, "Got bad data from extras, aborting");
@@ -70,6 +72,7 @@ public class RemoteEventJob extends JobService {
             case Util.CREATE:
                 if (HabitRepository.getInstance(getApplicationContext()).getHabitSync(event.getHabitId()) == null) {
                     Log.w(TAG, "Can not create remote event if the local habit has been deleted");
+                    jobFinished(jobParameters, false);
                 }
                 Log.d(TAG, "Attempting remote create: " + eventId);
                 elastic.createEventWithId(eventId, event).enqueue(cb);
@@ -77,13 +80,14 @@ public class RemoteEventJob extends JobService {
             case Util.UPDATE:
                 if (HabitRepository.getInstance(getApplicationContext()).getHabitSync(event.getHabitId()) == null) {
                     Log.w(TAG, "Can not update remote event if the local habit has been deleted");
+                    jobFinished(jobParameters, false);
                 }
                 Log.d(TAG, "Attempting remote update: " + eventId);
-                elastic.updateEvent(eventId, event);
+                elastic.updateEvent(eventId, event).enqueue(cb);
                 break;
             case Util.DELETE:
                 Log.d(TAG, "Attempting remote delete: " + eventId);
-                elastic.deleteEvent(eventId);
+                elastic.deleteEvent(eventId).enqueue(cb);
                 break;
             default:
                 Log.d(TAG, "Got bad operation: " + String.valueOf(operation));
