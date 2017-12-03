@@ -18,7 +18,9 @@ import android.widget.Toast;
 
 import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.model.Habit;
+import com.stylepoints.habittracker.repository.HabitEventRepository;
 import com.stylepoints.habittracker.repository.HabitRepository;
+import com.stylepoints.habittracker.repository.UserRepository;
 import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.EventsMainActivity;
 import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
 import com.stylepoints.habittracker.viewmodel.HabitListViewModelFactory;
@@ -27,13 +29,12 @@ import com.stylepoints.habittracker.viewmodel.Profile.ProfileMain;
 import com.stylepoints.habittracker.viewmodel.SocialFeed.SocialFeed;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    SharedPreferences pref;
-    SharedPreferences.Editor prefEdit;
     static final int GET_USER_NAME = 1;
 
     Button habitButton;
@@ -49,23 +50,27 @@ public class MainActivity extends AppCompatActivity {
     private List<Habit> habitList;
     private LiveData<List<Habit>> fullList;
     private HabitRepository repo;
+    private UserRepository userRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toast toast = Toast.makeText(getApplicationContext(), "Welcome to Habit Tracker!", Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+
+        userRepo = new UserRepository(HabitRepository.getInstance(getApplicationContext()),
+                HabitEventRepository.getInstance(getApplicationContext()),
+                getApplicationContext());
+
         //Added for getting the user name and ID
-        pref = getPreferences(0);
-        if (pref.contains("username") == false){
+        if (!userRepo.isUserNameSet()){
             //Go to Activity to get username. Should only be ran the first time
             Intent getUserNameIntent = new Intent(this, NewUserActivity.class);
             startActivityForResult(getUserNameIntent, GET_USER_NAME);
         }
-        String username = pref.getString("username", "");
-        Log.i("debug", pref.getString("username", ""));
+
+        Toast toast = Toast.makeText(getApplicationContext(), "Welcome to Habit Tracker " + userRepo.getUserName(), Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
 
 
         HabitRepository habitRepo = HabitRepository.getInstance(getApplicationContext());
@@ -74,7 +79,15 @@ public class MainActivity extends AppCompatActivity {
 
         bindToUi();
 
-        habitModel.getHabitList().observe(this, habitList -> {
+        habitModel.getHabitList().observe(this, fullList -> {
+            habitList = new ArrayList<Habit>();
+            Iterator itr = fullList.iterator();
+            while (itr.hasNext()) {
+                Habit habit = (Habit) itr.next();
+                if (habit.isActiveToday()) {
+                    habitList.add(habit);
+                }
+            }
             ArrayAdapter<Habit> adapter = new ArrayAdapter<Habit>(
                     this, android.R.layout.simple_list_item_1, habitList);
             listView.setAdapter(adapter);
@@ -90,6 +103,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+//    private void subscribeToModel() {
+//        fullList.observe(this, fullList -> {
+//            if (fullList == null) { return; }
+//            // TODO: do this a better way
+//            habitList.clear();
+//            for (Habit habit : fullList) {
+//                if (habit.isActiveToday()) {
+//                    habitList.add(habit);
+//                }
+//            }
+//            adapter.notifyDataSetChanged();
+//        });
+//    }
 
     private void bindToUi() {
         listView = (ListView) findViewById(R.id.todaysHabitsList);
@@ -130,17 +157,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        switch (requestCode) {
-            case GET_USER_NAME:
-                if (resultCode == RESULT_OK){
-                    prefEdit = pref.edit();
-                    prefEdit.putString("username", data.getStringExtra("username"));
-                    prefEdit.commit();
-                }
-                break;
-        }
-
-    }
 }

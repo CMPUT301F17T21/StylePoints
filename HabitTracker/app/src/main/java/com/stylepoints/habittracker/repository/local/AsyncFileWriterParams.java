@@ -6,9 +6,11 @@ import java.io.OutputStreamWriter;
 import java.util.List;
 
 /**
- * Created by mchauck on 12/1/17.
+ * Helper class to store the parameters needed for AsyncFileWriter
+ *
+ * @author Mackenzie Hauck
+ * @see AsyncFileWriter
  */
-
 public class AsyncFileWriterParams {
     List list;
     BufferedWriter writer;

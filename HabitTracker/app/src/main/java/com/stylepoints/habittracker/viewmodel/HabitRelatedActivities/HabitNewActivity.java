@@ -16,8 +16,10 @@ import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.model.HabitReasonTooLongException;
 import com.stylepoints.habittracker.model.HabitTypeTooLongException;
+import com.stylepoints.habittracker.repository.HabitEventRepository;
 import com.stylepoints.habittracker.repository.HabitRepository;
 import com.stylepoints.habittracker.repository.NonUniqueException;
+import com.stylepoints.habittracker.repository.UserRepository;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -27,6 +29,7 @@ import java.util.EnumSet;
 public class HabitNewActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     static String TAG = "HabitNewActivity";
     HabitRepository repo;
+    private UserRepository userRepo;
 
     LocalDate date;
 
@@ -50,6 +53,10 @@ public class HabitNewActivity extends AppCompatActivity implements DatePickerDia
         bindToUi();
 
         repo = HabitRepository.getInstance(getApplicationContext());
+        userRepo = new UserRepository(HabitRepository.getInstance(getApplicationContext()),
+                HabitEventRepository.getInstance(getApplicationContext()),
+                getApplicationContext());
+
         date = LocalDate.now();
         textview_habit_start_date.setText(date.format(DateTimeFormatter.ISO_LOCAL_DATE));
 
@@ -69,7 +76,7 @@ public class HabitNewActivity extends AppCompatActivity implements DatePickerDia
                     String type = edittext_habit_name.getText().toString();
                     Habit habit = null;
                     try {
-                        habit = new Habit(type, reason, "username");
+                        habit = new Habit(type, reason, userRepo.getUserName());
                     } catch (HabitReasonTooLongException e) {
                         edittext_habit_reason.setError("Must be less than " + String.valueOf(Habit.MAX_REASON_LENGTH) + " characters");
                         return;

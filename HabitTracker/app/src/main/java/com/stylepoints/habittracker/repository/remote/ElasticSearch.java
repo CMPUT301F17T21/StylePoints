@@ -14,9 +14,9 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
- * Created by mchauck on 11/23/17.
+ * The interface that defines how to call Elastic Search.
+ * Uses the Retrofit2 library
  */
-
 public interface ElasticSearch {
     // ====== Habits =====
     @GET("habit/{id}")
@@ -59,4 +59,9 @@ public interface ElasticSearch {
     // ===== User =====
     @GET("user/{username}")
     Call<ElasticResponse<User>> getUserByName(@Path("username") String username);
+
+    @PUT("user/{username}")
+    Call<ElasticRequestStatus> createUser(@Path("username") String username, @Body User user);
+
+
 }

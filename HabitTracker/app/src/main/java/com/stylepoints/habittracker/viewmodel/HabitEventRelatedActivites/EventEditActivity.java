@@ -174,8 +174,6 @@ public class EventEditActivity extends AppCompatActivity {
         buttonDeleteEvent.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("Delete");
-                System.out.println(event.getElasticId());
                 eventRepo.deleteEvent(event.getElasticId());
                 finish();
             }
