@@ -1,10 +1,13 @@
 package com.stylepoints.habittracker.model;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.util.Base64;
 
 import com.stylepoints.habittracker.repository.remote.Id;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -26,7 +29,7 @@ public class HabitEvent implements Id {
     private String comment;
     private LocalDate date;
     private Location location;
-    private Bitmap photo;
+    private String photo;
 
     public HabitEvent(String username, String habitId, String type) {
         elasticId = UUID.randomUUID().toString();
@@ -101,11 +104,23 @@ public class HabitEvent implements Id {
     }
 
     public Bitmap getPhoto() {
-        return photo;
+        // http://practiceonandroid.blogspot.ca/2013/03/convert-string-to-bitmap-and-bitmap-to.html
+        try{
+            byte [] encodeByte = Base64.decode(this.photo, Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        }catch(Exception e){
+            e.getMessage();
+            return null;
+        }
     }
 
     public void setPhoto(Bitmap photo) {
-        this.photo = photo;
+        // http://practiceonandroid.blogspot.ca/2013/03/convert-string-to-bitmap-and-bitmap-to.html
+        ByteArrayOutputStream ByteStream=new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.PNG,100, ByteStream);
+        byte [] b = ByteStream.toByteArray();
+        this.photo = Base64.encodeToString(b, Base64.DEFAULT);
     }
 
     public String getType() {
