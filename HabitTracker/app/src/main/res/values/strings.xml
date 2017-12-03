@@ -10,7 +10,7 @@
     <string name="_2015_01_20">2015-01-20</string>
     <string name="take_photo">Take Photo</string>
     <string name="delete_event">Delete event</string>
-    <string name="date_of_occurence">Date of Occurence</string>
+    <string name="date_of_occurence">Date of Occurrence</string>
     <string name="example_chicken">Example: Chicken</string>
     <string name="event_name">Event Name</string>
     <string name="jogging">Jogging</string>
@@ -58,17 +58,37 @@
     <string name="friday">Friday</string>
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
+
     <string name="statistics">Statistics</string>
     <string name="save_habit">Save Habit</string>
     <string name="delete_habit">Delete Habit</string>
     <string name="add_new_event">Add New Event</string>
     <string name="existing_events">Existing Events</string>
     <string name="commentary_key_word">Commentary Key Word</string>
-    <string name="todays_habits">Todays Habits</string>
+    <string name="todays_habits">Today\'s Habits</string>
+    <string name="search">Search</string>
+    <string name="comment">Comment</string>
+    <string name="update_event">Update Event</string>
+    <string name="counter_description">Counter Description</string>
+    <string name="add_event">Add Event</string>
+    <string name="search_user_to_follow">Search User to Follow</string>
+    <string name="go">GO</string>
+    <string name="welcome_to_habittracker">Welcome to HabitTracker</string>
+    <string name="please_enter_username">Please enter username:</string>
+    <string name="login">Login</string>
+    <string name="existing_habits">Existing Habits</string>
+    <string name="most_common_habit">Most Common Habit: </string>
+    <string name="insert_val_here">insert common habit here</string>
+    <string name="number">###?</string>
+    <string name="level">Level:</string>
+    <string name="question">\?</string>
+    <string name="tenPlus">Habits Recorded 10+ times:</string>
+    <string name="hundredPlus">Habits Recorded 100+ times:</string>
 
     <string-array name="socialFeed_vals">
         <item>All</item>
         <item>My Events</item>
         <item>Within 5 km</item>
     </string-array>
-    \</resources>
+    \
+</resources>

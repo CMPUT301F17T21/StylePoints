@@ -6,11 +6,13 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.model.Habit;
@@ -53,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
         userRepo = new UserRepository(HabitRepository.getInstance(getApplicationContext()),
                 HabitEventRepository.getInstance(getApplicationContext()),
                 getApplicationContext());
+
+        Toast toast = Toast.makeText(getApplicationContext(), "Welcome to Habit Tracker!", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
 
         //Added for getting the user name and ID
         if (!userRepo.isUserNameSet()){

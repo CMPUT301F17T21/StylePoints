@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitNewActivity"
     tools:layout_editor_absoluteY="81dp"
+    android:background="@drawable/test2"
     tools:layout_editor_absoluteX="0dp">
 
     <CheckBox
@@ -157,7 +158,6 @@
         android:hint="@string/name_of_habit"
         android:inputType="textPersonName"
         android:textSize="14sp"
-        android:maxLength="20"
         app:layout_constraintBaseline_toBaselineOf="@+id/textViewHabitNameTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textViewHabitNameTitle" />
@@ -173,7 +173,6 @@
         android:hint="@string/reason_of_habit"
         android:inputType="textPersonName"
         android:textSize="14sp"
-        android:maxLength="30"
         app:layout_constraintBaseline_toBaselineOf="@+id/textViewReasonTitle"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/textViewReasonTitle"
