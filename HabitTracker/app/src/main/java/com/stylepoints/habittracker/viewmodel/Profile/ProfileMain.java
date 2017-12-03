@@ -13,8 +13,8 @@ import com.stylepoints.habittracker.viewmodel.SocialFeed.MapEvents;
 import com.stylepoints.habittracker.viewmodel.SocialFeed.SocialFeed;
 
 public class ProfileMain extends AppCompatActivity {
-    private Button achievements;
-    private Button question;
+    Button achievements;
+    Button question;
     private Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
