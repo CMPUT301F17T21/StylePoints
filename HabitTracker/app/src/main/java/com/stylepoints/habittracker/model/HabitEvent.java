@@ -31,6 +31,12 @@ public class HabitEvent implements Id {
     private Location location;
     private String photo;
 
+    /**
+     * Constructor
+     * @param username username that this event belongs to
+     * @param habitId the id of the habit that this event belongs to
+     * @param type the type of the habit
+     */
     public HabitEvent(String username, String habitId, String type) {
         elasticId = UUID.randomUUID().toString();
         this.habitId = habitId;
@@ -39,70 +45,135 @@ public class HabitEvent implements Id {
         this.date = LocalDate.now();
     }
 
+    /**
+     * Constructor
+     * @param username username that this event belongs to
+     * @param habitId the id of the habit that this event belongs to
+     * @param type the type of the habit
+     * @param comment comment for this event
+     */
     public HabitEvent(String username, String habitId, String type, String comment) {
         this(username, habitId, type);
         this.comment = comment;
     }
 
+    /**
+     * Constructor
+     * @param username username that this event belongs to
+     * @param habitId the id of the habit that this event belongs to
+     * @param type the type of the habit
+     * @param comment comment for this event
+     * @param date the date this event was done on
+     */
     public HabitEvent(String username, String habitId, String type, String comment, LocalDate date) {
         this(username, habitId, type, comment);
         this.date = date;
     }
 
+    /**
+     * Constructor
+     * @param username username that this event belongs to
+     * @param habitId the id of the habit that this event belongs to
+     * @param type the type of the habit
+     * @param comment comment for this event
+     * @param date the date this event was done on
+     * @param location the location this was done at
+     */
     public HabitEvent(String username, String habitId, String type, String comment, LocalDate date, Location location) {
         this(username, habitId, type, comment, date);
         this.location = location;
     }
 
+    /**
+     * @return the unique id of this event, also the id used for elastic search
+     */
     public String getElasticId() {
         return elasticId;
     }
 
+    /**
+     * @return the id of the habit this event belongs to
+     */
     public String getHabitId() {
         return habitId;
     }
 
+    /**
+     * @param elasticId the id to uniquely identify this event in local and remote storage
+     */
     @Override
     public void setElasticId(String elasticId) {
         this.elasticId = elasticId;
     }
 
+    /**
+     * @param habitId the id of the habit this event belongs to
+     */
     public void setHabitId(String habitId) {
         this.habitId = habitId;
     }
 
+    /**
+     * @return the username of the user that this event belongs to
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * @param username the username of the user that this event belongs to
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * @return the comment of this event. Null if not set
+     */
     public String getComment() {
         return comment;
     }
 
+    /**
+     * @param comment the comment that the event should have
+     */
     public void setComment(String comment) {
         this.comment = comment;
     }
 
+    /**
+     * @return the date this event was done
+     */
     public LocalDate getDate() {
         return date;
     }
 
+    /**
+     * @param date the date this was done on
+     */
     public void setDate(LocalDate date) {
         this.date = date;
     }
 
+    /**
+     * @return the location where the event took place. Null if not set
+     */
     public Location getLocation() {
         return location;
     }
 
+    /**
+     * @param location the location where the event took place
+     */
     public void setLocation(Location location) {
         this.location = location;
     }
 
+    /**
+     * Convert the internal representation of string to a bitmap for display
+     * @author qikai
+     * @return the photo for the event. null if not set
+     */
     public Bitmap getPhoto() {
         // http://practiceonandroid.blogspot.ca/2013/03/convert-string-to-bitmap-and-bitmap-to.html
         try{
@@ -115,6 +186,10 @@ public class HabitEvent implements Id {
         }
     }
 
+    /**
+     * Convert and set the photo to internal representation as base64 string
+     * @param photo the photo for the event
+     */
     public void setPhoto(Bitmap photo) {
         // http://practiceonandroid.blogspot.ca/2013/03/convert-string-to-bitmap-and-bitmap-to.html
         ByteArrayOutputStream ByteStream=new ByteArrayOutputStream();
@@ -123,10 +198,16 @@ public class HabitEvent implements Id {
         this.photo = Base64.encodeToString(b, Base64.DEFAULT);
     }
 
+    /**
+     * @return the type of the Habit that this event belongs to
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * @param type the type of the Habit that this event belongs to
+     */
     public void setType(String type) {
         this.type = type;
     }
