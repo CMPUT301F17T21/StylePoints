@@ -35,7 +35,7 @@
         android:textAppearance="@android:style/TextAppearance.Material.Small"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewEventNameTitle"
-        android:layout_marginStart="8dp" />
+        android:layout_marginStart="16dp" />
 
     <TextView
         android:id="@+id/textViewEventNameTitle"

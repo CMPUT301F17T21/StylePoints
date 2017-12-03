@@ -3,10 +3,8 @@ package com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.HabitE
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.repository.HabitEventRepository;
-import com.stylepoints.habittracker.repository.HabitRepository;
 
 /**
  * The viewmodel for viewing the details of a SINGLE Habit

@@ -17,6 +17,7 @@ import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.model.HabitReasonTooLongException;
 import com.stylepoints.habittracker.model.HabitTypeTooLongException;
 import com.stylepoints.habittracker.repository.HabitRepository;
+import com.stylepoints.habittracker.repository.NonUniqueException;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -70,11 +71,10 @@ public class HabitNewActivity extends AppCompatActivity implements DatePickerDia
                     try {
                         habit = new Habit(type, reason, "username");
                     } catch (HabitReasonTooLongException e) {
-                        e.printStackTrace();
+                        edittext_habit_reason.setError("Must be less than " + String.valueOf(Habit.MAX_REASON_LENGTH) + " characters");
+                        return;
                     } catch (HabitTypeTooLongException e) {
-                        e.printStackTrace();
-                    }
-                    if (habit == null) {
+                        edittext_habit_name.setError("Must be less than " + String.valueOf(Habit.MAX_TYPE_LENGTH) + " characters");
                         return;
                     }
 
@@ -90,7 +90,12 @@ public class HabitNewActivity extends AppCompatActivity implements DatePickerDia
                     if (checkbox_sunday.isChecked()) { schedule.add(DayOfWeek.SUNDAY); }
                     habit.setDaysActive(schedule);
 
-                    repo.save(habit);
+                    try {
+                        repo.save(habit);
+                    } catch (NonUniqueException e) {
+                        edittext_habit_name.setError("A habit of this type already exists!");
+                        return;
+                    }
                     finish();
                 }
             }

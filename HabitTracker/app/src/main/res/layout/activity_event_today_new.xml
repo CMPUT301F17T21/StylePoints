@@ -34,7 +34,8 @@
         android:text=" Date Of Occurrence"
         android:textAppearance="@android:style/TextAppearance.Material.Small"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewEventNameTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewEventNameTitle"
+        android:layout_marginStart="16dp" />
 
     <TextView
         android:id="@+id/textViewEventNameTitle"

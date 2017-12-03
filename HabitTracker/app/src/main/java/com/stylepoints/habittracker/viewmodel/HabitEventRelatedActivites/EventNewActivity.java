@@ -1,15 +1,16 @@
 package com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites;
 ////////////////////////////Work on this urgent
+
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,13 +31,9 @@ import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.HabitEv
 import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
 import com.stylepoints.habittracker.viewmodel.HabitListViewModelFactory;
 
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -151,6 +148,7 @@ public class EventNewActivity extends AppCompatActivity {
         buttonAddEvent.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println(spinnerHabitName.getSelectedItem());
                 if (spinnerHabitName.getSelectedItem() != null) {
                     String habitId = ((Habit) spinnerHabitName.getSelectedItem()).getElasticId();
                     String type = ((Habit) spinnerHabitName.getSelectedItem()).getType();
@@ -161,6 +159,7 @@ public class EventNewActivity extends AppCompatActivity {
                         event.setPhoto(((BitmapDrawable) imageViewEventPhoto.getDrawable()).getBitmap());
                     }
                     //              event.setLocation();
+                    System.out.println("save");
                     eventRepo.saveEvent(event);
                     finish();
                 } else {

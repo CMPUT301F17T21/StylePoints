@@ -19,15 +19,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <service
             android:name=".repository.remote.RemoteHabitJob"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true"/>
-
-        <service android:name=".repository.remote.RemoteEventJob"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true"/>
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".repository.remote.RemoteEventJob"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity android:name=".viewmodel.CentralHubActivity.MainActivity">
             <intent-filter>
@@ -64,29 +63,16 @@
         </activity>
         <activity
             android:name=".viewmodel.HabitEventRelatedActivites.EventsMainActivity"
-            android:windowSoftInputMode="adjustPan">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".viewmodel.CentralHubActivity.MainActivity" />
-        </activity>
-        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventNewActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".viewmodel.HabitEventRelatedActivites.EventsMainActivity" />
-        </activity>
-        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventEditActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".viewmodel.HabitEventRelatedActivites.EventsMainActivity" />
-        </activity>
-
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventNewActivity" />
+        <activity android:name=".viewmodel.HabitEventRelatedActivites.EventEditActivity" />
         <activity android:name=".viewmodel.CentralHubActivity.NewUserActivity" />
         <activity android:name=".viewmodel.SocialFeed.SocialFeed" />
         <activity android:name=".viewmodel.SocialFeed.Followers" />
         <activity android:name=".viewmodel.SocialFeed.Following" />
         <activity android:name=".viewmodel.SocialFeed.MapEvents" />
-        <activity android:name=".viewmodel.Profile.ProfileMain"></activity>
-
+        <activity android:name=".viewmodel.Profile.ProfileMain" />
+        <activity android:name=".viewmodel.Profile.Achievements"></activity>
     </application>
 
 </manifest>

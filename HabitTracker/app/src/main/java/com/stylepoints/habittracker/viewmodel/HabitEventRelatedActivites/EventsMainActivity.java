@@ -1,9 +1,10 @@
 package com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites;
 // List duplication error
+
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.model.Habit;
@@ -22,8 +22,6 @@ import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.HabitEv
 import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.HabitEventAux.HabitEventListViewModelFactory;
 import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
 import com.stylepoints.habittracker.viewmodel.HabitListViewModelFactory;
-
-
 
 import java.util.ArrayList;
 import java.util.Collections;

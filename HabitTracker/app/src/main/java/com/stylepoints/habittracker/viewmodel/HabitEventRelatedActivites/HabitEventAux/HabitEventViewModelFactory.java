@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import com.stylepoints.habittracker.repository.HabitEventRepository;
-import com.stylepoints.habittracker.repository.HabitRepository;
 
 /**
  * Created by Mackenzie on 2017-11-10.
