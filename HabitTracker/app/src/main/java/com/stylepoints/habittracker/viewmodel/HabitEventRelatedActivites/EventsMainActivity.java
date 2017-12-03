@@ -156,7 +156,7 @@ public class EventsMainActivity extends AppCompatActivity {
         eventModel.getHabitEventList().observe(this, eventList -> {
             Collections.sort(eventList, new Comparator<HabitEvent>() {
                 public int compare(HabitEvent e0, HabitEvent e1) {
-                    return e0.getDate().compareTo(e1.getDate());
+                    return e1.getDate().compareTo(e0.getDate());
                 }
             });
             EventsMainActivity.this.setEventList(eventList);
