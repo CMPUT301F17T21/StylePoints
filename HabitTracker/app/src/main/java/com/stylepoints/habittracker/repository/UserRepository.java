@@ -1,6 +1,7 @@
 package com.stylepoints.habittracker.repository;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -15,6 +16,7 @@ import com.stylepoints.habittracker.repository.remote.ElasticHabitListResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticRequestStatus;
 import com.stylepoints.habittracker.repository.remote.ElasticResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticSearch;
+import com.stylepoints.habittracker.viewmodel.CentralHubActivity.UserAsyncCallback;
 
 import java.io.IOException;
 import java.lang.reflect.Parameter;
@@ -35,68 +37,161 @@ public class UserRepository{
 
     private static final String TAG = "UserRepository";
     private ElasticSearch elastic;
-    private HabitRepository hR;
-    private HabitEventRepository hER;
+    private HabitRepository habitRepo;
+    private HabitEventRepository habitEventRepo;
     private List<Habit> habitList;
     private List<HabitEvent> eventList;
     private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private Context context;
 
-    public UserRepository(HabitRepository hR, HabitEventRepository hER) {
+    public UserRepository(HabitRepository habitRepo, HabitEventRepository habitEventRepo, Context context) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://cmput301.softwareprocess.es:8080/cmput301f17t21_stylepoints/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         this.elastic = retrofit.create(ElasticSearch.class);
-        this.hR = hR;
-        this.hER = hER;
-        this.pref = getSharedPreferences();
+        this.habitRepo = habitRepo;
+        this.habitEventRepo = habitEventRepo;
+        this.context = context;
+        this.pref = context.getSharedPreferences("stylepoints", 0);
+        this.editor = pref.edit();
     }
 
-
+    //Local
     public String getUserName(){
+        return pref.getString("username", "");
     }
 
     public Boolean isUserNameSet(){
-
+        return pref.contains("username");
     }
 
+    public void setUserName(String username){
+        editor.putString("username", username);
+        editor.commit();
+    }
 
-    public Boolean checkUserExists(String username) throws IOException{
-        Response<ElasticResponse<User>> response = elastic.getUserByName(username).execute();
-        if (response.isSuccessful()){
-            return true;
-        } else {
-            return false;
+    public void logOutUser(){
+        editor.remove("username");
+    }
+
+    //Remote
+    public void logInUser(String username, UserAsyncCallback callback) {
+        callback.setLoading();
+        habitRepo.deleteAll();
+        habitEventRepo.deleteAll();
+        setUserName(username);
+        try {
+            getRemoteUser(username, callback);
+        } catch (IOException e) {
+            callback.setError(e);
         }
     }
 
-    public void requestUser(String username) throws IOException {
-        if (checkUserExists(username)) {
-            Response<ElasticHabitListResponse> responseHabits = elastic.searchHabit("user:" + username).execute();
-            if (!responseHabits.isSuccessful()) {
-                throw new IOException("Elastic Search Request Unsuccessful");
+
+    public void deleteUser(String username, UserAsyncCallback callback){
+        callback.setLoading();
+        logOutUser();
+
+
+    }
+
+
+
+
+
+
+
+
+    //Get User after login
+    private void getRemoteUser(String username, UserAsyncCallback callback) throws IOException{
+        elastic.getUserByName(username).enqueue(new Callback<ElasticResponse<User>>() {
+            @Override
+            public void onResponse(Call<ElasticResponse<User>> call, Response<ElasticResponse<User>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        loadRemoteUserHabits(username, callback);
+                    } else {
+                        createRemoteUser(username, callback);
+                    }
+                } catch (IOException e){
+                    callback.setError(e);
+                }
             }
-            habitList = responseHabits.body().getList();
 
-            Response<ElasticEventListResponse> responseEvents = elastic.searchEvent("user:" + username).execute();
-            if (!responseEvents.isSuccessful()) {
-                throw new IOException("Elastic Search Request Unsuccessful");
+            @Override
+            public void onFailure(Call<ElasticResponse<User>> call, Throwable t) {
+                callback.setError(t);
             }
-            eventList = responseEvents.body().getList();
-
-        } else {
-            elastic.createUser(username, new User(username)).execute();
-        }
-
+        });
     }
 
-    public void deleteUser(){
+    private void loadRemoteUserHabits(String username, UserAsyncCallback callback) throws IOException {
+        elastic.searchHabit("user:" + username).enqueue(new Callback<ElasticHabitListResponse>() {
+            @Override
+            public void onResponse(Call<ElasticHabitListResponse> call, Response<ElasticHabitListResponse> response) {
+                if (response.isSuccessful()) {
+                    saveUserHabits(response.body().getList(), callback);
+                }
+                try {
+                    loadRemoteUserEvents(username, callback);
+                } catch (IOException e) {
+                    callback.setError(e);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ElasticHabitListResponse> call, Throwable t) {
+                callback.setError(t);
+            }
+        });
     }
 
-    public void loadUser(){
-        this.hR.saveList(this.habitList);
-        this.hER.saveList(this.eventList);
+    private void loadRemoteUserEvents(String username, UserAsyncCallback callback) throws IOException {
+
+            elastic.searchEvent("user:" + username).enqueue(new Callback<ElasticEventListResponse>() {
+                @Override
+                public void onResponse(Call<ElasticEventListResponse> call, Response<ElasticEventListResponse> response) {
+                    if (response.isSuccessful()){
+                        saveUserEvents(response.body().getList(), callback);
+                    }
+                    callback.setSuccess();
+                }
+
+                @Override
+                public void onFailure(Call<ElasticEventListResponse> call, Throwable t) {
+                    callback.setError(t);
+                }
+            });
     }
+
+    private void createRemoteUser(String username, UserAsyncCallback callback) throws IOException {
+        elastic.createUser(username, new User(username)).enqueue(new Callback<ElasticRequestStatus>() {
+            @Override
+            public void onResponse(Call<ElasticRequestStatus> call, Response<ElasticRequestStatus> response) {
+                if (response.isSuccessful()){
+                    callback.setSuccess();
+                } else {
+                    callback.setError(new Throwable("Elasticsearch create user failed"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ElasticRequestStatus> call, Throwable t) {
+                callback.setError(t);
+            }
+        });
+    }
+
+    private void saveUserHabits(List<Habit> habits, UserAsyncCallback callback){
+        habitRepo.saveList(habits);
+    }
+
+    private void saveUserEvents(List<HabitEvent> events, UserAsyncCallback callback){
+        habitEventRepo.saveList(events);
+    }
+
+
 
 }
