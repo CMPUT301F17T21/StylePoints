@@ -127,13 +127,14 @@ public class Habit implements Id {
 
     @Override
     public String toString() {
-        return "Habit{" +
-                "elasticId='" + elasticId + '\'' +
-                ", type='" + type + '\'' +
-                ", reason='" + reason + '\'' +
-                ", username='" + username + '\'' +
-                ", startDate=" + startDate +
-                ", daysActive=" + daysActive +
-                '}';
+        return "type:" + type;
+//        return "Habit{" +
+//                "elasticId='" + elasticId + '\'' +
+//                ", type='" + type + '\'' +
+//                ", reason='" + reason + '\'' +
+//                ", username='" + username + '\'' +
+//                ", startDate=" + startDate +
+//                ", daysActive=" + daysActive +
+//                '}';
     }
 }

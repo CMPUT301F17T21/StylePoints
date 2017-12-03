@@ -138,6 +138,7 @@ public class EventJsonSource {
 
 
     public void saveEvent(HabitEvent event) {
+        Log.d(TAG, event.toString());
         eventList.add(event);
         saveToDisk();
     }

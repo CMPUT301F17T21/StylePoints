@@ -61,9 +61,11 @@ public class HabitEventRepository {
 
     public void saveEvent(HabitEvent event) {
         if (habitRepo.getHabitSync(event.getHabitId()) == null) {
+            System.out.println(TAG + " no event");
             Log.d(TAG, "Could not find local habit with id: " + event.getHabitId());
             return;
         }
+        System.out.println(TAG + " got event");
         source.saveEvent(event);
         remoteOperation(event.getElasticId(), Util.CREATE);
     }
