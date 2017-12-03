@@ -26,6 +26,7 @@ import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.repository.HabitEventRepository;
 import com.stylepoints.habittracker.repository.HabitRepository;
+import com.stylepoints.habittracker.repository.UserRepository;
 import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.HabitEventAux.HabitEventListViewModel;
 import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.HabitEventAux.HabitEventListViewModelFactory;
 import com.stylepoints.habittracker.viewmodel.HabitListViewModel;
@@ -80,6 +81,8 @@ public class EventNewActivity extends AppCompatActivity {
     private Button buttonRemovePicture;
     private Button buttonAddEvent;
 
+    private UserRepository userRepo;
+
     private List<Habit> habitList;
     private ArrayAdapter<Habit> habitArrayAdapter;
 
@@ -98,6 +101,10 @@ public class EventNewActivity extends AppCompatActivity {
         HabitEventRepository eventRepo = HabitEventRepository.getInstance(getApplicationContext());
         HabitEventListViewModelFactory eventFactory = new HabitEventListViewModelFactory(eventRepo);
         HabitEventListViewModel eventModel = ViewModelProviders.of(this, eventFactory).get(HabitEventListViewModel.class);
+
+        userRepo = new UserRepository(HabitRepository.getInstance(getApplicationContext()),
+                HabitEventRepository.getInstance(getApplicationContext()),
+                getApplicationContext());
 
 
         System.out.println(getIntent());
@@ -152,7 +159,7 @@ public class EventNewActivity extends AppCompatActivity {
                 if (spinnerHabitName.getSelectedItem() != null) {
                     String habitId = ((Habit) spinnerHabitName.getSelectedItem()).getElasticId();
                     String type = ((Habit) spinnerHabitName.getSelectedItem()).getType();
-                    HabitEvent event = new HabitEvent("username", habitId, type);
+                    HabitEvent event = new HabitEvent(userRepo.getUserName(), habitId, type);
                     event.setDate(date);
                     event.setComment(editTextEventComment.getText().toString());
                     if (imageViewEventPhoto.getDrawable() != null) {

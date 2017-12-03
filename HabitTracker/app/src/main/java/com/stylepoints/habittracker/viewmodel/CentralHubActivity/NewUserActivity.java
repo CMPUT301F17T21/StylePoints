@@ -63,8 +63,8 @@ public class NewUserActivity extends AppCompatActivity implements UserAsyncCallb
 
     @Override
     public void setSuccess() {
-        Intent intent = new Intent(NewUserActivity.this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         setResult(RESULT_OK, intent);
-        finish();
+        startActivity(intent);
     }
 }

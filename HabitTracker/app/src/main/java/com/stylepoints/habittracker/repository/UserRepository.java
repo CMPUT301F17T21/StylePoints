@@ -2,6 +2,7 @@ package com.stylepoints.habittracker.repository;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.stylepoints.habittracker.repository.remote.ElasticHabitListResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticRequestStatus;
 import com.stylepoints.habittracker.repository.remote.ElasticResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticSearch;
+import com.stylepoints.habittracker.viewmodel.CentralHubActivity.NewUserActivity;
 import com.stylepoints.habittracker.viewmodel.CentralHubActivity.UserAsyncCallback;
 
 import java.io.IOException;
@@ -74,6 +76,8 @@ public class UserRepository{
 
     public void logOutUser(){
         editor.remove("username");
+        Intent getUserNameIntent = new Intent(context, NewUserActivity.class);
+        context.startActivity(getUserNameIntent);
     }
 
     //Remote

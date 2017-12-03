@@ -56,10 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 HabitEventRepository.getInstance(getApplicationContext()),
                 getApplicationContext());
 
-        Toast toast = Toast.makeText(getApplicationContext(), "Welcome to Habit Tracker!", Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-
         //Added for getting the user name and ID
         if (!userRepo.isUserNameSet()){
             //Go to Activity to get username. Should only be ran the first time
@@ -67,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(getUserNameIntent, GET_USER_NAME);
         }
 
-        String username = userRepo.getUserName();
-        Log.i("debug", userRepo.getUserName());
+        Toast toast = Toast.makeText(getApplicationContext(), "Welcome to Habit Tracker " + userRepo.getUserName(), Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
 
 
         repo = HabitRepository.getInstance(getApplicationContext());
@@ -136,14 +133,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        switch (requestCode) {
-            case GET_USER_NAME:
-                if (resultCode == RESULT_OK){
-                }
-                break;
-        }
-
-    }
 }
