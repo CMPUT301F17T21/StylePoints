@@ -24,12 +24,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by mchauck on 11/9/17.
- * https://developer.android.com/topic/libraries/architecture/guide.html
+ * A singleton class that acts as an abstraction layer between the user interface
+ * and either the local Habit storage, or the remote Habit storage.
  *
- * singleton class
+ * The data returned to the UI are instances of LiveData, which is basically an observable
+ * class that is also aware of android specific lifecycle information.
  */
-
 public class HabitRepository {
     private static final String TAG = "HabitRepository";
     private static HabitRepository INSTANCE;
@@ -38,26 +38,22 @@ public class HabitRepository {
     private JobScheduler jobScheduler;
     private Context context;
 
-    private HabitRepository(HabitJsonSource source) {
-        this.source = source;
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://cmput301.softwareprocess.es:8080/cmput301f17t21_stylepoints/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        this.elastic = retrofit.create(ElasticSearch.class);
-    }
-
     private HabitRepository(Context context) {
-        this.source = HabitJsonSource.getInstance(context);
+        this.context = context.getApplicationContext();
+        this.source = HabitJsonSource.getInstance(this.context);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://cmput301.softwareprocess.es:8080/cmput301f17t21_stylepoints/")
+                .baseUrl(Util.API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         this.elastic = retrofit.create(ElasticSearch.class);
-        this.context = context.getApplicationContext();
-        this.jobScheduler = (JobScheduler) context.getApplicationContext().getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        this.jobScheduler = (JobScheduler) this.context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
     }
 
+    /**
+     * Get observable Habit object with id.
+     * @param habitId unique id for the habit we wish to get
+     * @return an observable LiveData<Habit>
+     */
     public LiveData<Habit> getHabit(String habitId) {
         if (source.contains(habitId)){
             return source.getHabit(habitId);
@@ -66,14 +62,28 @@ public class HabitRepository {
         }
     }
 
+    /**
+     * Get a Habit synchronously
+     * @param habitId unique id for habit we wish to get
+     * @return the Habit with id habitId, or null if not found
+     */
     public Habit getHabitSync(String habitId) {
         return source.getHabitSync(habitId);
     }
 
+    /**
+     * Get observable list of habits. Automatically updates when backend updates
+     * @return An observable list of all local users habits
+     */
     public LiveData<List<Habit>> loadAll() {
         return source.getHabits();
     }
 
+    /**
+     * Create a new Habit and save it both locally and remotely.
+     * @param habit The habit we wish to add to local and remote storage
+     * @throws NonUniqueException when a Habit with that `type` already exists
+     */
     public void save(Habit habit) throws NonUniqueException {
         if (source.hasHabitWithType(habit.getType())) {
             throw new NonUniqueException();
@@ -84,6 +94,12 @@ public class HabitRepository {
         remoteOperation(habit.getElasticId(), Util.CREATE);
     }
 
+    /**
+     * Update the Habit with id to what is passed in in habit. Changes propagate
+     * locally and remotely.
+     * @param id unique habit id used to specify which habit we are updating
+     * @param habit What the old habit should be updated to
+     */
     public void update(String id, Habit habit) {
         // update local version
         source.updateHabit(id, habit);
@@ -91,6 +107,10 @@ public class HabitRepository {
         remoteOperation(id, Util.UPDATE);
     }
 
+    /**
+     * Delete the Habit specified by id locally and remotely.
+     * @param id unique habit id
+     */
     public void delete(String id) {
         // delete from local
         source.deleteHabit(id);
@@ -103,10 +123,19 @@ public class HabitRepository {
         source.deleteAllHabits();
     }
 
+    /**
+     * Bulk save habits to local storage
+     * @param habitList list of habits to add to local storage
+     */
     public void saveList(List<Habit> habitList){
         source.saveHabits(habitList);
     }
 
+    /**
+     * Get's a habit from the remote server
+     * @param habitId unique id of a habit
+     * @return an observable LiveData<Habit>
+     */
     public LiveData<Habit> getRemoteHabit(String habitId) {
         final MutableLiveData<Habit> data = new MutableLiveData<>();
         elastic.getHabitById(habitId).enqueue(new Callback<ElasticResponse<Habit>>() {
@@ -123,6 +152,11 @@ public class HabitRepository {
         return data;
     }
 
+    /**
+     * Get all Habits for a specific username
+     * @param elasticUsername which users habits we should fetch
+     * @return observable list of habits, that updates when network request completes
+     */
     public LiveData<List<Habit>> getUsersHabits(String elasticUsername) {
         final MutableLiveData<List<Habit>> data = new MutableLiveData<>();
         elastic.searchHabit("user:" + elasticUsername).enqueue(new Callback<ElasticHabitListResponse>() {
@@ -145,7 +179,10 @@ public class HabitRepository {
      * jobs in order, so if we create a Habit offline then delete it offline
      * there is no guarantee that it will be done in that order, causing a
      * mismatch between the local and remote data.
+     *
+     * @author Mackenzie Hauck
      * @param id the elasticId of a Habit
+     * @see RemoteHabitJob
      */
     private void removePreviousJobs(String id) {
         String jobHabitId = null;
@@ -166,6 +203,7 @@ public class HabitRepository {
      * be done. Persists across app closes as well
      * @param id the elasticId of the Habit we are doing an operation on
      * @param operation an integer representing the operation (Util.CREATE, Util.UPDATE, Util.DELETE)
+     * @see RemoteHabitJob
      */
     private void remoteOperation(String id, int operation) {
         removePreviousJobs(id);

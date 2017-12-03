@@ -2,18 +2,21 @@ package com.stylepoints.habittracker.model;
 
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.support.annotation.Nullable;
 
 import com.stylepoints.habittracker.repository.remote.Id;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.UUID;
 
 /**
- * Created by Mackenzie on 2017-11-10.
+ * The model class for an Event. Implements the Id interface so that it can be
+ * serialized and uploaded to Elastic Search. This class is automatically serialized
+ * by gson into JSON which is then stored locally, and uploaded to the server.
+ *
+ * A HabitEvent represents an occurrence of a Habit.
+ *
+ * Fields marked with transient are ignored by the serializer.
  */
-
 public class HabitEvent implements Id {
 
     private String elasticId;

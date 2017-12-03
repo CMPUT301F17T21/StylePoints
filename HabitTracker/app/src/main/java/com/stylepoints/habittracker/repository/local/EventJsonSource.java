@@ -7,30 +7,25 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import com.stylepoints.habittracker.model.HabitEvent;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by mchauck on 11/28/17.
+ * A local data store for HabitEvents. Backed by a json file that stores
+ * the list of HabitEvents. Saving to file is done async.
+ *
+ * @author Mackenzie Hauck
  */
-
 public class EventJsonSource {
     private static final String TAG = "EventJsonSource";
     private static EventJsonSource INSTANCE;
