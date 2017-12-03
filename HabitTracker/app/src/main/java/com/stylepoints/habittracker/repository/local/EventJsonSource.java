@@ -110,7 +110,17 @@ public class EventJsonSource {
     }
 
     public void deleteEvent(String id) {
-        eventList.remove(id);
+        for (HabitEvent event : eventList) {
+            if (event.getElasticId().equals(id)) {
+                eventList.remove(event);
+                break;
+            }
+        }
+        saveToDisk();
+    }
+
+    public void deleteAllEvents(){
+        eventList.clear();
         saveToDisk();
     }
 
