@@ -4,42 +4,35 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import com.stylepoints.habittracker.model.Habit;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * Created by mchauck on 11/28/17.
+ * A local data store for Habits. Backed by a json file that stores
+ * the list of Habits. Saving to file is done async.
+ *
+ * @author Mackenzie Hauck
+ * @see Habit
  */
-
 public class HabitJsonSource {
     private static final String TAG = "HabitJsonSource";
     private Gson gson;
     private Context context;
     private static HabitJsonSource INSTANCE;
     private static String FILENAME = "habits.json";
-    //@Expose
     private List<Habit> habitList;
     private MutableLiveData<List<Habit>> liveHabits;
 

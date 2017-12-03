@@ -25,6 +25,7 @@ import java.util.List;
  * the list of HabitEvents. Saving to file is done async.
  *
  * @author Mackenzie Hauck
+ * @see HabitEvent
  */
 public class EventJsonSource {
     private static final String TAG = "EventJsonSource";
