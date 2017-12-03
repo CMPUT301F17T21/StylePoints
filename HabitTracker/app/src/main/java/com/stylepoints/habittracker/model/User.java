@@ -12,7 +12,6 @@ import java.time.LocalDate;
 
 public class User implements Id {
 
-    private String elasticId;
     private String username;
     private LocalDate dateCreated;
     //Maybe achievements here so that others can see your achievments
@@ -32,7 +31,7 @@ public class User implements Id {
 
     @Override
     public void setElasticId(String id) {
-        elasticId = id;
+        this.username = id;
     }
 
 }

@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Mackenzie on 2017-11-23.
+ * A wrapper class to hold the server response when we request a list of HabitEvents.
+ * The fields, and class hierarchy are organized so that gson can deserialize the
+ * json response directly.
+ *
+ * @author Mackenzie Hauck
  */
-
 public class ElasticEventListResponse {
     private int took;
     private boolean timed_out;

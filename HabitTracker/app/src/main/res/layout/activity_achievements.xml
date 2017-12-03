@@ -13,18 +13,20 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:text="@string/achievements"
         android:textSize="24sp"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/userInfo"/>
 
     <LinearLayout
         android:id="@+id/userInfo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:gravity="center"
@@ -84,14 +86,13 @@
             app:layout_constraintEnd_toStartOf="@id/tenPlusVal"
             app:layout_constraintStart_toEndOf="@id/mostCommonVal" />
 
-        <TextView
+        <ListView
             android:id="@+id/tenPlusVal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="@string/number"
             android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@id/hundredPlus"
             app:layout_constraintStart_toEndOf="@id/tenPlus" />
@@ -107,10 +108,10 @@
             app:layout_constraintEnd_toStartOf="@id/hundredPlusVal"
             app:layout_constraintStart_toEndOf="@id/tenPlusVal" />
 
-        <TextView
+        <ListView
             android:id="@+id/hundredPlusVal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
@@ -157,7 +158,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/levelVal" />
+            />
 
 
     </LinearLayout>

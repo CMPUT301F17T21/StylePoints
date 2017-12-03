@@ -7,7 +7,12 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
-
+/**
+ * Helper class to write a List to a JSON file asynchronously.
+ *
+ * @author Mackenzie Hauck
+ * @see AsyncFileWriterParams
+ */
 public class AsyncFileWriter extends AsyncTask<AsyncFileWriterParams, Void, Void> {
     private static final String TAG = "AsyncFileWriter";
     @Override

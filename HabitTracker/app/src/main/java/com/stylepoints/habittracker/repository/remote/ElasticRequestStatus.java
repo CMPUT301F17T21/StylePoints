@@ -1,9 +1,12 @@
 package com.stylepoints.habittracker.repository.remote;
 
 /**
- * A class to hold the response of posting something to elastic search
+ * A class to hold the response of posting something to elastic search.
+ * Fields are named weirdly so that they serialize properly with gson to
+ * match exactly the JSON returned from elastic search.
+ *
+ * @author Mackenzie Hauck
  */
-
 public class ElasticRequestStatus implements Id {
     private String _id;
     private String _type;

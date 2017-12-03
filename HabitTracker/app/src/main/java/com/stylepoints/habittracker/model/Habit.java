@@ -1,8 +1,5 @@
 package com.stylepoints.habittracker.model;
 
-import android.support.annotation.NonNull;
-
-import com.google.gson.annotations.Expose;
 import com.stylepoints.habittracker.repository.remote.Id;
 
 import java.time.DayOfWeek;
@@ -12,9 +9,12 @@ import java.util.EnumSet;
 import java.util.UUID;
 
 /**
- * Created by mchauck on 11/9/17.
+ * The model class for a Habit. Implements the Id interface so that it can be
+ * serialized and uploaded to Elastic Search. This class is automatically serialized
+ * by gson into JSON which is then stored locally, and uploaded to the server.
+ *
+ * Fields marked with transient are ignored by the serializer.
  */
-
 public class Habit implements Id {
     public static transient final int MAX_REASON_LENGTH = 30;
     public static transient final int MAX_TYPE_LENGTH = 20;
@@ -65,6 +65,10 @@ public class Habit implements Id {
         return daysActive.contains(LocalDate.now().getDayOfWeek());
     }
 
+    /**
+     * Get the habit's unique id.
+     * @return the randomly generated id that will be used to uniquely identify this Habit
+     */
     public String getElasticId() {
         return elasticId;
     }
@@ -127,13 +131,14 @@ public class Habit implements Id {
 
     @Override
     public String toString() {
-        return "Habit{" +
-                "elasticId='" + elasticId + '\'' +
-                ", type='" + type + '\'' +
-                ", reason='" + reason + '\'' +
-                ", username='" + username + '\'' +
-                ", startDate=" + startDate +
-                ", daysActive=" + daysActive +
-                '}';
+        return "type:" + type;
+//        return "Habit{" +
+//                "elasticId='" + elasticId + '\'' +
+//                ", type='" + type + '\'' +
+//                ", reason='" + reason + '\'' +
+//                ", username='" + username + '\'' +
+//                ", startDate=" + startDate +
+//                ", daysActive=" + daysActive +
+//                '}';
     }
 }
