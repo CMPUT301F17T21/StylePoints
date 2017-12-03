@@ -48,7 +48,7 @@ public interface ElasticSearch {
     Call<ElasticRequestStatus> updateEvent(@Path("id") String id, @Body HabitEvent habit);
 
     @PUT("event/{id}")
-    Call<ElasticRequestStatus> createEventWithId(@Path("id") String id, @Body HabitEvent habit);
+    Call<ElasticRequestStatus> createEventWithId(@Path("id") String id, @Body HabitEvent event);
 
     @DELETE("event/{id}")
     Call<ElasticRequestStatus> deleteEvent(@Path("id") String id);

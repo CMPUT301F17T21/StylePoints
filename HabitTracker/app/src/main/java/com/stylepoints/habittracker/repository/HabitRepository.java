@@ -214,6 +214,7 @@ public class HabitRepository {
                 new ComponentName(context, RemoteHabitJob.class))
                 .setExtras(bundle) // send eventId, and operation (create, update, or delete)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY) // must have network
+                .setOverrideDeadline(5000)
                 .build()
         );
     }
