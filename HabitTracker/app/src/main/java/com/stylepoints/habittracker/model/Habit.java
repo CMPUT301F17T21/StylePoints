@@ -30,6 +30,14 @@ public class Habit implements Id {
     private LocalDate startDate;
     private EnumSet<DayOfWeek> daysActive;
 
+    /**
+     *
+     * @param type the type of habit. E.g., "Exercise"
+     * @param reason reason for doing the habit. E.g., "to get healthy"
+     * @param username username that this habit belongs to
+     * @throws HabitTypeTooLongException when the type is longer than the allowed max
+     * @throws HabitReasonTooLongException when the reason is longer than the allowed max
+     */
     public Habit(String type, String reason, String username) throws HabitReasonTooLongException, HabitTypeTooLongException {
         this.elasticId = UUID.randomUUID().toString();
         setType(type);
@@ -39,8 +47,17 @@ public class Habit implements Id {
         this.daysActive = EnumSet.noneOf(DayOfWeek.class);
     }
 
+    /**
+     * Constructor.
+     * @param type the type of habit. E.g., "Exercise"
+     * @param reason reason for doing the habit. E.g., "to get healthy"
+     * @param username username that this habit belongs to
+     * @param startDate day to start working on this habit
+     * @param daysActive days of the week to do this habit
+     * @throws HabitTypeTooLongException when the type is longer than the allowed max
+     * @throws HabitReasonTooLongException when the reason is longer than the allowed max
+     */
     public Habit(String type, String reason, String username, LocalDate startDate, DayOfWeek... daysActive) throws HabitTypeTooLongException, HabitReasonTooLongException {
-        // generate a random id
         this.elasticId = UUID.randomUUID().toString();
 
         setType(type);
@@ -50,8 +67,17 @@ public class Habit implements Id {
         setDaysActive(daysActive);
     }
 
+    /**
+     * Constructor.
+     * @param type the type of habit. E.g., "Exercise"
+     * @param reason reason for doing the habit. E.g., "to get healthy"
+     * @param username username that this habit belongs to
+     * @param startDate day to start working on this habit
+     * @param daysActive the days of the week that we are scheduled to do this habit
+     * @throws HabitTypeTooLongException when the type is longer than the allowed max
+     * @throws HabitReasonTooLongException when the reason is longer than the allowed max
+     */
     public Habit(String type, String reason, String username, LocalDate startDate, EnumSet<DayOfWeek> daysActive) throws HabitTypeTooLongException, HabitReasonTooLongException {
-        // generate a random id
         this.elasticId = UUID.randomUUID().toString();
 
         setType(type);
@@ -61,22 +87,32 @@ public class Habit implements Id {
         this.daysActive = daysActive;
     }
 
+    /**
+     * Check if the habit is scheduled for this day of the week
+     * @return true if the habit is scheduled for today
+     */
     public boolean isActiveToday() {
         return daysActive.contains(LocalDate.now().getDayOfWeek());
     }
 
     /**
-     * Get the habit's unique id.
-     * @return the randomly generated id that will be used to uniquely identify this Habit
+     * @return the id that will be used to uniquely identify this Habit
      */
     public String getElasticId() {
         return elasticId;
     }
 
+    /**
+     * @return the type of habit. E.g., "Exercise"
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * @param type the type of habit. E.g., "Exercise"
+     * @throws HabitTypeTooLongException when type is too long
+     */
     public void setType(String type) throws HabitTypeTooLongException {
         if (type.length() > MAX_TYPE_LENGTH) {
             throw new HabitTypeTooLongException();
@@ -84,10 +120,17 @@ public class Habit implements Id {
         this.type = type;
     }
 
+    /**
+     * @return reason for the habit. null if nothing set
+     */
     public String getReason() {
         return reason;
     }
 
+    /**
+     * @param reason the reason for doing this habit. E.g., "to get healthy"
+     * @throws HabitReasonTooLongException when the reason is longer than the maximum
+     */
     public void setReason(String reason) throws HabitReasonTooLongException {
         if (reason.length() > MAX_REASON_LENGTH) {
             throw new HabitReasonTooLongException();
@@ -95,35 +138,59 @@ public class Habit implements Id {
         this.reason = reason;
     }
 
+    /**
+     * @return the username of the creator of this habit
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * @param username the username of who created this habit
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * @return the day that we want to start doing this habit
+     */
     public LocalDate getStartDate() {
         return startDate;
     }
 
+    /**
+     * @param startDate the day that we want to start doing this habit
+     */
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
+    /**
+     * @return the days of the week that we are scheduled to do this habit
+     */
     public EnumSet<DayOfWeek> getDaysActive() {
         return daysActive;
     }
 
+    /**
+     * @param daysActive the days of the week that we are scheduled to do this habit
+     */
     public void setDaysActive(EnumSet<DayOfWeek> daysActive) {
         this.daysActive = daysActive;
     }
 
+    /**
+     * @param days the days of the week that we are scheduled to do this habit
+     */
     public void setDaysActive(DayOfWeek... days) {
         daysActive = EnumSet.noneOf(DayOfWeek.class);
         daysActive.addAll(Arrays.asList(days));
     }
 
+    /**
+     * @param id the id that is used in elastic search. E.g., api/habit/{id}
+     */
     @Override
     public void setElasticId(String id) {
         elasticId = id;

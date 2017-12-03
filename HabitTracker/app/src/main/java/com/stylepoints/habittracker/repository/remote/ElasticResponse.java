@@ -1,11 +1,15 @@
 package com.stylepoints.habittracker.repository.remote;
 
-import java.util.Map;
 
 /**
- * Created by mchauck on 11/23/17.
+ * The response from Elastic Search when doing one of the following:
+ * create, update, delete.
+ *
+ * The fields are named this way so that gson can automatically deserialize the json
+ * resposne.
+ * @author Mackenzie Hauck
+ * @param <T> The object the request relates to. E.g., deleting a Habit, use Habit
  */
-
 public class ElasticResponse<T extends Id> {
     private String _index;
     private String _type;

@@ -38,6 +38,7 @@ public class RemoteHabitJob extends JobService {
         // called when job is started. runs on main thread!
         String habitId = jobParameters.getExtras().getString("HABIT_ID");
         int operation = jobParameters.getExtras().getInt("OPERATION", -1);
+        Log.d(TAG, "Job started: " + habitId + " operation: " + String.valueOf(operation) + " jobId: " + jobParameters.getJobId());
 
         if (habitId == null || operation == -1) {
             Log.e(TAG, "Got bad data from extras");
