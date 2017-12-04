@@ -1,5 +1,4 @@
 package com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites;
-////////////////////////////Work on this urgent
 
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
@@ -43,8 +42,11 @@ import java.util.List;
 public class EventEditActivity extends AppCompatActivity {
     static String TAG = "EventEditActivity";
 
-    static final int CAM_REQUEST = 25647;
-    static final int REQ_CODE_CAMERA = 157670;
+    static final int CAM_REQUEST = 25647; // request code for camera use
+    static final int REQ_CODE_CAMERA = 157670; // request code to acquire camera permission
+    static final int REQ_LISTENER = 282194; // request permission for location listener
+
+    /* field getters, used if lambda or inner functions cannot access private fields */
 
     public TextView getTextViewEventName() {
         return textViewEventName;
@@ -74,43 +76,36 @@ public class EventEditActivity extends AppCompatActivity {
         return buttonDeleteEvent;
     }
 
-    public List<Habit> getHabitList() {
-        return habitList;
-    };
+    private TextView textViewEventName;  // Fixed type name of event, associated to habit
+    private TextView textViewDateOfOccurence;  // Date field, is fixed.
+    private EditText editTextEventComment; // Event comment field, up to 30 char (reinforced in .xml)
+    private ImageView imageViewEventPhoto; // Photo display, if null, no photo is found
+    private CheckBox checkBoxAttachLocation; // checkBox is attached
+    private Button buttonTakePicture; // Take picture
+    private Button buttonRemovePicture; // Delete Picture
+    private Button buttonSaveEvent; // Save Modifications to Events
+    private Button buttonDeleteEvent; // Delete current event
+    private Button buttonClearEventLocation; // Clear location of event
 
-    private TextView textViewEventName;  // Change the this to a spinner later one, selecting from existing habits
-    private TextView textViewDateOfOccurence;  // Change to calendar selector, like habits
-    private EditText editTextEventComment;
-    private ImageView imageViewEventPhoto;
-    private CheckBox checkBoxAttachLocation;
-    private Button buttonTakePicture;
-    private Button buttonRemovePicture;
-    private Button buttonSaveEvent;
-    private Button buttonDeleteEvent;
-    private Button buttonClearEvent;
+    private HabitRepository habitRepo; // habit repository, need to be accessed by inner classes
+    HabitEventRepository eventRepo; // event Repository
+    private Location loc; // location field
 
-    private List<Habit> habitList;
-    private ArrayAdapter<Habit> habitArrayAdapter;
-
-    private HabitRepository habitRepo;
-    private Location loc;
+    /**
+     * Initialise all fields required for tha activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_edit);
 
-        System.out.println("EventEditActivity");
-
-        // Get required repo
+        // Get required repository
         habitRepo = HabitRepository.getInstance(getApplicationContext());
-        HabitListViewModelFactory habitFactory = new HabitListViewModelFactory(habitRepo);
-        HabitListViewModel habitModel = ViewModelProviders.of(this, habitFactory).get(HabitListViewModel.class);
+        eventRepo = HabitEventRepository.getInstance(getApplicationContext());
 
-        HabitEventRepository eventRepo = HabitEventRepository.getInstance(getApplicationContext());
-        HabitEventListViewModelFactory eventFactory = new HabitEventListViewModelFactory(eventRepo);
-        HabitEventListViewModel eventModel = ViewModelProviders.of(this, eventFactory).get(HabitEventListViewModel.class);
-
-
+        /* Get event by passed eventId*/
+        /////////////////////////////////////////////////////////////////
         Intent inputIntent = getIntent();
         System.out.println(inputIntent);
         if (!inputIntent.hasExtra("EVENT_ID")) {
@@ -135,19 +130,22 @@ public class EventEditActivity extends AppCompatActivity {
             finish();
             return;
         }
+        /////////////////////////////////////////////////////////////////////
 
         // Inisitialise the activity to layout
         bindToUi();
+        // Set fields with pre-existing information for viewing
         fillUi(event);
 
         // Initialise button to take picture
         buttonTakePicture.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view) {
+                // If camera permission is already given, proceed, else request for permission
                 if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, CAM_REQUEST);
-                } else {
+                } else { // This chain of code performs properly, but camera must be first withfrawn from before reattempt at taking pictures
                     String permissionRequest[] = {Manifest.permission.CAMERA};
                     requestPermissions(permissionRequest, REQ_CODE_CAMERA);
                 }
@@ -161,10 +159,12 @@ public class EventEditActivity extends AppCompatActivity {
                 if (imageViewEventPhoto.getDrawable() != null) {
                     imageViewEventPhoto.setImageDrawable(null);
                 }
+                Toast.makeText(EventEditActivity.this, "Picture Deleted.", Toast.LENGTH_LONG).show();
             }
         });
 
-        buttonClearEvent.setOnClickListener(new Button.OnClickListener(){
+        // Initialise button to clear location
+        buttonClearEventLocation.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view) {
                 event.setLocation(null);
@@ -172,16 +172,17 @@ public class EventEditActivity extends AppCompatActivity {
             }
         });
 
+        // Initialise operation to save events
         buttonSaveEvent.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 event.setComment(editTextEventComment.getText().toString());
-                if (imageViewEventPhoto.getDrawable() != null) {
+                if (imageViewEventPhoto.getDrawable() != null) { // null check for photo
                     event.setPhoto(((BitmapDrawable) imageViewEventPhoto.getDrawable()).getBitmap());
                 } else {
                     event.setPhoto(null);
                 }
-                if (checkBoxAttachLocation.isChecked() && event.getLocation() == null) {
+                if (checkBoxAttachLocation.isChecked() && event.getLocation() == null) { // update only if previous location is cleared
                     event.setLocation(loc);
                 }
                 eventRepo.updateEvent(event.getElasticId(), event);
@@ -189,7 +190,7 @@ public class EventEditActivity extends AppCompatActivity {
             }
         });
 
-        // Deletion process
+        // Initialise operation for event deletion process
         buttonDeleteEvent.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -198,17 +199,15 @@ public class EventEditActivity extends AppCompatActivity {
             }
         });
 
+        // Initialise location listener if permission is acquired (!runtimePermissions)
         if (!runtimePermissions()) {
             setLocListener();
         }
-//        checkBoxAttachLocation.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
     }
 
+    /**
+     * Establish listen for location
+     */
     private void setLocListener() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
@@ -240,31 +239,39 @@ public class EventEditActivity extends AppCompatActivity {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,locationListener);
     }
 
-
+    /**
+     * check if runtimePermission for location listener to operate
+     * @return boolean
+     */
     private boolean runtimePermissions() {
+        // from https://www.youtube.com/watch?v=QNb_3QKSmMk
         if (Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_LISTENER);
             return true;
         }
         return false;
     }
 
-    // Photo specific process
+    /**
+     *  Request permission operation
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 100) {
+        if (requestCode == REQ_LISTENER) { // Location Listener
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 setLocListener();
             } else {
-                runtimePermissions();
+                runtimePermissions(); // Forgot what this does... leave it for now
             }
-        }
-        else if (requestCode == REQ_CODE_CAMERA ) {
+        } else if (requestCode == REQ_CODE_CAMERA ) { // Camera
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 System.out.println("granted");
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -275,6 +282,12 @@ public class EventEditActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * for getting camera result
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -286,8 +299,9 @@ public class EventEditActivity extends AppCompatActivity {
         }
     }
 
-
-    // UI init
+    /**
+     * UI init
+     */
     private void bindToUi() {
         // Intialise variables
         textViewEventName = (TextView) findViewById(R.id.textViewHabitName);
@@ -299,10 +313,13 @@ public class EventEditActivity extends AppCompatActivity {
         buttonRemovePicture = (Button) findViewById(R.id.buttonRemovePhoto);
         buttonSaveEvent = (Button) findViewById(R.id.buttonSaveEvent);
         buttonDeleteEvent = (Button) findViewById(R.id.buttonDeleteEvent);
-        buttonClearEvent = (Button) findViewById(R.id.buttonClearEvent);
+        buttonClearEventLocation = (Button) findViewById(R.id.buttonClearEvent);
     }
 
-
+    /**
+     * fill Ui (declare after UI init)
+     * @param event
+     */
     private void fillUi(HabitEvent event) {
         textViewEventName.setText(habitRepo.getHabitSync(event.getHabitId()).getType());
         textViewDateOfOccurence.setText(event.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
