@@ -6,6 +6,8 @@ import com.stylepoints.habittracker.model.HabitTypeTooLongException;
 
 import org.junit.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.Assert.*;
 
 public class HabitModelTest {
@@ -46,5 +48,12 @@ public class HabitModelTest {
         assert(habit.getElasticId() != null);
         assert(habit.getDaysActive() != null);
         assert(habit.getStartDate() != null);
+    }
+
+    @Test
+    public void isActiveTodayTest() throws Exception {
+        Habit habit = new Habit("testType", "testReason", "Testusername");
+        habit.setDaysActive(LocalDate.now().getDayOfWeek());
+        assert(habit.isActiveToday());
     }
 }
