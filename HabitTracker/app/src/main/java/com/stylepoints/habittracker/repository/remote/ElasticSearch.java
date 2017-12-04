@@ -14,9 +14,9 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
- * Created by mchauck on 11/23/17.
+ * The interface that defines how to call Elastic Search.
+ * Uses the Retrofit2 library
  */
-
 public interface ElasticSearch {
     // ====== Habits =====
     @GET("habit/{id}")
@@ -48,7 +48,7 @@ public interface ElasticSearch {
     Call<ElasticRequestStatus> updateEvent(@Path("id") String id, @Body HabitEvent habit);
 
     @PUT("event/{id}")
-    Call<ElasticRequestStatus> createEventWithId(@Path("id") String id, @Body HabitEvent habit);
+    Call<ElasticRequestStatus> createEventWithId(@Path("id") String id, @Body HabitEvent event);
 
     @DELETE("event/{id}")
     Call<ElasticRequestStatus> deleteEvent(@Path("id") String id);

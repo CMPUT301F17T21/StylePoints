@@ -4,6 +4,7 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.repository.HabitEventRepository;
 import com.stylepoints.habittracker.repository.HabitRepository;
@@ -16,21 +17,29 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by mchauck on 12/2/17.
+ * Handles creating, updating, and deleting HabitEvents on the server.
+ *
+ * Defines a Job that is executed by the Android JobScheduler which ensures that
+ * offline activity is replicated to the server, even if we lose network connection.
+ * The JobScheduler will execute the job the next time we get network.
+ *
+ * @author Mackenzie Hauck
  */
-
 public class RemoteEventJob extends JobService {
     private static final String TAG = "RemoteEventJob";
 
     /**
-     * Called on the main thread to kick off the job
-     * @param jobParameters
+     * Called on the main thread to kick off the job. Setup the job synchronously, then
+     * the actual network call is done async.
+     *
+     * @param jobParameters contains all info about job (jobId, habitEventId, operation)
      * @return true if the job is still active, false if job is finished
      */
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         String eventId = jobParameters.getExtras().getString("EVENT_ID");
         int operation = jobParameters.getExtras().getInt("OPERATION", -1);
+        Log.d(TAG, "Job started: " + eventId + " operation: " + String.valueOf(operation) + " jobId: " + jobParameters.getJobId());
 
         if (eventId == null || operation == -1) {
             Log.e(TAG, "Got bad data from extras, aborting");
@@ -40,7 +49,7 @@ public class RemoteEventJob extends JobService {
         HabitEvent event = HabitEventRepository.getInstance(getApplicationContext()).getEventSync(eventId);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://cmput301.softwareprocess.es:8080/cmput301f17t21_stylepoints/")
+                .baseUrl(Util.API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ElasticSearch elastic = retrofit.create(ElasticSearch.class);
@@ -63,6 +72,7 @@ public class RemoteEventJob extends JobService {
             case Util.CREATE:
                 if (HabitRepository.getInstance(getApplicationContext()).getHabitSync(event.getHabitId()) == null) {
                     Log.w(TAG, "Can not create remote event if the local habit has been deleted");
+                    jobFinished(jobParameters, false);
                 }
                 Log.d(TAG, "Attempting remote create: " + eventId);
                 elastic.createEventWithId(eventId, event).enqueue(cb);
@@ -70,13 +80,14 @@ public class RemoteEventJob extends JobService {
             case Util.UPDATE:
                 if (HabitRepository.getInstance(getApplicationContext()).getHabitSync(event.getHabitId()) == null) {
                     Log.w(TAG, "Can not update remote event if the local habit has been deleted");
+                    jobFinished(jobParameters, false);
                 }
                 Log.d(TAG, "Attempting remote update: " + eventId);
-                elastic.updateEvent(eventId, event);
+                elastic.updateEvent(eventId, event).enqueue(cb);
                 break;
             case Util.DELETE:
                 Log.d(TAG, "Attempting remote delete: " + eventId);
-                elastic.deleteEvent(eventId);
+                elastic.deleteEvent(eventId).enqueue(cb);
                 break;
             default:
                 Log.d(TAG, "Got bad operation: " + String.valueOf(operation));

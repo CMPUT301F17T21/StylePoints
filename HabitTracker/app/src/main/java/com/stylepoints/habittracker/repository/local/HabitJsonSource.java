@@ -4,45 +4,42 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import com.stylepoints.habittracker.model.Habit;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * Created by mchauck on 11/28/17.
+ * A local data store for Habits. Backed by a json file that stores
+ * the list of Habits. Saving to file is done async.
+ *
+ * @author Mackenzie Hauck
+ * @see Habit
  */
-
 public class HabitJsonSource {
     private static final String TAG = "HabitJsonSource";
     private Gson gson;
     private Context context;
     private static HabitJsonSource INSTANCE;
     private static String FILENAME = "habits.json";
-    //@Expose
     private List<Habit> habitList;
     private MutableLiveData<List<Habit>> liveHabits;
 
+    /**
+     * Constructor
+     * @param context need a context so that we can Android resources like Files, and JobScheduler
+     */
     private HabitJsonSource(Context context) {
         // This must use getApplicationContext() to help prevent memory leaks
         this.context = context.getApplicationContext();
@@ -74,6 +71,11 @@ public class HabitJsonSource {
         liveHabits.setValue(this.habitList);
     }
 
+    /**
+     * Get singleton of HabitJsonSource
+     * @param context need a context so that we can Android resources like Files, and JobScheduler
+     * @return singleton instance of HabitJsonSource
+     */
     public static HabitJsonSource getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = new HabitJsonSource(context);
@@ -81,11 +83,19 @@ public class HabitJsonSource {
         return INSTANCE;
     }
 
+    /**
+     * @return list of habits in an observable LiveData container
+     */
     public LiveData<List<Habit>> getHabits() {
         liveHabits.setValue(habitList);
         return liveHabits;
     }
 
+    /**
+     * Get the habit with id id
+     * @param id the id of the habit to get
+     * @return the habit wrapped in an observable LiveData container
+     */
     public LiveData<Habit> getHabit(String id) {
         return Transformations.map(getHabits(), hList -> {
             for (Habit habit : hList) {
@@ -98,6 +108,11 @@ public class HabitJsonSource {
         });
     }
 
+    /**
+     * Get the habit synchronously
+     * @param id id of the habit to get
+     * @return the habit with id id
+     */
     public Habit getHabitSync(String id) {
         for (Habit habit : habitList) {
             if (habit.getElasticId().equals(id)) {
@@ -107,6 +122,11 @@ public class HabitJsonSource {
         return null;
     }
 
+    /**
+     * Remove the habit from in memory list synchronously, then save
+     * to disk async.
+     * @param id the id of the habit to delete
+     */
     public void deleteHabit(String id) {
         for (Habit habit : habitList) {
             if (habit.getElasticId().equals(id)) {
@@ -117,11 +137,19 @@ public class HabitJsonSource {
         saveToDisk();
     }
 
+    /**
+     * Remove all of the habits from in memory list, then write to file.
+     */
     public void deleteAllHabits(){
         habitList.clear();
         saveToDisk();
     }
 
+    /**
+     * Update the habit with id to what is in habit
+     * @param id id of the habit to update
+     * @param habit what the habit should be updated to
+     */
     public void updateHabit(String id, Habit habit) {
         Log.i(TAG, "Updating habit " + id);
         habit.setElasticId(id);
@@ -135,17 +163,30 @@ public class HabitJsonSource {
         saveToDisk();
     }
 
+    /**
+     * Save a habit to local data store
+     * @param habit the habit to save
+     */
     public void saveHabit(Habit habit) {
         Log.d(TAG, "Adding a habit with id: " + habit.getElasticId());
         habitList.add(habit);
         saveToDisk();
     }
 
+    /**
+     * Bulk save habits to local data store
+     * @param habits the habits to be saved
+     */
     public void saveHabits(List<Habit> habits) {
         habitList.addAll(habits);
         saveToDisk();
     }
 
+    /**
+     * Check if a habit with id is in the local data store
+     * @param id the id of the habit
+     * @return true if habit is found in data store
+     */
     public boolean contains(String id) {
         for (Habit habit : habitList) {
             if (habit.getElasticId().equals(id)) {
@@ -155,6 +196,11 @@ public class HabitJsonSource {
         return false;
     }
 
+    /**
+     * Check if we have a habit with a certain type
+     * @param type the type field of habit that we want to find
+     * @return true if a habit is found to have a type field of type
+     */
     public boolean hasHabitWithType(String type) {
         for (Habit habit : habitList) {
             if (habit.getType().equals(type)) {
@@ -164,6 +210,12 @@ public class HabitJsonSource {
         return false;
     }
 
+    /**
+     * Write our in memory representation of data to a file so the data persists
+     * across app restarts.
+     *
+     * Data is written to file asynchronously.
+     */
     private void saveToDisk() {
         liveHabits.setValue(habitList);
         try {

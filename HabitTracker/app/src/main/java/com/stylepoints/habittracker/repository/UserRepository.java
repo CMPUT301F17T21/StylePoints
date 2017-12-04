@@ -1,17 +1,12 @@
 package com.stylepoints.habittracker.repository;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.util.Log;
 
 import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.model.User;
-import com.stylepoints.habittracker.repository.local.HabitJsonSource;
-import com.stylepoints.habittracker.repository.local.UserJsonSource;
 import com.stylepoints.habittracker.repository.remote.ElasticEventListResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticHabitListResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticRequestStatus;
@@ -21,7 +16,6 @@ import com.stylepoints.habittracker.viewmodel.CentralHubActivity.NewUserActivity
 import com.stylepoints.habittracker.viewmodel.CentralHubActivity.UserAsyncCallback;
 
 import java.io.IOException;
-import java.lang.reflect.Parameter;
 import java.util.List;
 
 import retrofit2.Call;

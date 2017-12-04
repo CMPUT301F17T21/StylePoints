@@ -7,30 +7,26 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
 import com.google.gson.reflect.TypeToken;
 import com.stylepoints.habittracker.model.HabitEvent;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by mchauck on 11/28/17.
+ * A local data store for HabitEvents. Backed by a json file that stores
+ * the list of HabitEvents. Saving to file is done async.
+ *
+ * @author Mackenzie Hauck
+ * @see HabitEvent
  */
-
 public class EventJsonSource {
     private static final String TAG = "EventJsonSource";
     private static EventJsonSource INSTANCE;
@@ -41,6 +37,10 @@ public class EventJsonSource {
     private List<HabitEvent> eventList;
     private MutableLiveData<List<HabitEvent>> liveEvents;
 
+    /**
+     * Constructor
+     * @param context need a context so that we can Android resources like Files, and JobScheduler
+     */
     private EventJsonSource(Context context) {
         // This must use getApplicationContext() to help prevent memory leaks
         this.context = context.getApplicationContext();
@@ -71,6 +71,11 @@ public class EventJsonSource {
         liveEvents.setValue(eventList);
     }
 
+    /**
+     * Get singleton of EventJsonSource
+     * @param context need a context so that we can Android resources like Files, and JobScheduler
+     * @return singleton instance of EventJsonSource
+     */
     public static EventJsonSource getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = new EventJsonSource(context);
@@ -78,11 +83,19 @@ public class EventJsonSource {
         return INSTANCE;
     }
 
+    /**
+     * @return list of events in an observable LiveData container
+     */
     public LiveData<List<HabitEvent>> getEvents() {
         liveEvents.setValue(eventList);
         return liveEvents;
     }
 
+    /**
+     * Get the event specified by unique id
+     * @param id the unique id of the event
+     * @return an event wrapped in an observable LiveData container
+     */
     public LiveData<HabitEvent> getEvent(String id) {
         return Transformations.map(getEvents(), eList -> {
             for (HabitEvent event : eList) {
@@ -95,6 +108,11 @@ public class EventJsonSource {
         });
     }
 
+    /**
+     * Get the event specified by unique id
+     * @param id the unique id of the event
+     * @return event with id matching id
+     */
     public HabitEvent getEventSync(String id) {
         for (HabitEvent event : eventList) {
             if (event.getElasticId().equals(id)) {
@@ -104,6 +122,11 @@ public class EventJsonSource {
         return null;
     }
 
+    /**
+     * Gets all of the events that are related to the habit with habitId
+     * @param habitId the unique id of the habit these events are related to
+     * @return list of event ids that are related to the habit with id habitId
+     */
     public List<String> getEventIdsForHabitId(String habitId) {
         List<String> list = new ArrayList<>();
         for (HabitEvent event : eventList) {
@@ -114,16 +137,33 @@ public class EventJsonSource {
         return list;
     }
 
+    /**
+     * Remove the event from in memory list, and then save that result to disk
+     * @param id the unique id of the event we want to delete
+     */
     public void deleteEvent(String id) {
-        eventList.remove(id);
+        for (HabitEvent event : eventList) {
+            if (event.getElasticId().equals(id)) {
+                eventList.remove(event);
+                break;
+            }
+        }
         saveToDisk();
     }
 
+    /**
+     * Delete all events from in memory list, then write to persistent storage
+     */
     public void deleteAllEvents(){
         eventList.clear();
         saveToDisk();
     }
 
+    /**
+     * Update the HabitEvent with eventId to what is passed in in event.
+     * @param id unique id of the event
+     * @param event what we want the event with id to be set to
+     */
     public void updateEvent(String id, HabitEvent event) {
         Log.i(TAG, "Updating HabitEvent " + id);
         event.setElasticId(id);
@@ -136,18 +176,31 @@ public class EventJsonSource {
         saveToDisk();
     }
 
-
+    /**
+     * Save the event to local data store
+     * @param event the event to be saved
+     */
     public void saveEvent(HabitEvent event) {
         Log.d(TAG, event.toString());
         eventList.add(event);
         saveToDisk();
     }
 
+    /**
+     * Bulk save events to local data store
+     * @param events the events to be saved
+     */
     public void saveEvents(List<HabitEvent> events){
         eventList.addAll(events);
         saveToDisk();
     }
 
+    /**
+     * Write our in memory representation of data to a file so the data persists
+     * across app restarts.
+     *
+     * Data is written to file asynchronously.
+     */
     private void saveToDisk() {
         liveEvents.setValue(eventList);
         try {

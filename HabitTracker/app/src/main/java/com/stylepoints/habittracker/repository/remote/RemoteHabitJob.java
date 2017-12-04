@@ -14,14 +14,31 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
+/**
+ * Handles creating, updating, and deleting Habits on the server.
+ *
+ * Defines a Job that is executed by the Android JobScheduler which ensures that
+ * offline activity is replicated to the server, even if we lose network connection.
+ * The JobScheduler will execute the job the next time we get network.
+ *
+ * @author Mackenzie Hauck
+ */
 public class RemoteHabitJob extends JobService {
     private static final String TAG = "RemoteHabitJob";
+
+    /**
+     * Called on the main thread to kick off the job. Setup the job synchronously, then
+     * the actual network call is done async.
+     *
+     * @param jobParameters contains all info about job (jobId, habitId, operation)
+     * @return true if the job is still active, false if job is finished
+     */
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         // called when job is started. runs on main thread!
         String habitId = jobParameters.getExtras().getString("HABIT_ID");
         int operation = jobParameters.getExtras().getInt("OPERATION", -1);
+        Log.d(TAG, "Job started: " + habitId + " operation: " + String.valueOf(operation) + " jobId: " + jobParameters.getJobId());
 
         if (habitId == null || operation == -1) {
             Log.e(TAG, "Got bad data from extras");
@@ -36,7 +53,7 @@ public class RemoteHabitJob extends JobService {
         }
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://cmput301.softwareprocess.es:8080/cmput301f17t21_stylepoints/")
+                .baseUrl(Util.API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ElasticSearch elastic = retrofit.create(ElasticSearch.class);
