@@ -34,7 +34,6 @@ public class HabitEvent implements Id {
      * Constructor
      * @param username username that this event belongs to
      * @param habitId the id of the habit that this event belongs to
-     * @param type the type of the habit
      */
     public HabitEvent(String username, String habitId) {
         elasticId = UUID.randomUUID().toString();
@@ -187,10 +186,12 @@ public class HabitEvent implements Id {
      */
     public void setPhoto(Bitmap photo) {
         // http://practiceonandroid.blogspot.ca/2013/03/convert-string-to-bitmap-and-bitmap-to.html
-        ByteArrayOutputStream ByteStream=new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.PNG,100, ByteStream);
-        byte [] b = ByteStream.toByteArray();
-        this.photo = Base64.encodeToString(b, Base64.DEFAULT);
+        if (photo != null) {
+            ByteArrayOutputStream ByteStream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.PNG, 100, ByteStream);
+            byte[] b = ByteStream.toByteArray();
+            this.photo = Base64.encodeToString(b, Base64.DEFAULT);
+        }
     }
 
 

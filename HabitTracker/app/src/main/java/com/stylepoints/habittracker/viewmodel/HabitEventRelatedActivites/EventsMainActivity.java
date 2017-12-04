@@ -156,11 +156,13 @@ public class EventsMainActivity extends AppCompatActivity {
 
     private void initEventListAndFilteredEventList(HabitEventListViewModel eventModel) {
         eventModel.getHabitEventList().observe(this, eventList -> {
-            Collections.sort(eventList, new Comparator<HabitEvent>() {
-                public int compare(HabitEvent e0, HabitEvent e1) {
-                    return e0.getDate().compareTo(e1.getDate());
-                }
-            });
+//            Collections.sort(eventList, new Comparator<HabitEvent>() {
+//                public int compare(HabitEvent e0, HabitEvent e1) {
+//                    return e0.getDate().compareTo(e1.getDate());
+//                }
+//            });
+
+            Collections.reverse(eventList);
 
             ArrayList<ViewableHabitEvent> viewableEventList = new ArrayList<ViewableHabitEvent>();
             for (HabitEvent event : eventList) {
