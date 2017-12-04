@@ -94,5 +94,6 @@
     <string name="no_filter">No Filter</string>
     <string name="habit_filter">Habit Filter</string>
     <string name="keyword_filter">Keyword Filter</string>
+    <string name="follow">Follow</string>
     \
 </resources>

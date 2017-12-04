@@ -45,7 +45,7 @@
             android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:background="?android:attr/selectableItemBackground"
-            android:text="@string/search"
+            android:text="@string/follow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/searchUser"
             app:layout_constraintTop_toTopOf="parent"
