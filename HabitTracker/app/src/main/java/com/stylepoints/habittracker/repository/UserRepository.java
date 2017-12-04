@@ -101,7 +101,7 @@ public class UserRepository{
         LocalDate tmp = habit.getStartDate();
         LocalDate today = LocalDate.now();
         Float points = new Float(0);
-        while (!tmp.equals(today)){
+        while (!tmp.equals(today.plusDays(1))){
             if (habit.getDaysActive().contains(tmp.getDayOfWeek())){
                 points += 1;
             }
@@ -129,7 +129,7 @@ public class UserRepository{
         return getHabitsCompletePoints(habitId)/getHabitsPossiblePoints(habitId);
     }
 
-    public Float getHabitsUncompletePoints(String habitId){
+    public Float getHabitsIncompletePoints(String habitId){
         return getHabitsPossiblePoints(habitId)-getHabitsCompletePoints(habitId);
     }
 
