@@ -13,16 +13,22 @@ package com.stylepoints.habittracker.model;
  * @see com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitsMainActivity
  */
 
-
+// For Viewing an event (displaying habit ID is not very useful for users)
 public class ViewableHabitEvent {
     HabitEvent event;
     String type;
 
+    /**
+     * Constructor
+     * @param event
+     * @param type
+     */
     public ViewableHabitEvent(HabitEvent event, String type) {
         this.event = event;
         this.type = type;
     }
 
+    // field getter and setter
     public void setEvent(HabitEvent event) {
         this.event = event;
     }
@@ -39,6 +45,7 @@ public class ViewableHabitEvent {
         return this.type;
     }
 
+    // conversion to string
     @Override
     public String toString() {
         return type + "\n" + event;
