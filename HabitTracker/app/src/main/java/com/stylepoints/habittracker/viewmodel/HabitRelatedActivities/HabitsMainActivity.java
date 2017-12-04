@@ -26,11 +26,6 @@ public class HabitsMainActivity extends AppCompatActivity {
     private Button button_new_habit;
     private ListView listview_habit_list;
 
-    // Test properties, will be replaced
-    List<Habit> habitList;
-    private ArrayAdapter<Habit> habitArrayAdapter; // adapter for the array of counters
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

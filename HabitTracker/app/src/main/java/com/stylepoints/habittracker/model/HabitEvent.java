@@ -194,6 +194,14 @@ public class HabitEvent implements Id {
         }
     }
 
+    /**
+     * This function is used to ensure that habits that are deserialized actually
+     * have all of the required fields. Makes sure the event is not corrupted
+     * @return true if all required fields are not null
+     */
+    public boolean hasValues() {
+        return elasticId != null && habitId != null && username != null && date != null;
+    }
 
     @Override
     public String toString() {

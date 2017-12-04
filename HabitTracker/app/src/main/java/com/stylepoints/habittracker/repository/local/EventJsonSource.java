@@ -190,8 +190,13 @@ public class EventJsonSource {
      * Bulk save events to local data store
      * @param events the events to be saved
      */
-    public void saveEvents(List<HabitEvent> events){
-        eventList.addAll(events);
+    public void saveEvents(List<HabitEvent> events) {
+        for (HabitEvent event : events) {
+            if (event != null && event.hasValues()) {
+                Log.d(TAG, "saving " + event.getElasticId() + " to local");
+                eventList.add(event);
+            }
+        }
         saveToDisk();
     }
 

@@ -192,6 +192,15 @@ public class Habit implements Id {
     }
 
     /**
+     * This function is used to ensure that habits that are deserialized actually
+     * have all of the required fields. Makes sure the Habit is not corrupted
+     * @return true if all required fields are not null
+     */
+    public boolean hasValues() {
+        return elasticId != null && type != null && username != null;
+    }
+
+    /**
      * @param id the id that is used in elastic search. E.g., api/habit/{id}
      */
     @Override

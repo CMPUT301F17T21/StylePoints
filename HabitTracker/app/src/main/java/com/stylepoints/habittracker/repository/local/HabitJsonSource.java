@@ -9,6 +9,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.stylepoints.habittracker.model.Habit;
+import com.stylepoints.habittracker.repository.HabitRepository;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -178,7 +179,13 @@ public class HabitJsonSource {
      * @param habits the habits to be saved
      */
     public void saveHabits(List<Habit> habits) {
-        habitList.addAll(habits);
+        Log.d(TAG, "bulk saving " + habits.size() + " to local storage");
+        for (Habit habit : habits) {
+            if (habit != null && habit.hasValues()) {
+                Log.d(TAG, "Adding habit: " + habit.getType());
+                habitList.add(habit);
+            }
+        }
         saveToDisk();
     }
 
