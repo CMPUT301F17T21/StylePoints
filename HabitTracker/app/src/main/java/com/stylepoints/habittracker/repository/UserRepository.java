@@ -16,6 +16,7 @@ import com.stylepoints.habittracker.viewmodel.CentralHubActivity.NewUserActivity
 import com.stylepoints.habittracker.viewmodel.CentralHubActivity.UserAsyncCallback;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,8 +36,6 @@ public class UserRepository{
     private ElasticSearch elastic;
     private HabitRepository habitRepo;
     private HabitEventRepository habitEventRepo;
-    private List<Habit> habitList;
-    private List<HabitEvent> eventList;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private Context context;
@@ -97,9 +96,42 @@ public class UserRepository{
 
 
 
+    public Float getHabitsPossiblePoints(String habitId){
+        Habit habit = habitRepo.getHabitSync(habitId);
+        LocalDate tmp = habit.getStartDate();
+        LocalDate today = LocalDate.now();
+        Float points = new Float(0);
+        while (!tmp.equals(today)){
+            if (habit.getDaysActive().contains(tmp.getDayOfWeek())){
+                points += 1;
+            }
+            tmp = tmp.plusDays(1);
+        }
+        return points;
+    }
 
+    public Float getHabitsCompletePoints(String habitId){
+        List<HabitEvent> events = habitEventRepo.getEventsByHabit(habitId);
+        Habit habit = habitRepo.getHabitSync(habitId);
+        Float points = new Float(0);
+        if (events == null){
+            return new Float(0);
+        }
+        for (HabitEvent e: events){
+            if (habit.getDaysActive().contains(e.getDate().getDayOfWeek())){
+                points += 1;
+            }
+        }
+        return points;
+    }
 
+    public Float getHabitsPercent(String habitId){
+        return getHabitsCompletePoints(habitId)/getHabitsPossiblePoints(habitId);
+    }
 
+    public Float getHabitsUncompletePoints(String habitId){
+        return getHabitsPossiblePoints(habitId)-getHabitsCompletePoints(habitId);
+    }
 
 
     //Get User after login
