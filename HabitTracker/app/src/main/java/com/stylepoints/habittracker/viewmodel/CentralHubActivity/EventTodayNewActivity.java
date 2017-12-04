@@ -162,8 +162,7 @@ public class EventTodayNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String habitId = habit.getElasticId();
-                String type = habit.getType();
-                HabitEvent event = new HabitEvent("username", habitId, type);
+                HabitEvent event = new HabitEvent("username", habitId);
                 event.setDate(date);
                 event.setComment(editTextEventComment.getText().toString());
                 if (imageViewEventPhoto.getDrawable() != null) {

@@ -85,6 +85,8 @@ public class EventEditActivity extends AppCompatActivity {
     private List<Habit> habitList;
     private ArrayAdapter<Habit> habitArrayAdapter;
 
+    private HabitRepository habitRepo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +95,7 @@ public class EventEditActivity extends AppCompatActivity {
         System.out.println("EventEditActivity");
 
         // Get required repo
-        HabitRepository habitRepo = HabitRepository.getInstance(getApplicationContext());
+        habitRepo = HabitRepository.getInstance(getApplicationContext());
         HabitListViewModelFactory habitFactory = new HabitListViewModelFactory(habitRepo);
         HabitListViewModel habitModel = ViewModelProviders.of(this, habitFactory).get(HabitListViewModel.class);
 
@@ -229,7 +231,7 @@ public class EventEditActivity extends AppCompatActivity {
 
 
     private void fillUi(HabitEvent event) {
-        textViewEventName.setText(event.getType());
+        textViewEventName.setText(habitRepo.getHabitSync(event.getHabitId()).getType());
         textViewDateOfOccurence.setText(event.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
         editTextEventComment.setText(event.getComment());
         imageViewEventPhoto.setImageBitmap(event.getPhoto());
