@@ -92,6 +92,7 @@ public class HabitEditActivity extends AppCompatActivity implements DatePickerDi
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HabitEditActivity.this, HabitStatActivity.class);
+                intent.putExtra("habitId", habit.getElasticId());
                 startActivity(intent);
             }
         });

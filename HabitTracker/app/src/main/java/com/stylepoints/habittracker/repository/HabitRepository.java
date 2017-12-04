@@ -15,6 +15,7 @@ import com.stylepoints.habittracker.repository.remote.ElasticResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticSearch;
 import com.stylepoints.habittracker.repository.remote.RemoteHabitJob;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import retrofit2.Call;
