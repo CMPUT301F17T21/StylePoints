@@ -90,5 +90,6 @@
         <item>My Events</item>
         <item>Within 5 km</item>
     </string-array>
+    <string name="title_activity_events_map">Map</string>
     \
 </resources>

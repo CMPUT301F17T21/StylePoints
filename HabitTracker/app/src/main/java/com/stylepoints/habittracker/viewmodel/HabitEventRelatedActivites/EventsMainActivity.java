@@ -92,6 +92,7 @@ public class EventsMainActivity extends AppCompatActivity {
     private Button button_filter_none;
     private Button button_filter_habit;
     private Button button_filter_keyword;
+    private Button button_map_events_listed;
     private ListView listview_event_list;
     private Spinner spinner_habit_select;
     private EditText edittext_keyword;
@@ -135,6 +136,9 @@ public class EventsMainActivity extends AppCompatActivity {
 
         // Initialise new event button
         initButtonAddEvent();
+
+        // Initialise map listed events button
+        initButtonMapListedEvents();
     }
 
     protected void onResume() {
@@ -147,6 +151,7 @@ public class EventsMainActivity extends AppCompatActivity {
         button_filter_none = (Button) findViewById(R.id.buttonFilterNone);
         button_filter_habit = (Button) findViewById(R.id.buttonFilterHabit);
         button_filter_keyword = (Button) findViewById(R.id.buttonFilterKeyword);
+        button_map_events_listed = (Button) findViewById(R.id.buttonMapEventList);
         listview_event_list = (ListView) findViewById(R.id.eventListView);
         spinner_habit_select = (Spinner) findViewById(R.id.habitSelectSpinner);
         edittext_keyword = (EditText) findViewById(R.id.editTextKeyword);
@@ -242,6 +247,16 @@ public class EventsMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 intent = new Intent(EventsMainActivity.this, EventNewActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void initButtonMapListedEvents() {
+        button_map_events_listed.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(EventsMainActivity.this, EventsMapActivity.class);
                 startActivity(intent);
             }
         });
