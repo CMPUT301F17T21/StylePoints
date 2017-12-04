@@ -26,6 +26,9 @@ public interface ElasticSearch {
     @GET("habit/_search")
     Call<ElasticHabitListResponse> searchHabit(@Query("q") String fieldAndTerm);
 
+    @GET("habit/_search")
+    Call<ElasticHabitListResponse> searchHabit(@Query("q") String fieldAndTerm1, @Query("q") String fieldAndTerm2);
+
     @POST("habit/")
     Call<ElasticRequestStatus> saveHabit(@Body Habit habit);
 
@@ -73,6 +76,4 @@ public interface ElasticSearch {
 
     @DELETE("relationship/{id}")
     Call<ElasticRequestStatus> deleteRelationship(@Path("id") String id);
-
-
 }
