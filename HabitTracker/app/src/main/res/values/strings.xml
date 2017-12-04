@@ -91,5 +91,8 @@
         <item>Within 5 km</item>
     </string-array>
     <string name="title_activity_events_map">Map</string>
+    <string name="no_filter">No Filter</string>
+    <string name="habit_filter">Habit Filter</string>
+    <string name="keyword_filter">Keyword Filter</string>
     \
 </resources>
