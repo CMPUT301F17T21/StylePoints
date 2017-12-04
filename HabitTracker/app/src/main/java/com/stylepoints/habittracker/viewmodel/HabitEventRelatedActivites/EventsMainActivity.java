@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import com.stylepoints.habittracker.R;
 import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.model.HabitEvent;
+import com.stylepoints.habittracker.model.ViewableHabitEvent;
 import com.stylepoints.habittracker.repository.HabitEventRepository;
 import com.stylepoints.habittracker.repository.HabitRepository;
 import com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.HabitEventAux.HabitEventListViewModel;
@@ -51,7 +52,7 @@ public class EventsMainActivity extends AppCompatActivity {
         return spinner_habit_select;
     }
 
-    public List<HabitEvent> getEventList() {
+    public List<ViewableHabitEvent> getEventList() {
         return eventList;
     }
 
@@ -59,19 +60,11 @@ public class EventsMainActivity extends AppCompatActivity {
         return habitList;
     }
 
-    public ArrayAdapter<HabitEvent> getEventArrayAdapter() {
-        return eventArrayAdapter;
-    }
-
     public ArrayAdapter<Habit> getHabitArrayAdapter() {
         return habitArrayAdapter;
     }
 
-    public ArrayAdapter<String> getFiltersArrayAdapter() {
-        return filtersArrayAdapter;
-    }
-
-    public void setEventList(List<HabitEvent> eventList) {
+    public void setEventList(List<ViewableHabitEvent> eventList) {
         this.eventList = eventList;
     }
 
@@ -79,12 +72,16 @@ public class EventsMainActivity extends AppCompatActivity {
         this.habitList = habitList;
     }
 
-    public void setFilteredEventList(List<HabitEvent> filteredEventList) {
+    public void setFilteredEventList(List<ViewableHabitEvent> filteredEventList) {
         this.filteredEventList = filteredEventList;
     }
 
-    public List<HabitEvent> getFilteredEventList() {
+    public List<ViewableHabitEvent> getFilteredEventList() {
         return filteredEventList;
+    }
+
+    public HabitRepository getHabitRepo() {
+        return habitRepo;
     }
 
     // Widgets
@@ -92,17 +89,18 @@ public class EventsMainActivity extends AppCompatActivity {
     private Button button_filter_none;
     private Button button_filter_habit;
     private Button button_filter_keyword;
+    private Button button_map_events_listed;
     private ListView listview_event_list;
     private Spinner spinner_habit_select;
     private EditText edittext_keyword;
 
-    private List<HabitEvent> eventList;
-    private List<HabitEvent> filteredEventList;
+    private List<ViewableHabitEvent> eventList;
+    private List<ViewableHabitEvent> filteredEventList;
     private List<Habit> habitList;
 
-    private ArrayAdapter<HabitEvent> eventArrayAdapter; // adapter for the array of events
     private ArrayAdapter<Habit> habitArrayAdapter; // adapter for the array of habits
-    private ArrayAdapter<String> filtersArrayAdapter; // adapter for the array of filters
+
+    private HabitRepository habitRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +108,7 @@ public class EventsMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_events_main);
 
         // get required model
-        HabitRepository habitRepo = HabitRepository.getInstance(getApplicationContext());
+        habitRepo = HabitRepository.getInstance(getApplicationContext());
         HabitListViewModelFactory habitFactory = new HabitListViewModelFactory(habitRepo);
         HabitListViewModel habitModel = ViewModelProviders.of(this, habitFactory).get(HabitListViewModel.class);
 
@@ -135,6 +133,9 @@ public class EventsMainActivity extends AppCompatActivity {
 
         // Initialise new event button
         initButtonAddEvent();
+
+        // Initialise map listed events button
+        initButtonMapListedEvents();
     }
 
     protected void onResume() {
@@ -147,6 +148,7 @@ public class EventsMainActivity extends AppCompatActivity {
         button_filter_none = (Button) findViewById(R.id.buttonFilterNone);
         button_filter_habit = (Button) findViewById(R.id.buttonFilterHabit);
         button_filter_keyword = (Button) findViewById(R.id.buttonFilterKeyword);
+        button_map_events_listed = (Button) findViewById(R.id.buttonMapEventList);
         listview_event_list = (ListView) findViewById(R.id.eventListView);
         spinner_habit_select = (Spinner) findViewById(R.id.habitSelectSpinner);
         edittext_keyword = (EditText) findViewById(R.id.editTextKeyword);
@@ -159,11 +161,19 @@ public class EventsMainActivity extends AppCompatActivity {
                     return e0.getDate().compareTo(e1.getDate());
                 }
             });
-            EventsMainActivity.this.setEventList(eventList);
-            EventsMainActivity.this.setFilteredEventList(eventList);
-            ArrayAdapter<HabitEvent> adapter = new ArrayAdapter<HabitEvent>(
-                    this, android.R.layout.simple_list_item_1, eventList);
+
+            ArrayList<ViewableHabitEvent> viewableEventList = new ArrayList<ViewableHabitEvent>();
+            for (HabitEvent event : eventList) {
+                viewableEventList.add(new ViewableHabitEvent(event, EventsMainActivity.this.getHabitRepo().getHabitSync(event.getHabitId()).getType()));
+            }
+
+            EventsMainActivity.this.setEventList(viewableEventList);
+            EventsMainActivity.this.setFilteredEventList(viewableEventList);
+            ArrayAdapter<ViewableHabitEvent> adapter = new ArrayAdapter<ViewableHabitEvent>(
+                    this, android.R.layout.simple_list_item_1, EventsMainActivity.this.getEventList());
             listview_event_list.setAdapter(adapter);
+
+
         });
     }
 
@@ -172,8 +182,8 @@ public class EventsMainActivity extends AppCompatActivity {
         button_filter_none.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventsMainActivity.this.setFilteredEventList(new ArrayList<HabitEvent>(EventsMainActivity.this.getEventList()));
-                ArrayAdapter<HabitEvent> adapter = new ArrayAdapter<HabitEvent>(
+                EventsMainActivity.this.setFilteredEventList(new ArrayList<ViewableHabitEvent>(EventsMainActivity.this.getEventList()));
+                ArrayAdapter<ViewableHabitEvent> adapter = new ArrayAdapter<ViewableHabitEvent>(
                         EventsMainActivity.this, android.R.layout.simple_list_item_1, EventsMainActivity.this.getFilteredEventList());
                 listview_event_list.setAdapter(adapter);
             }
@@ -185,14 +195,14 @@ public class EventsMainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Habit filter_habit = (Habit) spinner_habit_select.getSelectedItem();
                 if (filter_habit != null) {
-                    EventsMainActivity.this.setFilteredEventList(new ArrayList<HabitEvent>(EventsMainActivity.this.getEventList()));
-                    Iterator<HabitEvent> it = EventsMainActivity.this.getFilteredEventList().iterator();
+                    EventsMainActivity.this.setFilteredEventList(new ArrayList<ViewableHabitEvent>(EventsMainActivity.this.getEventList()));
+                    Iterator<ViewableHabitEvent> it = EventsMainActivity.this.getFilteredEventList().iterator();
                     while (it.hasNext()) {
-                        if (!(it.next().getHabitId()).equals(filter_habit.getElasticId())) {
+                        if (!(it.next().getEvent().getHabitId()).equals(filter_habit.getElasticId())) {
                             it.remove();
                         }
                     }
-                    ArrayAdapter<HabitEvent> adapter = new ArrayAdapter<HabitEvent>(
+                    ArrayAdapter<ViewableHabitEvent> adapter = new ArrayAdapter<ViewableHabitEvent>(
                             EventsMainActivity.this, android.R.layout.simple_list_item_1, EventsMainActivity.this.getFilteredEventList());
                     listview_event_list.setAdapter(adapter);
                 }
@@ -203,15 +213,15 @@ public class EventsMainActivity extends AppCompatActivity {
         button_filter_keyword.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventsMainActivity.this.setFilteredEventList(new ArrayList<HabitEvent>(EventsMainActivity.this.getEventList()));
-                Iterator<HabitEvent> it = EventsMainActivity.this.getFilteredEventList().iterator();
+                EventsMainActivity.this.setFilteredEventList(new ArrayList<ViewableHabitEvent>(EventsMainActivity.this.getEventList()));
+                Iterator<ViewableHabitEvent> it = EventsMainActivity.this.getFilteredEventList().iterator();
                 while(it.hasNext()) {
-                    if (!it.next().getComment().contains(edittext_keyword.getText().toString())) {
+                    if (!it.next().getEvent().getComment().contains(edittext_keyword.getText().toString())) {
                         it.remove();
                     }
                 }
 
-                ArrayAdapter<HabitEvent> adapter = new ArrayAdapter<HabitEvent>(
+                ArrayAdapter<ViewableHabitEvent> adapter = new ArrayAdapter<ViewableHabitEvent>(
                         EventsMainActivity.this, android.R.layout.simple_list_item_1, EventsMainActivity.this.getFilteredEventList());
                 listview_event_list.setAdapter(adapter);
             }
@@ -229,7 +239,7 @@ public class EventsMainActivity extends AppCompatActivity {
         listview_event_list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapter, View v, int position, long l){
-                String eventId = EventsMainActivity.this.getFilteredEventList().get(position).getElasticId();
+                String eventId = EventsMainActivity.this.getFilteredEventList().get(position).getEvent().getElasticId();
                 intent = new Intent(EventsMainActivity.this, EventEditActivity.class);
                 intent.putExtra("EVENT_ID", eventId);
                 startActivity(intent);
@@ -242,6 +252,16 @@ public class EventsMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 intent = new Intent(EventsMainActivity.this, EventNewActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void initButtonMapListedEvents() {
+        button_map_events_listed.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(EventsMainActivity.this, EventsMapActivity.class);
                 startActivity(intent);
             }
         });

@@ -24,7 +24,6 @@ public class HabitEvent implements Id {
 
     private String elasticId;
     private String habitId;
-    private String type;
     private String username;
     private String comment;
     private LocalDate date;
@@ -37,10 +36,9 @@ public class HabitEvent implements Id {
      * @param habitId the id of the habit that this event belongs to
      * @param type the type of the habit
      */
-    public HabitEvent(String username, String habitId, String type) {
+    public HabitEvent(String username, String habitId) {
         elasticId = UUID.randomUUID().toString();
         this.habitId = habitId;
-        this.type = type;
         this.username = username;
         this.date = LocalDate.now();
     }
@@ -49,11 +47,10 @@ public class HabitEvent implements Id {
      * Constructor
      * @param username username that this event belongs to
      * @param habitId the id of the habit that this event belongs to
-     * @param type the type of the habit
      * @param comment comment for this event
      */
-    public HabitEvent(String username, String habitId, String type, String comment) {
-        this(username, habitId, type);
+    public HabitEvent(String username, String habitId,String comment) {
+        this(username, habitId);
         this.comment = comment;
     }
 
@@ -61,12 +58,11 @@ public class HabitEvent implements Id {
      * Constructor
      * @param username username that this event belongs to
      * @param habitId the id of the habit that this event belongs to
-     * @param type the type of the habit
      * @param comment comment for this event
      * @param date the date this event was done on
      */
-    public HabitEvent(String username, String habitId, String type, String comment, LocalDate date) {
-        this(username, habitId, type, comment);
+    public HabitEvent(String username, String habitId, String comment, LocalDate date) {
+        this(username, habitId, comment);
         this.date = date;
     }
 
@@ -74,13 +70,12 @@ public class HabitEvent implements Id {
      * Constructor
      * @param username username that this event belongs to
      * @param habitId the id of the habit that this event belongs to
-     * @param type the type of the habit
      * @param comment comment for this event
      * @param date the date this event was done on
      * @param location the location this was done at
      */
-    public HabitEvent(String username, String habitId, String type, String comment, LocalDate date, Location location) {
-        this(username, habitId, type, comment, date);
+    public HabitEvent(String username, String habitId, String comment, LocalDate date, Location location) {
+        this(username, habitId, comment, date);
         this.location = location;
     }
 
@@ -198,20 +193,6 @@ public class HabitEvent implements Id {
         this.photo = Base64.encodeToString(b, Base64.DEFAULT);
     }
 
-    /**
-     * @return the type of the Habit that this event belongs to
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * @param type the type of the Habit that this event belongs to
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
-
 
     @Override
     public String toString() {
@@ -222,7 +203,7 @@ public class HabitEvent implements Id {
 //                ", date=" + date +
 //                ", location=" + location +
 //                '}';
-        return "Type: " + type + "\nDate: " + date;
+        return "Date: " + date + "\nComment: " + comment;
     }
 
     @Override
