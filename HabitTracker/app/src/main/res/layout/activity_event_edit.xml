@@ -143,7 +143,8 @@
         app:layout_constraintEnd_toEndOf="@+id/buttonRemovePhoto"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPhotographTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewPhotographTitle"
+        android:background="?android:attr/selectableItemBackground"/>
 
     <Button
         android:id="@+id/buttonSaveEvent"
@@ -157,7 +158,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonDeleteEvent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="?android:attr/selectableItemBackground"/>
 
     <Button
         android:id="@+id/buttonDeleteEvent"
@@ -171,7 +173,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonSaveEvent" />
+        app:layout_constraintStart_toEndOf="@+id/buttonSaveEvent"
+        android:background="?android:attr/selectableItemBackground"/>
 
     <Button
         android:id="@+id/buttonRemovePhoto"
@@ -179,10 +182,11 @@
         android:layout_height="40dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="16dp"
-        android:text="remove_photo"
+        android:text="remove photo"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonTakePhoto" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonTakePhoto"
+        android:background="?android:attr/selectableItemBackground"/>
 
 
 </android.support.constraint.ConstraintLayout>

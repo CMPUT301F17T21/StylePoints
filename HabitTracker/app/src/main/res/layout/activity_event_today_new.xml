@@ -146,6 +146,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:text="@string/add_event"
+        android:background="?android:attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -158,6 +159,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/take_photo"
+        android:background="?android:attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="@+id/buttonRemovePhoto"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -169,7 +171,8 @@
         android:layout_height="40dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="16dp"
-        android:text="remove_photo"
+        android:text="remove photo"
+        android:background="?android:attr/selectableItemBackground"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonTakePhoto" />
