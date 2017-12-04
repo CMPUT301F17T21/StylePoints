@@ -44,8 +44,12 @@ public class HabitStatActivity extends AppCompatActivity {
 
         pieChartEntry = new ArrayList<PieEntry>();
         // Arbitrary demo values here, please change
+
+        Float a = userRepo.getHabitsCompletePoints(habitId);
+        Float b = userRepo.getHabitsIncompletePoints(habitId);
+
         pieChartEntry.add(new PieEntry(userRepo.getHabitsCompletePoints(habitId), "Completed on Schedule"));
-        pieChartEntry.add(new PieEntry(userRepo.getHabitsUncompletePoints(habitId), "Not Completed on Schedule"));
+        pieChartEntry.add(new PieEntry(userRepo.getHabitsIncompletePoints(habitId), "Not Completed on Schedule"));
 
         pieChartHabitStat.setRotationEnabled(true);
 
