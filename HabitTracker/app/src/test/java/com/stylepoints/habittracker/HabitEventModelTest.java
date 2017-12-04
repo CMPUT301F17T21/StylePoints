@@ -16,7 +16,6 @@ public class HabitEventModelTest {
         assert(event.getHabitId() != null);
         assert(event.getElasticId() != null);
         assert(event.getDate() != null);
-        assert(event.getType() != null);
         assert(event.getUsername() != null);
     }
 
@@ -26,7 +25,6 @@ public class HabitEventModelTest {
 
         assertEquals("username", event.getUsername());
         assertEquals("habitId", event.getHabitId());
-        assertEquals("habitType", event.getType());
         assert(event.getElasticId().length() > 0);
         assertEquals(LocalDate.now(), event.getDate());
     }
