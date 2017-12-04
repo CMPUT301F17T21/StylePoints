@@ -92,6 +92,9 @@ public class Habit implements Id {
      * @return true if the habit is scheduled for today
      */
     public boolean isActiveToday() {
+        if (daysActive == null) {
+            daysActive = EnumSet.noneOf(DayOfWeek.class);
+        }
         return daysActive.contains(LocalDate.now().getDayOfWeek());
     }
 
