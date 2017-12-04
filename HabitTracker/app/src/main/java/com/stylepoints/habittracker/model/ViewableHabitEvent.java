@@ -1,8 +1,18 @@
 package com.stylepoints.habittracker.model;
 
 /**
- * Created by Main on 2017-12-03.
+ * Includes getters and setters for viewable versions of habit events, ie. not hidden by the
+ * LiveData wrapper in the repository class. This is the regular observable counterpart to the
+ * lifecycle-aware HabitEvent object.
+ *
+ * Includes methods for setting and getting the HabitEvent associated with a given instance of this
+ * class, getting and setting the event type as a string and returning the type and event as a
+ * string.
+ *
+ * @author StylePoints
+ * @see com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitsMainActivity
  */
+
 
 public class ViewableHabitEvent {
     HabitEvent event;
