@@ -13,6 +13,7 @@ import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.repository.local.EventJsonSource;
 import com.stylepoints.habittracker.repository.remote.RemoteEventJob;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -73,6 +74,15 @@ public class HabitEventRepository {
      */
     public HabitEvent getEventSync(String eventId) {
         return source.getEventSync(eventId);
+    }
+
+    public List<HabitEvent> getEventsByHabit(String habitId){
+        List<String> eventIdList = source.getEventIdsForHabitId(habitId);
+        List<HabitEvent> events = new ArrayList<HabitEvent>();
+        for (String eventId: eventIdList){
+            events.add(source.getEventSync(eventId));
+        }
+        return events;
     }
 
     /**

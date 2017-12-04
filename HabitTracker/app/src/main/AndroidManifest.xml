@@ -64,6 +64,13 @@
                 android:value=".viewmodel.HabitRelatedActivities.HabitsMainActivity" />
         </activity>
         <activity
+            android:name=".viewmodel.HabitRelatedActivities.HabitStatActivity"
+            android:windowSoftInputMode="adjustPan">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".viewmodel.HabitRelatedActivities.HabitEditActivity" />
+        </activity>
+        <activity
             android:name=".viewmodel.HabitEventRelatedActivites.EventsMainActivity"
             android:windowSoftInputMode="adjustPan">
             <meta-data

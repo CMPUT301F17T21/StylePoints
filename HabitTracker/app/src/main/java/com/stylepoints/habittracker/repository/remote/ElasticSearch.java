@@ -2,6 +2,7 @@ package com.stylepoints.habittracker.repository.remote;
 
 import com.stylepoints.habittracker.model.Habit;
 import com.stylepoints.habittracker.model.HabitEvent;
+import com.stylepoints.habittracker.model.Relationship;
 import com.stylepoints.habittracker.model.User;
 
 import retrofit2.Call;
@@ -62,6 +63,16 @@ public interface ElasticSearch {
 
     @PUT("user/{username}")
     Call<ElasticRequestStatus> createUser(@Path("username") String username, @Body User user);
+
+    // ===== Relationship =====
+    @POST("relationship/")
+    Call<ElasticRequestStatus> createRelationship(@Body Relationship relationship);
+
+    @PUT("relationship/{id}")
+    Call<ElasticRequestStatus> editRelationship(@Path("id") String id, @Body Relationship relationship);
+
+    @DELETE("relationship/{id}")
+    Call<ElasticRequestStatus> deleteRelationship(@Path("id") String id);
 
 
 }
