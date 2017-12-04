@@ -264,6 +264,12 @@ public class EventsMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 intent = new Intent(EventsMainActivity.this, EventsMapActivity.class);
+                ArrayList<String> selId = new ArrayList<String>();
+                for (ViewableHabitEvent viewableEvent : filteredEventList){
+                    selId.add(viewableEvent.getEvent().getElasticId());
+                    System.out.println(selId);
+                }
+                intent.putStringArrayListExtra("eventIds", selId);
                 startActivity(intent);
             }
         });
