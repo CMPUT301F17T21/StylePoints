@@ -1,14 +1,16 @@
 package com.stylepoints.habittracker.model;
 
+import com.stylepoints.habittracker.repository.remote.Id;
+
 /**
  * Created by nikosomos on 2017-12-03.
  */
 
-public class Relationship {
+public class Relationship implements Id{
 
-    public final Integer FOLLOW_REQUESTED = 0;
-    public final Integer FOLLOW_ACCEPTED = 1;
-    public final Integer FOLLOW_REJECTED = 2;
+    public static final Integer FOLLOW_REQUESTED = 0;
+    public static final Integer FOLLOW_ACCEPTED = 1;
+    public static final Integer FOLLOW_REJECTED = 2;
 
     // the id used with elastic search. i.e., /habit/{elasticId}
     private String elasticId;
@@ -45,5 +47,10 @@ public class Relationship {
 
     public void setStatusRejected(){
         this.status = FOLLOW_REJECTED;
+    }
+
+    @Override
+    public void setElasticId(String id) {
+        this.elasticId = id;
     }
 }

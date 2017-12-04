@@ -29,9 +29,7 @@ public class NewUserActivity extends AppCompatActivity implements UserAsyncCallb
         loginButton = (Button) findViewById(R.id.userLoginButton);
         usernameInput = (EditText) findViewById(R.id.userNameInput);
 
-        userRepo = new UserRepository(HabitRepository.getInstance(getApplicationContext()),
-                                        HabitEventRepository.getInstance(getApplicationContext()),
-                                        getApplicationContext());
+
 
 
         loginButton.setOnClickListener(new Button.OnClickListener(){
@@ -48,7 +46,8 @@ public class NewUserActivity extends AppCompatActivity implements UserAsyncCallb
 
     @Override
     public void setLoading() {
-
+        loginButton.setEnabled(false);
+        usernameInput.setEnabled(false);
     }
 
     @Override

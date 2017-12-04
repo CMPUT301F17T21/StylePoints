@@ -74,5 +74,11 @@ public interface ElasticSearch {
     @DELETE("relationship/{id}")
     Call<ElasticRequestStatus> deleteRelationship(@Path("id") String id);
 
+    @GET("relationship/_search")
+    Call<ElasticRelationshipListResponse> searchRelationship(@Query("q") String fieldAndTerms);
+
+    @POST("relationship/{id}/_update")
+    Call<ElasticRequestStatus> updateRelationshipStatus(@Path("id") String id, @Body RelationshipUpdateStatus newStatus);
+
 
 }

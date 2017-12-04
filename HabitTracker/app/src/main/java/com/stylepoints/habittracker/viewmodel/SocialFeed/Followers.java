@@ -9,12 +9,16 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.stylepoints.habittracker.R;
+import com.stylepoints.habittracker.model.Relationship;
+import com.stylepoints.habittracker.repository.UserRepository;
 
-public class Followers extends AppCompatActivity {
+public class Followers extends AppCompatActivity implements FollowingAsyncCallback{
 
 
     Button acceptButton;
     Button rejectButton;
+
+    Integer requestStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,8 @@ public class Followers extends AppCompatActivity {
         acceptButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                requestStatus = Relationship.FOLLOW_ACCEPTED;
                 //accept request function
                 Toast toast = Toast.makeText(getApplicationContext(), "Follow Request Accepted!", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER,0,0);
@@ -35,12 +41,33 @@ public class Followers extends AppCompatActivity {
         rejectButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                requestStatus = Relationship.FOLLOW_REJECTED;
                 //reject request function
                 Toast toast = Toast.makeText(getApplicationContext(), "Follow Request Rejected!", Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER,0,0);
                 toast.show();
             }
         });
+
+    }
+
+    @Override
+    public void setLoading() {
+        acceptButton.setEnabled(false);
+        rejectButton.setEnabled(false);
+
+
+
+    }
+
+    @Override
+    public void onSuccess() {
+
+    }
+
+    @Override
+    public void onError(Throwable t) {
 
     }
 }

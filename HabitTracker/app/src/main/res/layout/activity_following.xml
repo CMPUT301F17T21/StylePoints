@@ -46,6 +46,7 @@
             android:layout_weight="1"
             android:background="?android:attr/selectableItemBackground"
             android:text="@string/search"
+            android:imeOptions="actionDone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/searchUser"
             app:layout_constraintTop_toTopOf="parent"

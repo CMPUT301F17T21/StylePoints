@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(getUserNameIntent, GET_USER_NAME);
         }
 
-        Toast toast = Toast.makeText(getApplicationContext(), "Welcome to Habit Tracker " + userRepo.getUserName(), Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(getApplicationContext(), "Welcome to Habit Tracker " + userRepo.getUserName(), Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
 
