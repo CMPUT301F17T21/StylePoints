@@ -158,8 +158,7 @@ public class EventNewActivity extends AppCompatActivity {
                 System.out.println(spinnerHabitName.getSelectedItem());
                 if (spinnerHabitName.getSelectedItem() != null) {
                     String habitId = ((Habit) spinnerHabitName.getSelectedItem()).getElasticId();
-                    String type = ((Habit) spinnerHabitName.getSelectedItem()).getType();
-                    HabitEvent event = new HabitEvent(userRepo.getUserName(), habitId, type);
+                    HabitEvent event = new HabitEvent(userRepo.getUserName(), habitId);
                     event.setDate(date);
                     event.setComment(editTextEventComment.getText().toString());
                     if (imageViewEventPhoto.getDrawable() != null) {
