@@ -2,13 +2,19 @@ package com.stylepoints.habittracker.viewmodel.CentralHubActivity;
 
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -82,7 +88,7 @@ public class EventTodayNewActivity extends AppCompatActivity {
 
     private List<Habit> habitList;
     private ArrayAdapter<Habit> habitArrayAdapter;
-
+    private Location loc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,7 +174,9 @@ public class EventTodayNewActivity extends AppCompatActivity {
                 if (imageViewEventPhoto.getDrawable() != null) {
                     event.setPhoto(((BitmapDrawable) imageViewEventPhoto.getDrawable()).getBitmap());
                 }
-//              event.setLocation();
+                if (checkBoxAttachLocation.isChecked()) {
+                    event.setLocation(loc);
+                }
                 eventRepo.saveEvent(event);
                 finish();
             }
@@ -180,21 +188,77 @@ public class EventTodayNewActivity extends AppCompatActivity {
 //
 //            }
 //        });
+
+        if (!runtimePermissions()) {
+            setLocListener();
+        }
+    }
+    private void setLocListener() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                location.getLatitude();
+                location.getLongitude();
+
+                loc = location;
+
+                //I make a log to see the results
+                System.out.println(loc);
+
+            }
+
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            public void onProviderEnabled(String s) {
+
+            }
+
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+        //noInspect MissingPermissions
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,locationListener);
+    }
+
+
+    private boolean runtimePermissions() {
+        if (Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+            return true;
+        }
+        return false;
     }
 
     // Photo specific process
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQ_CODE_CAMERA ) {
+        if (requestCode == 100) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                setLocListener();
+            } else {
+                runtimePermissions();
+            }
+        }
+        else if (requestCode == REQ_CODE_CAMERA ) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                System.out.println("granted");
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, CAM_REQUEST);
             } else {
-                Toast.makeText(this, "CannotAccessCamera", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Cannot Access Camera", Toast.LENGTH_LONG).show();
             }
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
