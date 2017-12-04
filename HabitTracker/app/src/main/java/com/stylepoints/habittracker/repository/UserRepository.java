@@ -126,7 +126,7 @@ public class UserRepository{
     }
 
     private void loadRemoteUserHabits(String username, UserAsyncCallback callback) throws IOException {
-        elastic.searchHabit("user:" + username).enqueue(new Callback<ElasticHabitListResponse>() {
+        elastic.searchHabit("username:" + username).enqueue(new Callback<ElasticHabitListResponse>() {
             @Override
             public void onResponse(Call<ElasticHabitListResponse> call, Response<ElasticHabitListResponse> response) {
                 if (response.isSuccessful()) {
@@ -148,7 +148,7 @@ public class UserRepository{
 
     private void loadRemoteUserEvents(String username, UserAsyncCallback callback) throws IOException {
 
-            elastic.searchEvent("user:" + username).enqueue(new Callback<ElasticEventListResponse>() {
+            elastic.searchEvent("username:" + username).enqueue(new Callback<ElasticEventListResponse>() {
                 @Override
                 public void onResponse(Call<ElasticEventListResponse> call, Response<ElasticEventListResponse> response) {
                     if (response.isSuccessful()){
