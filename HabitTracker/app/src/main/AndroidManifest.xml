@@ -107,7 +107,8 @@
 
         <activity
             android:name=".viewmodel.HabitEventRelatedActivites.EventsMapActivity"
-            android:label="@string/title_activity_events_map"></activity>
+            android:label="@string/title_activity_events_map" />
+        <activity android:name=".viewmodel.SocialFeed.FollowResponseActivity"></activity>
     </application>
 
 </manifest>

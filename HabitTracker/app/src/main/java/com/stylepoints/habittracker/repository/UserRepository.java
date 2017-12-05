@@ -14,6 +14,7 @@ import com.stylepoints.habittracker.repository.remote.ElasticResponse;
 import com.stylepoints.habittracker.repository.remote.ElasticSearch;
 import com.stylepoints.habittracker.viewmodel.CentralHubActivity.NewUserActivity;
 import com.stylepoints.habittracker.viewmodel.CentralHubActivity.UserAsyncCallback;
+import com.stylepoints.habittracker.viewmodel.SocialFeed.CheckUserExistsCallback;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -139,14 +140,10 @@ public class UserRepository{
         elastic.getUserByName(username).enqueue(new Callback<ElasticResponse<User>>() {
             @Override
             public void onResponse(Call<ElasticResponse<User>> call, Response<ElasticResponse<User>> response) {
-                try {
-                    if (response.isSuccessful()) {
-                        loadRemoteUserHabits(username, callback);
-                    } else {
-                        createRemoteUser(username, callback);
-                    }
-                } catch (IOException e){
-                    callback.setError(e);
+                if (response.isSuccessful()) {
+                    loadRemoteUserHabits(username, callback);
+                } else {
+                    createRemoteUser(username, callback);
                 }
             }
 
@@ -157,18 +154,32 @@ public class UserRepository{
         });
     }
 
-    private void loadRemoteUserHabits(String username, UserAsyncCallback callback) throws IOException {
+    public void checkUserExits(String username, CheckUserExistsCallback callback){
+        elastic.getUserByName(username).enqueue(new Callback<ElasticResponse<User>>() {
+            @Override
+            public void onResponse(Call<ElasticResponse<User>> call, Response<ElasticResponse<User>> response) {
+                if (response.isSuccessful()) {
+                    callback.userExists();
+                } else {
+                    callback.userDoesNotExist();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ElasticResponse<User>> call, Throwable t) {
+                callback.setError(t);
+            }
+        });
+    }
+
+    private void loadRemoteUserHabits(String username, UserAsyncCallback callback){
         elastic.searchHabit("username:" + username).enqueue(new Callback<ElasticHabitListResponse>() {
             @Override
             public void onResponse(Call<ElasticHabitListResponse> call, Response<ElasticHabitListResponse> response) {
                 if (response.isSuccessful()) {
                     saveUserHabits(response.body().getList(), callback);
                 }
-                try {
-                    loadRemoteUserEvents(username, callback);
-                } catch (IOException e) {
-                    callback.setError(e);
-                }
+                loadRemoteUserEvents(username, callback);
             }
 
             @Override
@@ -178,7 +189,7 @@ public class UserRepository{
         });
     }
 
-    private void loadRemoteUserEvents(String username, UserAsyncCallback callback) throws IOException {
+    private void loadRemoteUserEvents(String username, UserAsyncCallback callback){
 
             elastic.searchEvent("username:" + username).enqueue(new Callback<ElasticEventListResponse>() {
                 @Override
@@ -196,7 +207,7 @@ public class UserRepository{
             });
     }
 
-    private void createRemoteUser(String username, UserAsyncCallback callback) throws IOException {
+    private void createRemoteUser(String username, UserAsyncCallback callback){
         elastic.createUser(username, new User(username)).enqueue(new Callback<ElasticRequestStatus>() {
             @Override
             public void onResponse(Call<ElasticRequestStatus> call, Response<ElasticRequestStatus> response) {
