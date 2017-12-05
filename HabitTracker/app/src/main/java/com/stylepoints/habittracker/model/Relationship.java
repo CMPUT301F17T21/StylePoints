@@ -1,7 +1,10 @@
 package com.stylepoints.habittracker.model;
 
 /**
- * Created by nikosomos on 2017-12-03.
+  Relationship model class. Essentially works as a gatekeeper for follower requests. 
+  Status is controlled by an integer. Set status rejected/accepted is invoked by
+  
+ * @author Niko Somos
  */
 
 public class Relationship {
