@@ -32,14 +32,12 @@ import java.util.List;
 
 public class EventsMainActivity extends AppCompatActivity {
 
-    //constants labels
+    // filter labels
     private static final String REV_CHRON = "Reverse Chronology";
     private static final String HABIT_SEL = "Selected Habit";
     private static final String KEYWORD = "Key Word in Comment";
 
-    // Internals
-    private Intent intent;
-
+    // getter of private fields (for lambda or inner functions)
     public Button getButton_new_event() {
         return button_new_event;
     }
@@ -64,6 +62,15 @@ public class EventsMainActivity extends AppCompatActivity {
         return habitArrayAdapter;
     }
 
+    public List<ViewableHabitEvent> getFilteredEventList() {
+        return filteredEventList;
+    }
+
+    public HabitRepository getHabitRepo() {
+        return habitRepo;
+    }
+
+    // set private fields (innner and lambda function)
     public void setEventList(List<ViewableHabitEvent> eventList) {
         this.eventList = eventList;
     }
@@ -76,45 +83,48 @@ public class EventsMainActivity extends AppCompatActivity {
         this.filteredEventList = filteredEventList;
     }
 
-    public List<ViewableHabitEvent> getFilteredEventList() {
-        return filteredEventList;
-    }
-
-    public HabitRepository getHabitRepo() {
-        return habitRepo;
-    }
-
     // Widgets
-    private Button button_new_event;
-    private Button button_filter_none;
-    private Button button_filter_habit;
-    private Button button_filter_keyword;
-    private Button button_map_events_listed;
-    private ListView listview_event_list;
-    private Spinner spinner_habit_select;
-    private EditText edittext_keyword;
+    private Button button_new_event; // button linked to EventNewActivity
+    private Button button_filter_none; // unfiltered list, date-reverse-sorted
+    private Button button_filter_habit; // filtered by habit, maintains data order
+    private Button button_filter_keyword; // filtered by keyword, maintains date order
+    private Button button_map_events_listed; // button linked to EventsMapActivity
+    private ListView listview_event_list; // presents the events after filtering
+    private Spinner spinner_habit_select; // habit selection for filtering purposes
+    private EditText edittext_keyword; // keyword input for filtering by comment purposes
 
-    private List<ViewableHabitEvent> eventList;
-    private List<ViewableHabitEvent> filteredEventList;
-    private List<Habit> habitList;
+    private List<ViewableHabitEvent> eventList; // date-sorted, but unfiltered eventList
+    private List<ViewableHabitEvent> filteredEventList; // filtered list (by no filter, habit, or date)
+    private List<Habit> habitList; // list of habit set for spinner
 
     private ArrayAdapter<Habit> habitArrayAdapter; // adapter for the array of habits
 
+    // required repository
     private HabitRepository habitRepo;
+    HabitEventRepository eventRepo;
 
+    // SHould this be here?
+    private Intent intent;
+
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events_main);
 
-        // get required model
+        // get required repository
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
         habitRepo = HabitRepository.getInstance(getApplicationContext());
         HabitListViewModelFactory habitFactory = new HabitListViewModelFactory(habitRepo);
         HabitListViewModel habitModel = ViewModelProviders.of(this, habitFactory).get(HabitListViewModel.class);
 
-        HabitEventRepository eventRepo = HabitEventRepository.getInstance(getApplicationContext());
+        eventRepo = HabitEventRepository.getInstance(getApplicationContext());
         HabitEventListViewModelFactory eventFactory = new HabitEventListViewModelFactory(eventRepo);
         HabitEventListViewModel eventModel = ViewModelProviders.of(this, eventFactory).get(HabitEventListViewModel.class);
+        /////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // Initialise widgets
         bindToUI();
@@ -138,11 +148,13 @@ public class EventsMainActivity extends AppCompatActivity {
         initButtonMapListedEvents();
     }
 
-    protected void onResume() {
+    protected void onResume() { // not sure what this is for
         super.onResume();
-        System.out.println();
     }
 
+    /**
+     * bind activity to layout
+     */
     private void bindToUI () {
         button_new_event = (Button) findViewById(R.id.addNewEventButton);
         button_filter_none = (Button) findViewById(R.id.buttonFilterNone);
@@ -154,13 +166,19 @@ public class EventsMainActivity extends AppCompatActivity {
         edittext_keyword = (EditText) findViewById(R.id.editTextKeyword);
     }
 
+    /**
+     * Get eventList (unfiltered) and display it as filterList
+     * @param eventModel
+     */
     private void initEventListAndFilteredEventList(HabitEventListViewModel eventModel) {
         eventModel.getHabitEventList().observe(this, eventList -> {
-            Collections.sort(eventList, new Comparator<HabitEvent>() {
-                public int compare(HabitEvent e0, HabitEvent e1) {
-                    return e0.getDate().compareTo(e1.getDate());
-                }
-            });
+//            Collections.sort(eventList, new Comparator<HabitEvent>() {
+//                public int compare(HabitEvent e0, HabitEvent e1) {
+//                    return e0.getDate().compareTo(e1.getDate());
+//                }
+//            });
+
+            Collections.reverse(eventList);
 
             ArrayList<ViewableHabitEvent> viewableEventList = new ArrayList<ViewableHabitEvent>();
             for (HabitEvent event : eventList) {
@@ -177,6 +195,7 @@ public class EventsMainActivity extends AppCompatActivity {
         });
     }
 
+    // Manage filter buttons (use iterator to determine which event goes where)
     private void initFilterButtons() {
         // no filter
         button_filter_none.setOnClickListener(new Button.OnClickListener() {
@@ -228,6 +247,10 @@ public class EventsMainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Place habitList in spinner
+     * @param habitModel
+     */
     private void initSpinnerHabitSelect(HabitListViewModel habitModel) {
         habitModel.getHabitList().observe(this, habitList -> {
             habitArrayAdapter = new ArrayAdapter<Habit>(EventsMainActivity.this, android.R.layout.simple_list_item_1, habitList);
@@ -235,6 +258,9 @@ public class EventsMainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * For selecting events from the ListView to update or delete
+     */
     private void initListViewListener() {
         listview_event_list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
@@ -247,6 +273,9 @@ public class EventsMainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * link specified button to EventNewActivity
+     */
     private void initButtonAddEvent() {
         button_new_event.setOnClickListener(new Button.OnClickListener(){
             @Override
@@ -257,11 +286,20 @@ public class EventsMainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * link the filtered list to EventsMapActivity
+     */
     private void initButtonMapListedEvents() {
         button_map_events_listed.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 intent = new Intent(EventsMainActivity.this, EventsMapActivity.class);
+                ArrayList<String> selId = new ArrayList<String>();
+                for (ViewableHabitEvent viewableEvent : filteredEventList){
+                    selId.add(viewableEvent.getEvent().getElasticId());
+                    System.out.println(selId);
+                }
+                intent.putStringArrayListExtra("eventIds", selId);
                 startActivity(intent);
             }
         });

@@ -92,7 +92,21 @@ public class Habit implements Id {
      * @return true if the habit is scheduled for today
      */
     public boolean isActiveToday() {
+        if (daysActive == null) {
+            daysActive = EnumSet.noneOf(DayOfWeek.class);
+        }
         return daysActive.contains(LocalDate.now().getDayOfWeek());
+    }
+
+    /**
+     * Check if this habit is active on this day, and if we have passed the start date
+     * @return true if we should do it today
+     */
+    public boolean shouldBeDoneToday() {
+        if (startDate.isBefore(LocalDate.now()) || startDate.isEqual(LocalDate.now())) {
+            return isActiveToday();
+        }
+        return false;
     }
 
     /**
@@ -186,6 +200,15 @@ public class Habit implements Id {
     public void setDaysActive(DayOfWeek... days) {
         daysActive = EnumSet.noneOf(DayOfWeek.class);
         daysActive.addAll(Arrays.asList(days));
+    }
+
+    /**
+     * This function is used to ensure that habits that are deserialized actually
+     * have all of the required fields. Makes sure the Habit is not corrupted
+     * @return true if all required fields are not null
+     */
+    public boolean hasValues() {
+        return elasticId != null && type != null && username != null;
     }
 
     /**

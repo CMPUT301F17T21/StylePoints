@@ -29,6 +29,9 @@ public interface ElasticSearch {
     @GET("habit/_search")
     Call<ElasticHabitListResponse> searchHabit(@Query("q") String fieldAndTerm);
 
+    @GET("habit/_search")
+    Call<ElasticHabitListResponse> searchHabit(@Query("q") String fieldAndTerm1, @Query("q") String fieldAndTerm2);
+
     @POST("habit/")
     Call<ElasticRequestStatus> saveHabit(@Body Habit habit);
 
@@ -82,6 +85,5 @@ public interface ElasticSearch {
 
     @POST("relationship/{id}/_update")
     Call<ElasticRequestStatus> updateRelationshipStatus(@Path("id") String id, @Body RelationshipUpdateStatus newStatus);
-
 
 }

@@ -24,24 +24,16 @@ public class HabitElasticTest {
     private ElasticSearch elastic;
 
     @Before
-    public void initElastic() {
+    public void initElastic() throws Exception {
+        elastic = Util.getElasticInstance();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://cmput301.softwareprocess.es:8080/cmput301f17t21_stylepoints/")
+                .baseUrl(Util.TEST_SERVER_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        elastic = retrofit.create(ElasticSearch.class);
-    }
-
-    @Test
-    public void getHabitTest() throws Exception {
-        // .execute() is sync, .enqueue() is async
-
-        Response<ElasticResponse<Habit>> response = elastic.getHabitById("8dfc7b93-9418-4ce0-b9e6-dd7ede287c1b").execute();
-        System.out.println(response);
-        Habit habit = response.body().getSource();
-        System.out.println(habit);
-
-        assertEquals("run", habit.getType());
+        ElasticAdminCalls adminElastic = retrofit.create(ElasticAdminCalls.class);
+        adminElastic.deleteEveryonesHabits().execute();
+        adminElastic.deleteEveryonesEvents().execute();
+        Thread.sleep(100);
     }
 
     @Test
@@ -55,10 +47,18 @@ public class HabitElasticTest {
         System.out.println(status);
 
         assertTrue(status.wasCreated());
-        assertEquals("cmput301f17t21_stylepoints", status.getIndex());
+        assertEquals("cmput301f17t21_stylepoints_test", status.getIndex());
         assertEquals(1, status.getVersion());
         assertEquals("habit", status.getType());
 
+        // get the habit we just saved
+        Response<ElasticResponse<Habit>> getResponse = elastic.getHabitById(status.getId()).execute();
+        assert(getResponse.isSuccessful());
+        System.out.println(getResponse);
+
+        Habit habit2 = getResponse.body().getSource();
+        assert(habit2 != null);
+        assertEquals(habit.getElasticId(), habit2.getElasticId());
 
         // delete the habit we just added
         Response<ElasticRequestStatus> delResponse = elastic.deleteHabit(status.getId()).execute();
@@ -72,16 +72,50 @@ public class HabitElasticTest {
 
     @Test
     public void getUsersHabitsTest() throws Exception {
-        Response<ElasticHabitListResponse> response = elastic.searchHabit("user:mackenzie").execute();
+        final int NUM_HABITS = 3;
+        // first, upload several habits
+        for (int i = 0; i < NUM_HABITS; i++) {
+            Habit habit = new Habit(String.valueOf(i), "reason for: " + i, "testusername");
+            Response<ElasticRequestStatus> resp = elastic.createHabitWithId(habit.getElasticId(), habit).execute();
+            System.out.println(resp);
+            assert(resp.isSuccessful());
+        }
+
+        // wait for elastic to finish making the habits
+        Thread.sleep(500);
+
+        Response<ElasticHabitListResponse> response = elastic.searchHabit("username:testusername").execute();
         assert(response.isSuccessful());
+
         List<Habit> habitList = response.body().getList();
         assert(habitList != null);
-
-        System.out.println("Number of hits: " + response.body().getNumHits());
 
         for (Habit habit : habitList) {
             System.out.println(habit);
         }
-        assert(habitList.size() > 0);
+
+        System.out.println("Number of hits: " + response.body().getNumHits());
+        assertEquals(NUM_HABITS, response.body().getNumHits());
+    }
+
+    @Test
+    public void searchHabits() throws Exception {
+        Habit habit = new Habit("type1", "test", "user1");
+        Habit habit2 = new Habit("type2", "test", "user2");
+        Response<ElasticRequestStatus> resp = elastic.createHabitWithId(habit.getElasticId(), habit).execute();
+        Response<ElasticRequestStatus> resp2 = elastic.createHabitWithId(habit2.getElasticId(), habit2).execute();
+
+        assert(resp.isSuccessful());
+        assert(resp2.isSuccessful());
+
+        Thread.sleep(500); // wait for elastic to finish
+
+        Response<ElasticHabitListResponse> respSearch1 = elastic.searchHabit("reason:test").execute();
+        assert(respSearch1.isSuccessful());
+        assertEquals(2, respSearch1.body().getNumHits());
+
+        Response<ElasticHabitListResponse> respSearch2 = elastic.searchHabit("reason:test", "username:user1").execute();
+        assert(respSearch2.isSuccessful());
+        assertEquals(1, respSearch2.body().getNumHits());
     }
 }

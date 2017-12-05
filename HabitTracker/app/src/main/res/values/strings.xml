@@ -82,8 +82,8 @@
     <string name="number">###?</string>
     <string name="level">Level:</string>
     <string name="question">\?</string>
-    <string name="tenPlus">Habits Recorded 10+ times:</string>
-    <string name="hundredPlus">Habits Recorded 100+ times:</string>
+    <string name="tenPlus">Habits Recorded 10+ Times (On Schedule):</string>
+    <string name="hundredPlus">Habits Recorded 100+ Times (On Schedule):</string>
 
     <string-array name="socialFeed_vals">
         <item>All</item>
@@ -91,5 +91,9 @@
         <item>Within 5 km</item>
     </string-array>
     <string name="title_activity_events_map">Map</string>
+    <string name="no_filter">No Filter</string>
+    <string name="habit_filter">Habit Filter</string>
+    <string name="keyword_filter">Keyword Filter</string>
+    <string name="follow">Follow</string>
     \
 </resources>
