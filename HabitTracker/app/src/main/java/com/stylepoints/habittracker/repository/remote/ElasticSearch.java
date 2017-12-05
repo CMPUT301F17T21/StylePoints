@@ -5,6 +5,8 @@ import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.model.Relationship;
 import com.stylepoints.habittracker.model.User;
 
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -13,6 +15,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 /**
  * The interface that defines how to call Elastic Search.
@@ -25,6 +28,9 @@ public interface ElasticSearch {
 
     @GET("habit/_search")
     Call<ElasticHabitListResponse> searchHabit(@Query("q") String fieldAndTerm);
+
+    @GET("habit/_search")
+    Call<ElasticHabitListResponse> searchHabit(@Query("q") String fieldAndTerm1, @Query("q") String fieldAndTerm2);
 
     @POST("habit/")
     Call<ElasticRequestStatus> saveHabit(@Body Habit habit);
@@ -74,5 +80,10 @@ public interface ElasticSearch {
     @DELETE("relationship/{id}")
     Call<ElasticRequestStatus> deleteRelationship(@Path("id") String id);
 
+    @GET("relationship/_search")
+    Call<ElasticRelationshipListResponse> searchRelationship(@Query("q") String fieldAndTerms);
+
+    @POST("relationship/{id}/_update")
+    Call<ElasticRequestStatus> updateRelationshipStatus(@Path("id") String id, @Body RelationshipUpdateStatus newStatus);
 
 }

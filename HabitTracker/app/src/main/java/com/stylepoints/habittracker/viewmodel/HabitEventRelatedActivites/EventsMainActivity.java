@@ -191,7 +191,7 @@ public class EventsMainActivity extends AppCompatActivity {
                     this, android.R.layout.simple_list_item_1, EventsMainActivity.this.getEventList());
             listview_event_list.setAdapter(adapter);
 
-
+            Collections.reverse(eventList); // sort back
         });
     }
 

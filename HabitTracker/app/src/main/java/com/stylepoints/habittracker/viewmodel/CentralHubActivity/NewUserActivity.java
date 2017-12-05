@@ -30,8 +30,8 @@ public class NewUserActivity extends AppCompatActivity implements UserAsyncCallb
         usernameInput = (EditText) findViewById(R.id.userNameInput);
 
         userRepo = new UserRepository(HabitRepository.getInstance(getApplicationContext()),
-                                        HabitEventRepository.getInstance(getApplicationContext()),
-                                        getApplicationContext());
+                HabitEventRepository.getInstance(getApplicationContext()),
+                getApplicationContext());
 
 
         loginButton.setOnClickListener(new Button.OnClickListener(){
@@ -48,21 +48,21 @@ public class NewUserActivity extends AppCompatActivity implements UserAsyncCallb
 
     @Override
     public void setLoading() {
-
+        loginButton.setEnabled(false);
+        usernameInput.setEnabled(false);
     }
 
     @Override
     public void setError(Throwable t) {
-        try {
-            throw t;
-        } catch (Throwable e) {
-            Snackbar.make(findViewById(android.R.id.content), "Problem Contacting Server", Snackbar.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
+        Snackbar.make(findViewById(android.R.id.content), t.getMessage(), Snackbar.LENGTH_LONG).show();
+        loginButton.setEnabled(true);
+        usernameInput.setEnabled(true);
     }
 
     @Override
     public void setSuccess() {
+        loginButton.setEnabled(true);
+        usernameInput.setEnabled(true);
         Intent intent = new Intent(this, MainActivity.class);
         setResult(RESULT_OK, intent);
         startActivity(intent);

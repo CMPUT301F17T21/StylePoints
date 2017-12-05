@@ -48,6 +48,9 @@ public class HabitStatActivity extends AppCompatActivity {
         Float a = userRepo.getHabitsCompletePoints(habitId);
         Float b = userRepo.getHabitsIncompletePoints(habitId);
 
+
+        System.out.println(userRepo.getHabitsCompletePoints(habitId));
+        System.out.println(userRepo.getHabitsIncompletePoints(habitId));
         pieChartEntry.add(new PieEntry(userRepo.getHabitsCompletePoints(habitId), "Completed on Schedule"));
         pieChartEntry.add(new PieEntry(userRepo.getHabitsIncompletePoints(habitId), "Not Completed on Schedule"));
 

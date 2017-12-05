@@ -78,7 +78,9 @@ import java.util.Collections;
                             mostCommon = habit;
                         }
                     }
-                    mostCommonVal.setText(mostCommon.getType());
+                    if (mostCommon != null) {
+                        mostCommonVal.setText(mostCommon.getType());
+                    }
                     ArrayAdapter<Habit> tenPlus = new ArrayAdapter<Habit>(this, android.R.layout.simple_list_item_1, tenPlusList);
                     tenPlusVal.setAdapter(tenPlus);
                     ArrayAdapter<Habit> hundredPlus = new ArrayAdapter<Habit>(this, android.R.layout.simple_list_item_2, hundredPlusList);

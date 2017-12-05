@@ -9,7 +9,6 @@ import com.stylepoints.habittracker.repository.remote.ElasticSearch;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import retrofit2.Response;
@@ -23,31 +22,16 @@ public class EventElasticTest {
     private ElasticSearch elastic;
 
     @Before
-    public void initElastic() {
+    public void initElastic() throws Exception {
+        elastic = Util.getElasticInstance();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://cmput301.softwareprocess.es:8080/cmput301f17t21_stylepoints/")
+                .baseUrl(Util.TEST_SERVER_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        elastic = retrofit.create(ElasticSearch.class);
-    }
-
-    @Test
-    public void getEventTest() throws Exception {
-        HabitEvent event = new HabitEvent("testusername", "8dfc7b93-9418-4ce0-b9e6-dd7ede287c1b", "testcomment");
-
-        Response<ElasticRequestStatus> response = elastic.createEventWithId(event.getElasticId(), event).execute();
-        assert(response.isSuccessful());
-        ElasticRequestStatus status = response.body();
-
-        assertEquals("event", status.getType());
-        assert(status.wasCreated());
-
-        Response<ElasticResponse<HabitEvent>> habitResponse = elastic.getEventById(status.getId()).execute();
-        assert(habitResponse.isSuccessful());
-        HabitEvent event2 = habitResponse.body().getSource();
-
-        assertEquals("testusername", event2.getUsername());
-        assertEquals("testcomment", event2.getComment());
+        ElasticAdminCalls adminElastic = retrofit.create(ElasticAdminCalls.class);
+        adminElastic.deleteEveryonesHabits().execute();
+        adminElastic.deleteEveryonesEvents().execute();
+        Thread.sleep(100);
     }
 
     @Test
@@ -62,8 +46,16 @@ public class EventElasticTest {
         assertEquals("event", status.getType());
         assert(status.wasCreated());
 
-        // delete the event we just made
+        // get the event from elastic
+        Response<ElasticResponse<HabitEvent>> getResponse = elastic.getEventById(status.getId()).execute();
+        assert(getResponse.isSuccessful());
+        System.out.println(getResponse);
 
+        HabitEvent event2 = getResponse.body().getSource();
+        assert(event2 != null);
+        assertEquals(event.getElasticId(), event2.getElasticId());
+
+        // delete the event we just made
         Response<ElasticRequestStatus> delResponse = elastic.deleteEvent(status.getId()).execute();
         assert(delResponse.isSuccessful());
 
@@ -96,7 +88,5 @@ public class EventElasticTest {
             System.out.println(e);
         }
         assert(response.body().getNumHits() > 0);
-
-        elastic.deleteEvent(saveResponse.body().getId());
     }
 }

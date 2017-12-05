@@ -28,6 +28,7 @@ import com.stylepoints.habittracker.viewmodel.HabitRelatedActivities.HabitsMainA
 import com.stylepoints.habittracker.viewmodel.Profile.ProfileMain;
 import com.stylepoints.habittracker.viewmodel.SocialFeed.SocialFeed;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(getUserNameIntent, GET_USER_NAME);
         }
 
-        Toast toast = Toast.makeText(getApplicationContext(), "Welcome to Habit Tracker " + userRepo.getUserName(), Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(getApplicationContext(), "Welcome to Habit Tracker " + userRepo.getUserName(), Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
 
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             Iterator itr = fullList.iterator();
             while (itr.hasNext()) {
                 Habit habit = (Habit) itr.next();
-                if (habit.isActiveToday()) {
+                if (habit.shouldBeDoneToday()) {
                     habitList.add(habit);
                 }
             }
