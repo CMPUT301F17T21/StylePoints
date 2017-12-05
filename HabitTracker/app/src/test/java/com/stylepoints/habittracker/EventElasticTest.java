@@ -9,7 +9,6 @@ import com.stylepoints.habittracker.repository.remote.ElasticSearch;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import retrofit2.Response;
@@ -89,7 +88,5 @@ public class EventElasticTest {
             System.out.println(e);
         }
         assert(response.body().getNumHits() > 0);
-
-        elastic.deleteEvent(saveResponse.body().getId());
     }
 }
