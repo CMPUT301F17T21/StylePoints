@@ -99,6 +99,17 @@ public class Habit implements Id {
     }
 
     /**
+     * Check if this habit is active on this day, and if we have passed the start date
+     * @return true if we should do it today
+     */
+    public boolean shouldBeDoneToday() {
+        if (startDate.isBefore(LocalDate.now()) || startDate.isEqual(LocalDate.now())) {
+            return isActiveToday();
+        }
+        return false;
+    }
+
+    /**
      * @return the id that will be used to uniquely identify this Habit
      */
     public String getElasticId() {
