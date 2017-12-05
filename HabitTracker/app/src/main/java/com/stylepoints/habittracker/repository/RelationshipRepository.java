@@ -130,7 +130,7 @@ public class RelationshipRepository {
             @Override
             public void onResponse(Call<ElasticRelationshipListResponse> call, Response<ElasticRelationshipListResponse> response) {
                 if (response.isSuccessful()) {
-                    if (response.body().getNumHits() != 0) {
+                    if (response.body().wasFound()) {
                         callback.onError(new Throwable("Relationship Exists"));
                         return;
                     }
@@ -164,16 +164,18 @@ public class RelationshipRepository {
         });
     }
 
-    public void findRelationshipForResponse(String follower, String followee, FollowingAsyncCallback callback, Integer status){
-        String query = "followee:" + followee + "AND follower:" + follower + "AND status:" + Relationship.FOLLOW_ACCEPTED;
+    public void findRelationshipForResponse(String follower, String followee, FollowingAsyncCallback callback, String status){
+        String query = "followee:" + followee + "AND follower:" + follower + "AND status:" + Relationship.FOLLOW_REQUESTED;
         elastic.searchRelationship(query).enqueue(new Callback<ElasticRelationshipListResponse>() {
             @Override
             public void onResponse(Call<ElasticRelationshipListResponse> call, Response<ElasticRelationshipListResponse> response) {
-                if (response.isSuccessful()){
-                    respondToRelationshipRequest(response.body().getList().get(0).getElasticId(), status);
-                } else {
-                    callback.onError(new Throwable("Relationship does not exist"));
+                if (response.isSuccessful()) {
+                    if (response.body().getNumHits() != 0) {
+                        respondToRelationshipRequest(response.body().getList().get(0).getElasticId(), status, callback);
+                        return;
+                    }
                 }
+                callback.onError(new Throwable("Relationship does not exist"));
             }
 
             @Override
@@ -183,19 +185,19 @@ public class RelationshipRepository {
         });
     }
 
-    public void respondToRelationshipRequest(String id, Integer status){
+    public void respondToRelationshipRequest(String id, String status, FollowingAsyncCallback callback){
         RelationshipUpdateStatus rUS = new RelationshipUpdateStatus(status);
         elastic.updateRelationshipStatus(id, rUS).enqueue(new Callback<ElasticRequestStatus>() {
             @Override
             public void onResponse(Call<ElasticRequestStatus> call, Response<ElasticRequestStatus> response) {
                 if (response.isSuccessful()){
-
+                    callback.onSuccess();
                 }
             }
 
             @Override
             public void onFailure(Call<ElasticRequestStatus> call, Throwable t) {
-
+                callback.onError(t);
             }
         });
     }

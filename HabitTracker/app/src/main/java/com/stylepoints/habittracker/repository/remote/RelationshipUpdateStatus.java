@@ -8,13 +8,13 @@ public class RelationshipUpdateStatus {
 
     private Document doc;
 
-    public RelationshipUpdateStatus(int status) {
+    public RelationshipUpdateStatus(String status) {
         this.doc = new Document(status);
     }
 
     class Document {
-        private int status;
-        public Document(int status) {
+        private String status;
+        public Document(String status) {
             this.status = status;
         }
     }
