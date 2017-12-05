@@ -8,16 +8,16 @@ import com.stylepoints.habittracker.repository.remote.Id;
 
 public class Relationship implements Id{
 
-    public static final Integer FOLLOW_REQUESTED = 0;
-    public static final Integer FOLLOW_ACCEPTED = 1;
-    public static final Integer FOLLOW_REJECTED = 2;
+    public static final String FOLLOW_REQUESTED = "0";
+    public static final String FOLLOW_ACCEPTED = "1";
+    public static final String FOLLOW_REJECTED = "2";
 
     // the id used with elastic search. i.e., /habit/{elasticId}
     private String elasticId;
 
     private String follower;
     private String followee;
-    private Integer status;
+    private String status;
 
     public Relationship(String follower, String followee){
         this.follower = follower;
@@ -37,7 +37,7 @@ public class Relationship implements Id{
         return followee;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 

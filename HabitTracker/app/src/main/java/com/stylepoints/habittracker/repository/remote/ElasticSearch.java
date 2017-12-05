@@ -5,6 +5,8 @@ import com.stylepoints.habittracker.model.HabitEvent;
 import com.stylepoints.habittracker.model.Relationship;
 import com.stylepoints.habittracker.model.User;
 
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -13,6 +15,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 /**
  * The interface that defines how to call Elastic Search.

@@ -5,8 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.stylepoints.habittracker.R;
@@ -15,10 +17,11 @@ import com.stylepoints.habittracker.repository.HabitRepository;
 import com.stylepoints.habittracker.repository.RelationshipRepository;
 import com.stylepoints.habittracker.repository.UserRepository;
 
-public class Following extends AppCompatActivity implements FollowingAsyncCallback{
+public class Following extends AppCompatActivity implements FollowingAsyncCallback, CheckUserExistsCallback{
 
-    Button searchButton;
-    EditText usernameInput;
+    private Button searchButton;
+    private EditText usernameInput;
+    private ListView followingListView;
 
     private UserRepository userRepo;
     private RelationshipRepository relationRepo;
@@ -32,27 +35,32 @@ public class Following extends AppCompatActivity implements FollowingAsyncCallba
 
         searchButton = (Button) findViewById(R.id.searchButton);
         usernameInput = (EditText) findViewById(R.id.searchUser);
+        followingListView = (ListView) findViewById(R.id.followingList);
 
+        relationRepo = RelationshipRepository.getInstance(getApplicationContext());
         userRepo = new UserRepository(HabitRepository.getInstance(getApplicationContext()),
                 HabitEventRepository.getInstance(getApplicationContext()),
                 getApplicationContext());
 
-        relationRepo = RelationshipRepository.getInstance(getApplicationContext());
+        relationRepo.getFollowing(userRepo.getUserName(), this).observe(this, followingList -> {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    this, android.R.layout.simple_list_item_1, followingList);
+            followingListView.setAdapter(adapter);
+        });
 
         searchButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 followUser();
-                //run username against database, request to follow,
-                //a follow request function...
-
             }
         });
+
+
     }
 
     public void followUser(){
         username = usernameInput.getText().toString();
-        relationRepo.newRelationship(userRepo.getUserName(), username, this);
+        userRepo.checkUserExits(username, this);
     }
 
     @Override
@@ -78,15 +86,27 @@ public class Following extends AppCompatActivity implements FollowingAsyncCallba
         searchButton.setEnabled(true);
         usernameInput.setEnabled(true);
         try {
-            throw t.getCause();
-        } catch (UserNotFound userNotFound) {
-            Toast toast = Toast.makeText(getApplicationContext(), "User: " + username + " not found", Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER,0,0);
-            toast.show();
+            throw t;
         } catch (Throwable throwable) {
-            Snackbar.make(findViewById(android.R.id.content), "Problem Contacting Server", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(findViewById(android.R.id.content), t.getMessage(), Snackbar.LENGTH_SHORT).show();
             throwable.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void userExists() {
+        relationRepo.checkRelationshipExists(userRepo.getUserName(), username, this);
+    }
+
+    @Override
+    public void userDoesNotExist() {
+        Snackbar.make(findViewById(android.R.id.content), "User: " + username + " not found", Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setError(Throwable t) {
+        Snackbar.make(findViewById(android.R.id.content), t.getMessage(), Snackbar.LENGTH_SHORT).show();
+        t.printStackTrace();
     }
 }
