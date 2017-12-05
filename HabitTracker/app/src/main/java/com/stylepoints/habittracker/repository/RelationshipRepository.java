@@ -125,12 +125,12 @@ public class RelationshipRepository {
             callback.onError(new Throwable("Cannot follow self"));
             return;
         }
-        String query = "followee:" + followee + "AND follower:" + follower;
+        String query = "followee:" + followee + " AND follower:" + follower;
         elastic.searchRelationship(query).enqueue(new Callback<ElasticRelationshipListResponse>() {
             @Override
             public void onResponse(Call<ElasticRelationshipListResponse> call, Response<ElasticRelationshipListResponse> response) {
                 if (response.isSuccessful()) {
-                    if (response.body().wasFound()) {
+                    if (response.body().getNumHits() > 0) {
                         callback.onError(new Throwable("Relationship Exists"));
                         return;
                     }
@@ -165,7 +165,7 @@ public class RelationshipRepository {
     }
 
     public void findRelationshipForResponse(String follower, String followee, FollowingAsyncCallback callback, String status){
-        String query = "followee:" + followee + "AND follower:" + follower + "AND status:" + Relationship.FOLLOW_REQUESTED;
+        String query = "followee:" + followee + " AND follower:" + follower + " AND status:" + Relationship.FOLLOW_REQUESTED;
         elastic.searchRelationship(query).enqueue(new Callback<ElasticRelationshipListResponse>() {
             @Override
             public void onResponse(Call<ElasticRelationshipListResponse> call, Response<ElasticRelationshipListResponse> response) {

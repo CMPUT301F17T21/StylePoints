@@ -51,8 +51,5 @@ public class ElasticRelationshipListResponse {
                 '}';
     }
 
-    public Boolean wasFound(){
-        return wasFound();
-    }
 
 }

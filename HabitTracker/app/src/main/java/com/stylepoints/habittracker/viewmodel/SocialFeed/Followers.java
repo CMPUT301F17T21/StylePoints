@@ -26,6 +26,8 @@ import java.util.Observer;
 public class Followers extends AppCompatActivity implements FollowingAsyncCallback{
 
 
+    private static final Integer REFRESH_PAGE = 0;
+
     private ListView followersListView;
     private ListView requestedListView;
 
@@ -47,6 +49,23 @@ public class Followers extends AppCompatActivity implements FollowingAsyncCallba
                 HabitEventRepository.getInstance(getApplicationContext()),
                 getApplicationContext());
 
+        refreshPage();
+
+        requestedListView.setOnItemClickListener(new ListView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String username = (String) adapterView.getItemAtPosition(i);
+                Intent intent = new Intent(Followers.this, FollowResponseActivity.class);
+                intent.putExtra("username", username);
+                startActivityForResult(intent, REFRESH_PAGE);
+            }
+        });
+
+
+    }
+
+    public void refreshPage(){
         relationRepo.getFollowers(userRepo.getUserName(), this).observe(this, followerList -> {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     this, android.R.layout.simple_list_item_1, followerList);
@@ -58,19 +77,6 @@ public class Followers extends AppCompatActivity implements FollowingAsyncCallba
                     this, android.R.layout.simple_list_item_1, requestList);
             requestedListView.setAdapter(adapter);
         });
-
-        requestedListView.setOnItemClickListener(new ListView.OnItemClickListener(){
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String username = (String) adapterView.getItemAtPosition(i);
-                Intent intent = new Intent(Followers.this, FollowResponseActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
-            }
-        });
-
-
     }
 
     @Override
@@ -90,5 +96,14 @@ public class Followers extends AppCompatActivity implements FollowingAsyncCallba
     @Override
     public void onError(Throwable t) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK){
+            if (requestCode == REFRESH_PAGE){
+                refreshPage();
+            }
+        }
     }
 }

@@ -25,6 +25,8 @@ public class FollowResponseActivity extends AppCompatActivity implements Followi
     private UserRepository userRepo;
     private RelationshipRepository relationRepo;
 
+    private String requestStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,31 +49,35 @@ public class FollowResponseActivity extends AppCompatActivity implements Followi
         acceptButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+                requestStatus = Relationship.FOLLOW_ACCEPTED;
+                setRelationship(requestStatus);
 
-                setRelationship(Relationship.FOLLOW_ACCEPTED);
-
-
-                Toast toast = Toast.makeText(getApplicationContext(), "Follow Request Accepted!", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER,0,0);
-                toast.show();
             }
         });
         rejectButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+                requestStatus = Relationship.FOLLOW_REJECTED;
+                setRelationship(requestStatus);
 
-                setRelationship(Relationship.FOLLOW_REJECTED);
-
-
-                Toast toast = Toast.makeText(getApplicationContext(), "Follow Request Rejected!", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER,0,0);
-                toast.show();
             }
         });
     }
 
     public void setRelationship(String status){
-        relationRepo.findRelationshipForResponse(userRepo.getUserName(), followerUsername.getText().toString(), this, status);
+        relationRepo.findRelationshipForResponse(followerUsername.getText().toString(), userRepo.getUserName(),  this, status);
+    }
+
+    public void acceptedToast(){
+        Toast toast = Toast.makeText(getApplicationContext(), "Follow Request Accepted!", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER,0,0);
+        toast.show();
+    }
+
+    public void rejectedToast(){
+        Toast toast = Toast.makeText(getApplicationContext(), "Follow Request Rejected!", Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER,0,0);
+        toast.show();
     }
 
     @Override
@@ -81,12 +87,24 @@ public class FollowResponseActivity extends AppCompatActivity implements Followi
 
     @Override
     public void onSuccess() {
-        Intent intent = new Intent(FollowResponseActivity.this, Followers.class);
-        startActivity(intent);
+        if (requestStatus == Relationship.FOLLOW_ACCEPTED){
+            acceptedToast();
+        } else if (requestStatus == Relationship.FOLLOW_REJECTED){
+            rejectedToast();
+        }
+        Intent result = new Intent(this, Following.class);
+        setResult(RESULT_OK, result);
+        finish();
+
     }
 
     @Override
     public void onError(Throwable t) {
-
+        Toast toast = Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER,0,0);
+        toast.show();
+        Intent result = new Intent(this, Following.class);
+        setResult(RESULT_OK, result);
+        finish();
     }
 }
