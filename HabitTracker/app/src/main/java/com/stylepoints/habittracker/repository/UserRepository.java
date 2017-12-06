@@ -176,6 +176,7 @@ public class UserRepository{
         });
     }
 
+
     private void loadRemoteUserHabits(String username, UserAsyncCallback callback){
         elastic.searchHabit("username:" + username).enqueue(new Callback<ElasticHabitListResponse>() {
             @Override

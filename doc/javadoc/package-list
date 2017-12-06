@@ -1,0 +1,12 @@
+com.stylepoints.habittracker
+com.stylepoints.habittracker.model
+com.stylepoints.habittracker.repository
+com.stylepoints.habittracker.repository.local
+com.stylepoints.habittracker.repository.remote
+com.stylepoints.habittracker.viewmodel
+com.stylepoints.habittracker.viewmodel.CentralHubActivity
+com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites
+com.stylepoints.habittracker.viewmodel.HabitEventRelatedActivites.HabitEventAux
+com.stylepoints.habittracker.viewmodel.HabitRelatedActivities
+com.stylepoints.habittracker.viewmodel.Profile
+com.stylepoints.habittracker.viewmodel.SocialFeed
