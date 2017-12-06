@@ -63,6 +63,7 @@ public class RelationshipRepository {
                         usernames.add(r.getFollower());
                     }
                     data.setValue(usernames);
+                    callback.onSuccess();
                 }
             }
 
@@ -86,6 +87,7 @@ public class RelationshipRepository {
                         usernames.add(r.getFollowee());
                     }
                     data.setValue(usernames);
+                    callback.onSuccess();
                 }
             }
 
