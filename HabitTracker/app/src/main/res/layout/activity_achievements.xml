@@ -153,12 +153,11 @@
             android:layout_marginTop="16dp"
             android:background="?android:attr/selectableItemBackground"
             android:gravity="center"
-            android:text="@string/question"
+            android:text="Help"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </LinearLayout>

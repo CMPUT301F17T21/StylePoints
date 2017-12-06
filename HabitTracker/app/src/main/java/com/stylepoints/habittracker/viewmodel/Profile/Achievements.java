@@ -35,6 +35,7 @@ import java.util.Collections;
             TextView username;
             ListView tenPlusVal;
             ListView hundredPlusVal;
+            TextView level;
 
             private HabitEventRepository eventRepo;
             private HabitRepository habitRepo;
@@ -48,6 +49,9 @@ import java.util.Collections;
                 tenPlusVal = (ListView) findViewById(R.id.tenPlusVal);
                 hundredPlusVal = (ListView) findViewById(R.id.hundredPlusVal);
                 username = (TextView) findViewById(R.id.username);
+
+                level = (TextView) findViewById(R.id.levelVal);
+                level.setText("1");
 
                 habitRepo = HabitRepository.getInstance(getApplicationContext());
                 HabitListViewModelFactory habitFactory = new HabitListViewModelFactory(habitRepo);
