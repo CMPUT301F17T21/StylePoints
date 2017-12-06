@@ -131,7 +131,11 @@ public class UserRepository{
     }
 
     public Float getHabitsIncompletePoints(String habitId){
-        return getHabitsPossiblePoints(habitId)-getHabitsCompletePoints(habitId);
+        if (getHabitsPossiblePoints(habitId)-getHabitsCompletePoints(habitId) > 0.0) {
+            return getHabitsPossiblePoints(habitId) - getHabitsCompletePoints(habitId);
+        } else {
+            return (float) 0.0;
+        }
     }
 
 
@@ -171,6 +175,7 @@ public class UserRepository{
             }
         });
     }
+
 
     private void loadRemoteUserHabits(String username, UserAsyncCallback callback){
         elastic.searchHabit("username:" + username).enqueue(new Callback<ElasticHabitListResponse>() {
