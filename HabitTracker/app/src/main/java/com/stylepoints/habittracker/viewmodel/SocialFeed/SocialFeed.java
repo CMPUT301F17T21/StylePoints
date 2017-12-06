@@ -13,12 +13,21 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.stylepoints.habittracker.R;
+import com.stylepoints.habittracker.model.Relationship;
+import com.stylepoints.habittracker.repository.HabitEventRepository;
+import com.stylepoints.habittracker.repository.HabitRepository;
+import com.stylepoints.habittracker.repository.RelationshipRepository;
+import com.stylepoints.habittracker.repository.UserRepository;
 
 public class SocialFeed extends AppCompatActivity {
 
 
     // Internals
     private Intent intent;
+
+    private UserRepository userRepo;
+    private RelationshipRepository relationRepo;
+    private HabitRepository habitRepo;
 
     // Widgets
     private Button button_mapEvents;
@@ -33,6 +42,15 @@ public class SocialFeed extends AppCompatActivity {
         setContentView(R.layout.activity_social_feed);
 
         bindToUi();
+
+        habitRepo = HabitRepository.getInstance(getApplicationContext());
+        relationRepo = RelationshipRepository.getInstance(getApplicationContext());
+        userRepo = new UserRepository(HabitRepository.getInstance(getApplicationContext()),
+                HabitEventRepository.getInstance(getApplicationContext()),
+                getApplicationContext());
+
+
+
 
         spinner_social_filter = (Spinner) findViewById(R.id.sort_by_spinner);
         spinner_social_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
