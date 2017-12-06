@@ -48,7 +48,7 @@ public class ProfileMain extends AppCompatActivity implements FollowingAsyncCall
         question = (Button) findViewById(R.id.question);
         logout = (Button) findViewById(R.id.logOut);
         level = (TextView) findViewById(R.id.levelVal);
-        level.setText("0");
+        level.setText("1");
 
         username = (TextView) findViewById(R.id.username);
 
